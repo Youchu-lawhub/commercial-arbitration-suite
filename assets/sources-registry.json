@@ -1,0 +1,1578 @@
+{
+  "version": 1,
+  "generated": "2026-10-24",
+  "refresh_cadence_days": 90,
+  "_note": "套件活数据源清单，由 scripts/fetch_official.py 消费。只登记官方出处、版本标识、访问状态与核验状态，不登记条号、期限、金额、费率、门槛或机制结论，不复制受版权保护的条文原文。fetch: ok=可自动抓取 / blocked=站点拒绝自动抓取需人工下载 / manual=需人工 / mirror=第三方镜像仅应急定位，引用前必须回官方核验。confidence: high=已确认官方文本 / medium=二手权威一致但未逐字核对 / low=来源冲突必须人工确认。confidence 为登记置信度，不代表当前本案已核验；任何条文引用前须以 applicable 定位版本、fetch 取文、lookup 命中。",
+  "institutions": {
+    "icc": {
+      "name_zh": "国际商会（ICC）国际仲裁",
+      "family": "global",
+      "rules": [
+        {
+          "id": "icc-arb-2026",
+          "title": "ICC Rules of Arbitration (2026)",
+          "effective": "2026-06-01",
+          "landing": "https://iccwbo.org/dispute-resolution/dispute-resolution-services/arbitration/rules-procedure/2026-arbitration-rules/",
+          "pdf": "https://iccwbo.org/wp-content/uploads/sites/3/2026/05/ICC_2026-Arbitration-Rules_2014-Mediation-Rules.pdf",
+          "diff_pdf": "https://iccwbo.org/wp-content/uploads/sites/3/2026/06/ICC-Arbitration-Rules-2021-and-2026-compared-version-1.pdf",
+          "fetch": "ok",
+          "confidence": "high",
+          "download": "https://iccwbo.org/wp-content/uploads/sites/3/2026/05/ICC_2026-Arbitration-Rules_2014-Mediation-Rules.pdf"
+        },
+        {
+          "id": "icc-arb-2021",
+          "title": "ICC Rules of Arbitration (2021)",
+          "effective": "2021-01-01",
+          "pdf": "https://iccwbo.org/wp-content/uploads/sites/3/2020/12/icc-2021-arbitration-rules-2014-mediation-rules-english-version.pdf",
+          "fetch": "ok",
+          "confidence": "high",
+          "download": "https://iccwbo.org/wp-content/uploads/sites/3/2020/12/icc-2021-arbitration-rules-2014-mediation-rules-english-version.pdf"
+        }
+      ],
+      "companions": [
+        {
+          "id": "icc-note-conduct",
+          "title": "ICC Note to Parties on the Conduct of the Proceedings",
+          "type": "practice-note",
+          "landing": "https://iccwbo.org/dispute-resolution/dispute-resolution-services/arbitration/rules-procedure/",
+          "fetch": "ok",
+          "confidence": "medium"
+        },
+        {
+          "id": "icc-stats",
+          "title": "ICC Dispute Resolution Statistics",
+          "type": "benchmark",
+          "landing": "https://iccwbo.org/dispute-resolution/resources/icc-dispute-resolution-statistics/",
+          "fetch": "ok",
+          "confidence": "high"
+        },
+        {
+          "id": "icc-awards",
+          "title": "ICC 裁决公布安排（经第三方数据库）",
+          "type": "award-library",
+          "landing": "https://iccwbo.org/dispute-resolution/resources/publication-of-icc-arbitral-awards-jus-mundi-not-icc-publication/",
+          "fetch": "blocked",
+          "confidence": "medium"
+        }
+      ],
+      "fees": [
+        {
+          "id": "icc-costs-calculator",
+          "title": "ICC Costs Calculator",
+          "url": "https://iccwbo.org/dispute-resolution/dispute-resolution-services/arbitration/costs-and-payment/costs-calculator/",
+          "fetch": "ok",
+          "confidence": "high"
+        }
+      ],
+      "filing": {
+        "portal": "ICC Case Connect",
+        "url": "https://icc-efiling.on.opus2.com/",
+        "file_request": "https://iccwbo.org/dispute-resolution/dispute-resolution-services/arbitration/file-a-request/",
+        "mandatory": false,
+        "note": "提交要求以官方立案页与现行规则为准；本条目不预载电子或纸质提交要求。",
+        "email": null,
+        "fetch": "unknown",
+        "checked_at": null,
+        "notes": "未核验；提交当日核对官方收件方式"
+      },
+      "_watch": "2021 与 2026 两版并行：版本选择按启动日与官方过渡条款核对；条文差异须以官方对照文本逐条核验，不采用二手评述的条号。"
+    },
+    "lcia": {
+      "name_zh": "伦敦国际仲裁院（LCIA）",
+      "family": "global",
+      "rules": [
+        {
+          "id": "lcia-2020",
+          "title": "LCIA Arbitration Rules 2020",
+          "effective": "2020-10-01",
+          "pdf": "https://www.lcia.org/media/download.aspx?MediaId=955",
+          "landing": "https://www.lcia.org/Dispute_Resolution_Services/lcia-arbitration-rules-2020.aspx",
+          "fetch": "ok",
+          "confidence": "high",
+          "canonical_url": "https://www.lcia.org/Dispute_Resolution_Services/lcia-arbitration-rules-2020.aspx",
+          "download": "https://www.lcia.org/media/download.aspx?MediaId=955"
+        },
+        {
+          "id": "lcia-languages",
+          "title": "LCIA Rules 多语版本页",
+          "landing": "https://www.lcia.org/lcia-arbitration-rules-2020-language-versions.aspx",
+          "fetch": "manual",
+          "confidence": "high"
+        }
+      ],
+      "companions": [
+        {
+          "id": "lcia-challenge-db",
+          "title": "LCIA Challenge Decision Database（仲裁员挑战决定库，免费）",
+          "url": "https://www.lcia.org/challenge-decision-database.aspx",
+          "type": "award-library",
+          "fetch": "ok",
+          "confidence": "high"
+        },
+        {
+          "id": "lcia-reform-watch",
+          "title": "LCIA 规则修订进展（可能取代 2020 版）",
+          "url": "https://www.lcia.org/News/lcia-rules-revision-consultation.aspx",
+          "type": "watchlist",
+          "fetch": "ok",
+          "confidence": "high"
+        },
+        {
+          "id": "english-arbitration-act-2025",
+          "title": "英国 2025 年仲裁法专题页（仲裁地、紧急仲裁员等）",
+          "url": "https://www.lcia.org/the-english-arbitration-act-2025.aspx",
+          "type": "statute",
+          "fetch": "ok",
+          "confidence": "medium"
+        }
+      ],
+      "fees": [
+        {
+          "id": "lcia-costs-2023",
+          "title": "LCIA Schedule of Arbitration Costs",
+          "url": "https://www.lcia.org/schedule-of-arbitration-costs-2023.aspx",
+          "fetch": "ok",
+          "confidence": "medium",
+          "canonical_url": "https://www.lcia.org/schedule-of-arbitration-costs-2023.aspx"
+        }
+      ],
+      "filing": {
+        "portal": "LCIA Online Filing",
+        "url": "https://onlinefiling.lcia.org/",
+        "mandatory": false,
+        "email": "casework@lcia.org",
+        "fetch": "manual",
+        "checked_at": "2026-10-22",
+        "notes": "用户提供的 2026-10-22 真机实测记录：门户返回 503 未测通；Guidance Note 指定邮箱收件。维护环境本轮未联网复核；提交当日须现场复核。"
+      }
+    },
+    "aaa-icdr": {
+      "name_zh": "美国仲裁协会 / 国际争议解决中心",
+      "family": "global",
+      "rules": [
+        {
+          "id": "icdr-2021",
+          "title": "ICDR International Dispute Resolution Procedures (Including Mediation and Arbitration Rules)",
+          "effective": "2021-03-01",
+          "pdf": "https://www.icdr.org/sites/default/files/document_repository/2026_International_Dispute_Resolution_Procedures.pdf",
+          "landing": "https://www.icdr.org/rules_forms_fees",
+          "fetch": "ok",
+          "confidence": "high",
+          "note": "官方 PDF 封面明定 \"Rules Amended and Effective March 1, 2021\"。旧登记链接 ICDR_Rules_1.pdf 解析为 2017 年版、ICDR_Rules.pdf 为 2014 年版，均非现行文本，不得再用作条号依据。",
+          "download": "https://www.icdr.org/sites/default/files/document_repository/2026_International_Dispute_Resolution_Procedures.pdf"
+        },
+        {
+          "id": "aaa-commercial-2022",
+          "title": "AAA Commercial Arbitration Rules and Mediation Procedures",
+          "effective": "2022-09-01",
+          "pdf": "https://www.icdr.org/sites/default/files/document_repository/2026_commercial-arbitration-rules-mediation-procedures.pdf",
+          "landing": "https://www.adr.org/rules-forms-and-fees/commercial/",
+          "fetch": "ok",
+          "confidence": "high",
+          "note": "官方 PDF 封面明定 \"Rules Amended and Effective September 1, 2022\"。另有建筑业规则 2024-03-01 版未登记（出海商事案件不适用，需要时现查 adr.org）。",
+          "download": "https://www.icdr.org/sites/default/files/document_repository/2026_commercial-arbitration-rules-mediation-procedures.pdf"
+        }
+      ],
+      "fees": [
+        {
+          "id": "icdr-fees-2026",
+          "title": "ICDR 2026 International Arbitration Fee Schedule",
+          "pdf": "https://www.icdr.org/sites/default/files/document_repository/2026_international-arbitration-feeschedule.pdf",
+          "fetch": "ok",
+          "confidence": "high"
+        }
+      ],
+      "_watch": "ICDR 国际规则与 AAA 国内商事规则并行：先按条款确定适用哪一套（用 applicable --ruleset），不得混引；费用数值现取。",
+      "filing": {
+        "portal": null,
+        "url": null,
+        "email": null,
+        "mandatory": null,
+        "fetch": "unknown",
+        "checked_at": null,
+        "notes": "未核验；提交当日核对官方收件方式"
+      }
+    },
+    "swiss": {
+      "name_zh": "瑞士仲裁中心",
+      "family": "global",
+      "rules": [
+        {
+          "id": "swiss-rules-2021",
+          "title": "Swiss Rules of International Arbitration 2021",
+          "effective": "2021-06-01",
+          "pdf": "https://www.swissarbitration.org/wp-content/uploads/2023/08/Swiss-Rules-2021-EN.pdf",
+          "landing": "https://www.swissarbitration.org/centre/arbitration/arbitration-rules/",
+          "fetch": "ok",
+          "confidence": "high",
+          "download": "https://www.swissarbitration.org/wp-content/uploads/2023/08/Swiss-Rules-2021-EN.pdf"
+        }
+      ],
+      "fees": [
+        {
+          "id": "sac-cost-calculator",
+          "title": "Swiss Costs Calculator",
+          "url": "https://www.swissarbitration.org/centre/arbitration/cost-calculator-2021/",
+          "fetch": "ok",
+          "confidence": "high"
+        }
+      ],
+      "companions": [
+        {
+          "id": "swiss-tef-rules-2025",
+          "title": "Swiss Supplemental Rules on Third-Party Funding (2025)",
+          "type": "supplementary-rules",
+          "landing": "https://www.swissarbitration.org/centre/arbitration/arbitration-rules/",
+          "fetch": "ok",
+          "confidence": "medium",
+          "note": "补充规则与主规则分属不同文本；第三方资助事项须取该补充规则官方文本核对，不得只引主规则。"
+        }
+      ],
+      "filing": {
+        "portal": null,
+        "url": null,
+        "email": null,
+        "mandatory": null,
+        "fetch": "unknown",
+        "checked_at": null,
+        "notes": "未核验；提交当日核对官方收件方式"
+      }
+    },
+    "scc": {
+      "name_zh": "斯德哥尔摩商会仲裁院（SCC）",
+      "family": "global",
+      "rules": [
+        {
+          "id": "scc-2023",
+          "title": "SCC Arbitration Rules (2023)",
+          "effective": "2023-01-01",
+          "pdf": "https://sccarbitrationinstitute.se/wp-content/uploads/2024/12/SCC_Arbitration_Rules_2023_English.pdf",
+          "landing": "https://sccarbitrationinstitute.se/en/subject/rules-policy/",
+          "fetch": "ok",
+          "confidence": "high",
+          "download": "https://sccarbitrationinstitute.se/wp-content/uploads/2024/12/SCC_Arbitration_Rules_2023_English.pdf"
+        },
+        {
+          "id": "scc-expedited-2023",
+          "title": "SCC Expedited Arbitration Rules (2023)",
+          "effective": "2023-01-01",
+          "pdf": "https://sccarbitrationinstitute.se/wp-content/uploads/2024/12/scc_expedited_rules_2023_english.pdf",
+          "fetch": "ok",
+          "confidence": "high",
+          "download": "https://sccarbitrationinstitute.se/wp-content/uploads/2024/12/scc_expedited_rules_2023_english.pdf"
+        }
+      ],
+      "fees": [
+        {
+          "id": "scc-costs",
+          "title": "SCC 仲裁费用规章与费用表",
+          "landing": "https://sccarbitrationinstitute.se/en/subject/rules-policy/",
+          "fetch": "ok",
+          "confidence": "medium"
+        }
+      ],
+      "filing": {
+        "portal": null,
+        "url": null,
+        "email": null,
+        "mandatory": null,
+        "fetch": "unknown",
+        "checked_at": null,
+        "notes": "未核验；提交当日核对官方收件方式"
+      }
+    },
+    "vienna": {
+      "name_zh": "维也纳国际仲裁中心（VIAC）",
+      "family": "global",
+      "rules": [
+        {
+          "id": "vienna-rules-2021",
+          "title": "Vienna Rules 2021（2025-01-01 修正版）",
+          "effective": "2025-01-01",
+          "pdf": "https://www.viac.eu/wp-content/uploads/2025/02/VIAC_schieds_mediationsordnung_2021_e_v4_1812s.pdf",
+          "landing": "https://www.viac.eu/en/rules-and-tools-at-a-glance/vienna-rules",
+          "fetch": "ok",
+          "confidence": "high",
+          "download": "https://www.viac.eu/wp-content/uploads/2025/02/VIAC_schieds_mediationsordnung_2021_e_v4_1812s.pdf"
+        }
+      ],
+      "companions": [
+        {
+          "id": "viac-portal",
+          "title": "VIAC Portal（在线立案与案件管理）",
+          "url": "https://www.viac.eu/en/rules-and-tools-at-a-glance/viac-portal/",
+          "type": "filing",
+          "fetch": "ok",
+          "confidence": "high"
+        }
+      ],
+      "fees": [
+        {
+          "id": "viac-calculator",
+          "title": "VIAC Cost Calculator",
+          "url": "https://www.viac.eu/en/rules-and-tools-at-a-glance/cost-calculator/",
+          "fetch": "ok",
+          "confidence": "high"
+        }
+      ],
+      "_watch": "缩写 VIAC 亦被其他机构使用，文书须写全称维也纳国际仲裁中心；官方文本语种与最新版本以官方规则页为准。",
+      "filing": {
+        "portal": null,
+        "url": null,
+        "email": null,
+        "mandatory": null,
+        "fetch": "unknown",
+        "checked_at": null,
+        "notes": "未核验；提交当日核对官方收件方式"
+      }
+    },
+    "dis": {
+      "name_zh": "德国仲裁研究院（DIS）",
+      "family": "global",
+      "rules": [
+        {
+          "id": "dis-2018",
+          "title": "DIS Arbitration Rules 2018",
+          "effective": "2018-03-01",
+          "pdf": "https://www.disarb.org/fileadmin/user_upload/Werkzeuge_und_Tools/2018_DIS_Arbitration_Rules_3-2026.pdf",
+          "landing": "https://www.disarb.org/en/tools-for-dis-proceedings/dis-rules",
+          "fetch": "ok",
+          "confidence": "high",
+          "download": "https://www.disarb.org/fileadmin/user_upload/Werkzeuge_und_Tools/2018_DIS_Arbitration_Rules_3-2026.pdf"
+        }
+      ],
+      "filing": {
+        "portal": null,
+        "url": null,
+        "email": null,
+        "mandatory": null,
+        "fetch": "unknown",
+        "checked_at": null,
+        "notes": "未核验；提交当日核对官方收件方式"
+      }
+    },
+    "uncitral-pca": {
+      "name_zh": "UNCITRAL 规则临时仲裁与常设仲裁法院（PCA）管理／指定机关",
+      "family": "global",
+      "rules": [
+        {
+          "id": "uncitral-rules-2021",
+          "title": "UNCITRAL Arbitration Rules（含 2013、2021 年修正的官方合并版）",
+          "effective": "2010-08-15",
+          "landing": "https://uncitral.un.org/en/texts/arbitration/contractualtexts/arbitration",
+          "pdf": "https://uncitral.un.org/sites/default/files/media-documents/uncitral/en/21-07996_expedited-arbitration-e-ebook.pdf",
+          "fetch": "ok",
+          "confidence": "high",
+          "note": "登记指向官方合并版。当事人选定版本、启动事件、透明度与快速程序的适用条件须分别核验。指定机关与负责指定该机关的主体是不同角色，不能把 PCA 秘书长默认视为所有案件的指定机关。通知、组庭、措施、裁决和费用的条号均须从适用全文逐项核对，不沿用旧登记摘要。 版本时间分层：effective/base_effective 是2010规则本体起点；selection_from 是本合并版进入按启动日自动筛选的保守下界，不代表历史案件不能后续约定快速程序。更早案件须取得当时版本与过渡依据，不能自动回填本合并版。日期依据为本条官方PDF。",
+          "selection_from": "2021-09-19",
+          "base_effective": "2010-08-15",
+          "components": [
+            {
+              "key": "expedited-appendix",
+              "effective": "2021-09-19",
+              "consent_required": true
+            }
+          ],
+          "download": "https://uncitral.un.org/sites/default/files/media-documents/uncitral/en/21-07996_expedited-arbitration-e-ebook.pdf"
+        },
+        {
+          "id": "pca-arbitration-rules",
+          "title": "PCA 仲裁规则／案件管理服务（常设仲裁法院）",
+          "landing": "https://docs.pca-cpa.org/2025/08/ecdc7ec1-pca-arbitration-rules.pdf",
+          "fetch": "manual",
+          "confidence": "high",
+          "edition_status": "verified",
+          "note": "PCA 主站 (pca-cpa.org) 有 Cloudflare 反爬保护（实测 403），但文档子域 docs.pca-cpa.org 可直接下载 PDF。2026-10-24 从 docs.pca-cpa.org 成功获取 37 页规则文本并缓存。"
+        }
+      ],
+      "_watch": "PCA 官网反爬为结构性问题：只在用户人工提供官方 PDF 后方可引用 PCA 条文；UNCITRAL 文本以官方合并版为准，须区分各修订版。",
+      "filing": {
+        "portal": null,
+        "url": null,
+        "email": null,
+        "mandatory": null,
+        "fetch": "unknown",
+        "checked_at": null,
+        "notes": "未核验；提交当日核对官方收件方式"
+      }
+    },
+    "icsid": {
+      "name_zh": "解决投资争端国际中心（ICSID，世界银行集团）",
+      "family": "global",
+      "rules": [
+        {
+          "id": "icsid-arb-2022",
+          "title": "ICSID Arbitration Rules（2022 版，Administrative Council 第四次修订）",
+          "default": true,
+          "effective": "2022-07-01",
+          "landing": "https://icsid.worldbank.org/rules-regulations/convention/arbitration-rules/introductory-note",
+          "pdf": "https://icsid.worldbank.org/sites/default/files/Arbitration_Rules.pdf",
+          "fetch": "ok",
+          "confidence": "high",
+          "note": "2022 版条号整体重编：引用任何条号前须在合并本或仲裁规则官方文本中逐字核对，不沿用旧版条号摘要。规则文本内不载生效日，effective 取自机构修订页，须随修订页复核。Chapter I 通用条文与各章条号均须以官方本文目录核对。",
+          "download": "https://icsid.worldbank.org/sites/default/files/Arbitration_Rules.pdf"
+        },
+        {
+          "id": "icsid-convention-2022",
+          "title": "ICSID Convention, Regulations and Rules（合并本，文号 ICSID/15/Rev. 3，2022 年 7 月）",
+          "effective": "2022-07-01",
+          "rule_set": "icsid-convention",
+          "role": "foundation",
+          "landing": "https://icsid.worldbank.org/sites/default/files/documents/ICSID_Convention.pdf",
+          "pdf": "https://icsid.worldbank.org/sites/default/files/documents/ICSID_Convention.pdf",
+          "fetch": "ok",
+          "confidence": "high",
+          "note": "合并本内含六套文书（Convention、Administrative and Financial Regulations、Institution Rules、Arbitration Rules、Conciliation Rules、Additional Facility Rules），各有独立编号体系。lookup 必须以章节名或条号加窗口限定，避免跨文书同号码误命中。Convention 各章条号须逐条取官方文本核对。effective 记录的是合并本修订版次，不是 Convention 自身生效日；Convention 生效日须从保存机关或官方文本核对，不得回填。 该 PDF 为 ICSID/15/Rev.3 合并卷，同时含公约、机构规则、仲裁规则与行政财务规则；共用同一 URL 是合并卷的合法登记，不是复制错误，lookup 须以章节名限定。",
+          "download": "https://icsid.worldbank.org/sites/default/files/documents/ICSID_Convention.pdf"
+        },
+        {
+          "id": "icsid-institution-rules-2022",
+          "title": "ICSID Institution Rules（2022 版）",
+          "effective": "2022-07-01",
+          "rule_set": "icsid-institution",
+          "role": "supplementary",
+          "landing": "https://icsid.worldbank.org/sites/default/files/documents/ICSID_Convention.pdf",
+          "pdf": "https://icsid.worldbank.org/sites/default/files/documents/ICSID_Convention.pdf",
+          "fetch": "ok",
+          "confidence": "high",
+          "note": "与 Arbitration Rules 同批修订；启动与登记条文在 Institution Rules 而非仲裁规则。pdf 指向合并本，text layer 含全部六套文书，lookup 须以 Chapter 名限定。Institution Rules 单独介绍页之 URL 未经核验，故不登记。 该 PDF 为 ICSID/15/Rev.3 合并卷，同时含公约、机构规则、仲裁规则与行政财务规则；共用同一 URL 是合并卷的合法登记，不是复制错误，lookup 须以章节名限定。",
+          "download": "https://icsid.worldbank.org/sites/default/files/documents/ICSID_Convention.pdf"
+        },
+        {
+          "id": "icsid-additional-facility-2022",
+          "title": "ICSID Additional Facility Rules（2022 版，含 AF Arbitration Rules 与 AF Conciliation Rules）",
+          "effective": "2022-07-01",
+          "rule_set": "icsid-af",
+          "role": "alternative",
+          "landing": "https://icsid.worldbank.org/rules-regulations/additional-facility",
+          "pdf": "https://icsid.worldbank.org/sites/default/files/documents/ICSID_Additional_Facility.pdf",
+          "fetch": "ok",
+          "confidence": "high",
+          "note": "AF 项下裁决的撤销与执行路径与 Convention 路径不同，条款起草须分别取官方文本核对，不混用。",
+          "download": "https://icsid.worldbank.org/sites/default/files/documents/ICSID_Additional_Facility.pdf"
+        },
+        {
+          "id": "icsid-admin-fin-regs-2022",
+          "title": "ICSID Administrative and Financial Regulations（2022 版）",
+          "effective": "2022-07-01",
+          "rule_set": "icsid-admfin",
+          "role": "supplementary",
+          "landing": "https://icsid.worldbank.org/sites/default/files/documents/ICSID_Convention.pdf",
+          "pdf": "https://icsid.worldbank.org/sites/default/files/documents/ICSID_Convention.pdf",
+          "fetch": "ok",
+          "confidence": "high",
+          "note": "费用、预缴与拖欠处理的条号须在合并本 Administrative and Financial Regulations 中逐条核对；lookup 须以 'Regulation N' 限定，勿与 Convention Article 或 Rule 同号混用。 该 PDF 为 ICSID/15/Rev.3 合并卷，同时含公约、机构规则、仲裁规则与行政财务规则；共用同一 URL 是合并卷的合法登记，不是复制错误，lookup 须以章节名限定。",
+          "download": "https://icsid.worldbank.org/sites/default/files/documents/ICSID_Convention.pdf"
+        }
+      ],
+      "_watch": "两条独立修订轨道须分别监测：Rules／Regs 修订由 Administrative Council 决议推动；Convention 本文修订依其自身修订条款。办案前查官方修订页；若出现新修订，本机构全部条号与管辖／执行章节须整体重核。版本判定须按 Convention 与 Arbitration Rules 官方文本核对，不预载结论。费用数额为机构网站公布数，每次办案现查并写明检索日。合并本 PDF 为 icsid-convention-2022／icsid-institution-rules-2022／icsid-admin-fin-regs-2022 三个 id 共用之官方文本层来源。",
+      "filing": {
+        "portal": null,
+        "url": null,
+        "email": null,
+        "mandatory": null,
+        "fetch": "unknown",
+        "checked_at": null,
+        "notes": "未核验；提交当日核对官方收件方式"
+      }
+    },
+    "sectoral-maritime-commodity": {
+      "name_zh": "伦敦海事与大宗商品仲裁（临时仲裁为主）",
+      "family": "sectoral",
+      "rules": [
+        {
+          "id": "lmaa-terms",
+          "title": "LMAA Terms 2021",
+          "effective": "2021-05-01",
+          "pdf": "https://lmaa.london/wp-content/uploads/2022/11/LMAA-Terms-2021.pdf",
+          "landing": "https://lmaa.london/the-lmaa-terms/",
+          "fetch": "ok",
+          "confidence": "high",
+          "download": "https://lmaa.london/wp-content/uploads/2022/11/LMAA-Terms-2021.pdf"
+        },
+        {
+          "id": "fosfa-2026",
+          "title": "FOSFA Rules of Arbitration and Appeal",
+          "effective": "2026-04-01",
+          "pdf": "https://www.fosfa.org/wp-content/uploads/2026/04/The-Rules-of-Arbitration-and-Appeal-1-April-2026.pdf",
+          "fetch": "ok",
+          "confidence": "high",
+          "download": "https://www.fosfa.org/wp-content/uploads/2026/04/The-Rules-of-Arbitration-and-Appeal-1-April-2026.pdf"
+        }
+      ],
+      "_note": "此类仲裁机构化程度低，时效（time-bar）与上诉／复审机制差异大；接案第一步须按适用规则官方文本核对时效与救济路径。",
+      "filing": {
+        "portal": null,
+        "url": null,
+        "email": null,
+        "mandatory": null,
+        "fetch": "unknown",
+        "checked_at": null,
+        "notes": "未核验；提交当日核对官方收件方式"
+      }
+    },
+    "hkiac": {
+      "name_zh": "香港国际仲裁中心",
+      "family": "asia",
+      "rules": [
+        {
+          "id": "hkiac-admin-2024",
+          "title": "HKIAC Administered Arbitration Rules 2024",
+          "effective": "2024-06-01",
+          "pdf": "https://hkiac.org/wp-content/uploads/2025/02/2024-HKIAC-ADMINISTERED-ARBITRATION-RULES-English.pdf",
+          "landing": "https://hkiac.org/arbitration/rules-and-practice-notes/2024-administered-arbitration-rules/",
+          "fetch": "ok",
+          "confidence": "high",
+          "pdf_zh": "https://hkiac.org/wp-content/uploads/2025/02/2024年版香港国际仲裁中心机构仲裁规则_简.pdf",
+          "download": "https://hkiac.org/wp-content/uploads/2025/02/2024-HKIAC-ADMINISTERED-ARBITRATION-RULES-English.pdf"
+        },
+        {
+          "id": "hkiac-domestic-2014",
+          "title": "HKIAC Domestic Arbitration Rules（历史条目，版本待核）",
+          "effective": null,
+          "pdf": null,
+          "fetch": "manual",
+          "confidence": "low",
+          "edition_status": "unverified",
+          "note": "机构规则选择与仲裁法的适用制度分别判断，涉外因素不当然决定适用 Administered Rules。依据当事人协议核验规则名称、版本、过渡及管理安排；旧条目编号不证明2014版本或生效日已核实。",
+          "landing": "https://hkiac.org/arbitration/rules-and-practice-notes/2014-hkiac-domestic-arbitration-rules/"
+        }
+      ],
+      "companions": [
+        {
+          "id": "hkiac-case-digest",
+          "title": "HKIAC Case Digest（以摘要与指引替代裁决公布）",
+          "url": "https://hkiac.org/case-digest/",
+          "type": "practice-note",
+          "fetch": "ok",
+          "confidence": "high"
+        },
+        {
+          "id": "hkiac-case-connect",
+          "title": "HKIAC Case Connect（电子提交与案件管理）",
+          "url": "https://hkiac.org/arbitration/case-connect/",
+          "type": "filing",
+          "fetch": "ok",
+          "confidence": "high"
+        },
+        {
+          "id": "hkiac-expedited-2026",
+          "title": "HKIAC 简易程序扩围与费用调整公告",
+          "url": "https://hkiac.org/news/hkiac-announces-expansion-of-expedited-procedure-updates-fees-and-releases-new-report-to-enhance-transparency-on-costs/",
+          "type": "announcement",
+          "fetch": "ok",
+          "confidence": "high"
+        }
+      ],
+      "fees": [
+        {
+          "id": "hkiac-schedule-of-fees",
+          "title": "HKIAC Schedule of Fees",
+          "url": "https://hkiac.org/arbitration/fees/",
+          "fetch": "ok",
+          "confidence": "high"
+        }
+      ],
+      "_watch": "简易程序门槛按启动日对应版本现取，不预载数值；历史公告与现行规则须分别核对。",
+      "filing": {
+        "portal": null,
+        "url": null,
+        "email": null,
+        "mandatory": null,
+        "fetch": "unknown",
+        "checked_at": null,
+        "notes": "未核验；提交当日核对官方收件方式"
+      }
+    },
+    "siac": {
+      "name_zh": "新加坡国际仲裁中心",
+      "family": "asia",
+      "rules": [
+        {
+          "id": "siac-2025",
+          "title": "SIAC Rules (7th edition, 2025)",
+          "effective": "2025-01-01",
+          "landing": "https://siac.org.sg/siac-rules-2025",
+          "fetch": "blocked",
+          "confidence": "medium",
+          "note": "官网对自动抓取返回 403，纯 HTTP 取文管线按受阻对待。技能包不附带该版官方全文，包内也没有可机器复核的取文摘要或逐项锚点核验记录。运行时须由使用者人工下载官方文本，经 import 与 verify 登记核验人、版本、定位和日期后才能引用；官网改版或规则换版时须重新取文回校，不得沿用缓存文本。",
+          "fallback_sources": [
+            {
+              "url": "https://www.cietac.org/articles/20350",
+              "kind": "mirror",
+              "note": "CIETAC 转载 SIAC 原文；须核版本、完整性，不当作 SIAC 实时官网"
+            }
+          ]
+        }
+      ],
+      "companions": [
+        {
+          "id": "siac-gateway",
+          "title": "SIAC Gateway（在线立案与案件管理）",
+          "url": "https://siac-gateway.on.opus2.com/",
+          "type": "filing",
+          "fetch": "manual",
+          "confidence": "high"
+        }
+      ],
+      "fees": [
+        {
+          "id": "siac-schedule-of-fees-2025",
+          "title": "SIAC Schedule of Fees 2025",
+          "landing": "https://siac.org.sg/siac-schedule-of-fees-2025",
+          "fetch": "blocked",
+          "mirror": "https://www.acerislaw.com/wp-content/uploads/2024/12/SIAC-Schedule-of-Fees-2025.pdf",
+          "confidence": "medium"
+        }
+      ],
+      "_watch": "官网对自动抓取返回 403：官方全文须经浏览器通道取回；引用条号前核对本版官方文本，换版或站点改版时重新取文回校。",
+      "filing": {
+        "portal": null,
+        "url": null,
+        "email": null,
+        "mandatory": null,
+        "fetch": "unknown",
+        "checked_at": null,
+        "notes": "未核验；提交当日核对官方收件方式"
+      }
+    },
+    "cietac": {
+      "name_zh": "中国国际经济贸易仲裁委员会（CIETAC，含 CMAC 海事）",
+      "family": "asia",
+      "rules": [
+        {
+          "id": "cietac-2024",
+          "title": "中国国际经济贸易仲裁委员会仲裁规则（2024 版）",
+          "effective": "2024-01-01",
+          "landing": "https://www.cietac.org/articles/25022",
+          "pdf_zh": "https://www.cietac.org/sfs/cms/991fe787204a35c648dad3e4023931b6.pdf",
+          "landing_en": "https://www.cietac.org/en/articles/32216",
+          "pdf_en": "https://www.cietac.org/en/sfs/cms/dd4ca1bb9e9d4a6d91ffafd87164e480.pdf",
+          "fetch": "ok",
+          "confidence": "high",
+          "download": "https://www.cietac.org/sfs/cms/991fe787204a35c648dad3e4023931b6.pdf",
+          "download_en": "https://www.cietac.org/en/sfs/cms/dd4ca1bb9e9d4a6d91ffafd87164e480.pdf"
+        },
+        {
+          "id": "cmac-maritime",
+          "title": "中国海事仲裁委员会仲裁规则",
+          "landing": "https://www.cmac.org.cn/index.php?catid=20",
+          "fetch": "manual",
+          "confidence": "low"
+        }
+      ],
+      "companions": [
+        {
+          "id": "cietac-tpf",
+          "title": "贸仲第三方资助相关规定",
+          "landing": "https://www.cietac.org/articles/20058",
+          "type": "practice-note",
+          "fetch": "ok",
+          "confidence": "medium"
+        }
+      ],
+      "fees": [
+        {
+          "id": "cietac-fee",
+          "title": "贸仲仲裁费用表",
+          "url": "https://www.cietac.org/articles/25014",
+          "calculator": "https://www.cietac.org/cost-calculator",
+          "hourly": "https://www.cietac.org/articles/33709",
+          "fetch": "ok",
+          "confidence": "high"
+        }
+      ],
+      "_watch": "简易程序金额门槛、自贸区规则现行版本与 CMAC 规则年份须现查官方文本；版本适用基准按现行规则官方文本核对，不凭旧登记回填。",
+      "filing": {
+        "portal": null,
+        "url": null,
+        "email": null,
+        "mandatory": null,
+        "fetch": "unknown",
+        "checked_at": null,
+        "notes": "未核验；提交当日核对官方收件方式"
+      }
+    },
+    "bac-biac": {
+      "name_zh": "北京仲裁委员会 / 国际仲裁院（BAC / BIAC）",
+      "family": "asia",
+      "rules": [
+        {
+          "id": "bac-intl-2026",
+          "title": "北京仲裁委员会国际仲裁规则（2026 版）",
+          "effective": "2026-01-01",
+          "landing": "https://www.bjac.org.cn/#/home",
+          "api": "https://www.bjac.org.cn/api/front/article/getArticle?id=2064145853272342530&siteId=1",
+          "pdf": "https://temp2.bjac.org.cn/upload/file/getUpload/2026-06-08/91b26606-cad3-4829-af81-5567650da89b.pdf",
+          "fetch": "ok",
+          "confidence": "high",
+          "note": "官网 bjac.org.cn 为 Vue SPA，旧静态路径 404；正文经前端内容 API 动态渲染。抓取配方：所有 /api/front/** 调用须带 siteId=1、orgId=1（勿用 localStorage 里的 UUID，否则返回 code -1 系统异常）。菜单 /api/front/articleCategory/categoryMenus?orgId=1&siteId=1 取分类；国际仲裁规则 SinglePage categoryId=2064145274194149377 → 文章 id=2064145853272342530。2026-10-24 已从官方主站正文 API 与 temp2.bjac.org.cn 官方 PDF（70 页中英对照，publishTime 2026-06-09）直接核验全部 18 个锚点条号与机制标题，逐条吻合。缓存 data/official/bac-intl-2026-primary.pdf。北京市司法局镜像 sfj.beijing.gov.cn 仅作备份。",
+          "download": "https://temp2.bjac.org.cn/upload/file/getUpload/2026-06-08/91b26606-cad3-4829-af81-5567650da89b.pdf"
+        }
+      ],
+      "_watch": "简易程序金额门槛与收费办法须回官方 API（siteId=1&orgId=1）核对；收费页 categoryId 见 categoryMenus；早期驳回与紧急仲裁员机制已按官方正文核验，条号与机制标题见 assets/rule-anchors.yaml 的 bac-biac 节。",
+      "filing": {
+        "portal": null,
+        "url": null,
+        "email": null,
+        "mandatory": null,
+        "fetch": "unknown",
+        "checked_at": null,
+        "notes": "未核验；提交当日核对官方收件方式"
+      }
+    },
+    "shiac": {
+      "name_zh": "上海国际经济贸易仲裁委员会（上海国际仲裁中心）（SHIAC）",
+      "family": "asia",
+      "rules": [
+        {
+          "id": "shiac-2024",
+          "title": "上海国际经济贸易仲裁委员会（上海国际仲裁中心）仲裁规则（2024 版）",
+          "effective": "2024-01-01",
+          "landing": "https://www.shiac.org/pc/SHIAC?moduleCode=arbitrate_rules",
+          "pdf": "https://shiac.org/api/fileOperation/download/XshXyhVLT43cRWetXJasqw",
+          "fetch": "ok",
+          "confidence": "high",
+          "note": "规则清单接口需登录，条文须以官方 PDF 文本核对；多语文本的效力关系按官方文本核对。",
+          "download": "https://shiac.org/api/fileOperation/download/XshXyhVLT43cRWetXJasqw"
+        }
+      ],
+      "fees": [
+        {
+          "id": "shiac-calculator",
+          "title": "SHIAC 费用快算",
+          "url": "https://www.shiac.org/pc/SHIAC?moduleCode=quick_shiac_calculate",
+          "fetch": "ok",
+          "confidence": "medium"
+        }
+      ],
+      "_watch": "勿与上海仲裁委员会（accsh.org，另一家机构）混淆；文书必须写全称与注册地，不要把两家机构的规则或费用表混用。",
+      "filing": {
+        "portal": null,
+        "url": null,
+        "email": null,
+        "mandatory": null,
+        "fetch": "unknown",
+        "checked_at": null,
+        "notes": "未核验；提交当日核对官方收件方式"
+      }
+    },
+    "scia": {
+      "name_zh": "深圳国际仲裁院（SCIA）",
+      "family": "asia",
+      "rules": [
+        {
+          "id": "scia-2025",
+          "title": "深圳国际仲裁院仲裁规则（2025 年修正，即 2019 版第四次修正）",
+          "effective": "2025-07-01",
+          "landing": "https://online.scia.com.cn/Common/SciaRule2025",
+          "landing_en": "https://en.scia.com.cn/ArbitrationRules.html",
+          "rules_list": "https://online.scia.com.cn/Common/Rules",
+          "fetch": "manual",
+          "confidence": "high",
+          "note": "中英页面并存；规则文本与条号须以官方页面或 PDF 取文核对。"
+        }
+      ],
+      "companions": [
+        {
+          "id": "scia-appellate-guide",
+          "title": "SCIA 选择性复裁指引（2022）",
+          "url": "https://online.scia.com.cn/Common/SciaAppellateGuide2022",
+          "type": "practice-note",
+          "fetch": "ok",
+          "confidence": "medium"
+        },
+        {
+          "id": "scia-maritime-logistics",
+          "title": "SCIA 海事物流仲裁规则（2026 年修正）",
+          "effective": "2026-03-01",
+          "url": "https://online.scia.com.cn/Common/SciaMaritimeRule2026",
+          "type": "rules",
+          "fetch": "ok",
+          "confidence": "medium",
+          "note": "2026-10-18 实测 www.scia.com.cn 旧路径返回 405，改用 online.scia.com.cn；海事物流条款须与该专门规则核对，不要引用主规则条号。"
+        }
+      ],
+      "fees": [
+        {
+          "id": "scia-fee",
+          "title": "SCIA 收费标准",
+          "url": "https://online.scia.com.cn/Common/Fees",
+          "fetch": "manual",
+          "confidence": "high",
+          "note": "2026-10-18 实测 www.scia.com.cn 对自动请求返回 405，改用 online.scia.com.cn / en.scia.com.cn；费率数值必须现取现用，不得沿用旧表。"
+        }
+      ],
+      "_watch": "深圳 SCIA 与港资 SCIAHK（华南国际仲裁中心）名称极易混淆，文书必须写全称与注册地。",
+      "filing": {
+        "portal": null,
+        "url": null,
+        "email": null,
+        "mandatory": null,
+        "fetch": "unknown",
+        "checked_at": null,
+        "notes": "未核验；提交当日核对官方收件方式"
+      }
+    },
+    "sciahk": {
+      "name_zh": "华南国际仲裁中心（SCIAHK，香港）",
+      "family": "asia",
+      "rules": [
+        {
+          "id": "sciahk-2025",
+          "title": "SCIAHK Arbitration Rules 2025",
+          "effective": "2025-03-31",
+          "landing": "https://www.scia.org.hk/en/arbitration/2025rules",
+          "fetch": "manual",
+          "confidence": "high",
+          "note": "以 UNCITRAL 仲裁规则为蓝本（机构自述）；应答、组庭、合并与加入、紧急仲裁员、上诉与快速程序等条号须取官方文本核对。"
+        }
+      ],
+      "filing": {
+        "portal": null,
+        "url": null,
+        "email": null,
+        "mandatory": null,
+        "fetch": "unknown",
+        "checked_at": null,
+        "notes": "未核验；提交当日核对官方收件方式"
+      }
+    },
+    "kcab": {
+      "name_zh": "大韩商调仲裁院国际仲裁院（KCAB / IAC）",
+      "family": "asia",
+      "rules": [
+        {
+          "id": "kcab-2026",
+          "title": "KCAB International Arbitration Rules 2026",
+          "effective": "2026-01-01",
+          "landing": "https://www.kcabinternational.or.kr/arbitration/arbitration_rules.do",
+          "pdf": "https://www.kcabinternational.or.kr/eng/pdf/2026%20KCAB%20International%20Arbitration%20Rules%20(ENG).pdf",
+          "fetch": "ok",
+          "confidence": "high",
+          "note": "官方 PDF 前言明定以英文文本为准；答辩／反请求、组庭、保全、加入、多合同、合并、并行程序与紧急仲裁员等条号须取官方文本核对。",
+          "download": "https://www.kcabinternational.or.kr/eng/pdf/2026%20KCAB%20International%20Arbitration%20Rules%20(ENG).pdf"
+        }
+      ],
+      "filing": {
+        "portal": null,
+        "url": null,
+        "email": null,
+        "mandatory": null,
+        "fetch": "unknown",
+        "checked_at": null,
+        "notes": "未核验；提交当日核对官方收件方式"
+      }
+    },
+    "jcaa": {
+      "name_zh": "日本商事仲裁协会（JCAA）",
+      "family": "asia",
+      "rules": [
+        {
+          "id": "jcaa-2021",
+          "title": "JCAA Commercial Arbitration Rules 2021",
+          "effective": "2021-07-01",
+          "landing": "https://www.jcaa.or.jp/common/pdf/arbitration/Commercial_Arbitration_Rules2021_en.pdf",
+          "fetch": "manual",
+          "confidence": "high",
+          "note": "JCAA 主站 HTML 页面返回 423，但 PDF 直链可正常下载。2026-10-24 成功获取 56 页英文版规则文本并缓存。"
+        }
+      ],
+      "filing": {
+        "portal": null,
+        "url": null,
+        "email": null,
+        "mandatory": null,
+        "fetch": "unknown",
+        "checked_at": null,
+        "notes": "未核验；提交当日核对官方收件方式"
+      }
+    },
+    "aiac": {
+      "name_zh": "亚洲国际仲裁中心（AIAC，吉隆坡）",
+      "family": "asia",
+      "rules": [
+        {
+          "id": "aiac-2026",
+          "title": "AIAC Arbitration Rules 2026",
+          "effective": "2026-01-01",
+          "pdf": "https://admin.aiac.world/uploads/ckupload/ckupload_20251229031919_71.pdf",
+          "fetch": "ok",
+          "confidence": "high",
+          "note": "官网规则页为前端渲染，须用 PDF 直链取文本。答辩、组庭、临时措施、紧急仲裁员、费用、合并、加入与快速程序等条号须取官方文本核对。",
+          "download": "https://admin.aiac.world/uploads/ckupload/ckupload_20251229031919_71.pdf"
+        }
+      ],
+      "_watch": "规则名称与快速程序门槛须以官方文本核对，不预载数值；不得引用未经官方确认的规则名。",
+      "filing": {
+        "portal": null,
+        "url": null,
+        "email": null,
+        "mandatory": null,
+        "fetch": "unknown",
+        "checked_at": null,
+        "notes": "未核验；提交当日核对官方收件方式"
+      }
+    },
+    "oceania": {
+      "name_zh": "澳大利亚（ACICA / Resolution Institute）",
+      "family": "asia",
+      "rules": [
+        {
+          "id": "acica-2021",
+          "title": "ACICA Arbitration Rules 2021",
+          "effective": "2021-03-01",
+          "pdf": "https://acica.org.au/wp-content/uploads/2022/11/ACICA_Rules_2021-WFF7.pdf",
+          "landing": "https://acica.org.au/acica-rules-2021/",
+          "fetch": "ok",
+          "confidence": "high",
+          "note": "官方规则页只表述为 2021 年 3 月经理事会正式批准并通过，未给 2021-01-01 生效日；本条 effective 系保守取值，程序期限起算须以文本自身条款核对。官网另开有 2026 年规则修订咨询，现行版本可能变更。",
+          "download": "https://acica.org.au/wp-content/uploads/2022/11/ACICA_Rules_2021-WFF7.pdf"
+        },
+        {
+          "id": "ri-2023",
+          "title": "Resolution Institute Arbitration Rules 2023",
+          "effective": "2023-01-01",
+          "pdf": "https://resolution.institute/common/Uploaded%20files/Rules%20and%20Regulations/Resolution%20Institute%20Arbitration%20Rules%202023.pdf",
+          "fetch": "manual",
+          "confidence": "low",
+          "note": "2026-10-18 官网整站对自动请求返回 403（反爬），且检索另见标题为 2020 版的 PDF，2023 版未经官方文本确证。条号与天数未经人工下载核对前不得写入文书，并按降级披露未核验最新仲裁规则的可适用性。",
+          "landing": "https://resolution.institute/common/Uploaded%20files/Rules%20and%20Regulations/Resolution%20Institute%20Arbitration%20Rules%202023.pdf"
+        }
+      ],
+      "filing": {
+        "portal": null,
+        "url": null,
+        "email": null,
+        "mandatory": null,
+        "fetch": "unknown",
+        "checked_at": null,
+        "notes": "未核验；提交当日核对官方收件方式"
+      }
+    },
+    "india": {
+      "name_zh": "印度（MCIA 等）",
+      "family": "asia",
+      "rules": [
+        {
+          "id": "mcia-2025",
+          "title": "MCIA Rules 2025",
+          "effective": null,
+          "pdf": "https://mcia.org.in/pdfs/MCIA-Rules-2025.pdf",
+          "landing": "https://mcia.org.in/mcia-rules-2025.php",
+          "fetch": "ok",
+          "confidence": "high",
+          "note": "官方站点现行文本为 MCIA Rules 2025（与 2016 版并列留存），但 2025-01-01 生效日无官方依据。期限起算须按规则自身条款与立案日核对，未经确证前按降级披露处理。",
+          "download": "https://mcia.org.in/pdfs/MCIA-Rules-2025.pdf"
+        },
+        {
+          "id": "lcia-miac-2018",
+          "title": "LCIA-MIAC Rules 2018（LCIA India 已停管新案，仅历史案件）",
+          "effective": "2018-07-27",
+          "url": "https://www.lcia.org/lcia-miac-arbitration-rules-2018.aspx",
+          "fetch": "manual",
+          "confidence": "high",
+          "note": "历史案件专用条目；LCIA India 已停止受理新案，当前案件不适用。引用前核对官方页面。",
+          "landing": "https://www.lcia.org/lcia-miac-arbitration-rules-2018.aspx"
+        }
+      ],
+      "_watch": "印度仲裁法修正案的成法状态须现查官方来源，不得写成「已生效」或「尚未成法」，须标注核验日期。",
+      "filing": {
+        "portal": null,
+        "url": null,
+        "email": null,
+        "mandatory": null,
+        "fetch": "unknown",
+        "checked_at": null,
+        "notes": "未核验；提交当日核对官方收件方式"
+      }
+    },
+    "west-asia": {
+      "name_zh": "西亚与北非（DIAC / arbitrateAD / QICCA / CRCICA / BCDR / SCA）",
+      "family": "asia",
+      "rules": [
+        {
+          "id": "diac-2022",
+          "title": "DIAC Arbitration Rules 2022（DIFC-LCIA 并入后统一适用）",
+          "effective": "2022-03-21",
+          "pdf": "https://www.diac.com/wp-content/uploads/2024/12/0.1-DIAC-Casework-2022-Arbitration-Rules.pdf",
+          "landing": "https://www.diac.com/en/adr-services/arbitration/rules/diac-arbitration-rules-2022/",
+          "fetch": "ok",
+          "confidence": "high",
+          "note": "2026-10-18 官网规则页里的 PDF 链接自身路径有误（2024-12- 代替 2024/12/），实测直链 200/application/pdf；引用仍以规则页为准，下载走此直链。",
+          "download": "https://www.diac.com/wp-content/uploads/2024/12/0.1-DIAC-Casework-2022-Arbitration-Rules.pdf"
+        },
+        {
+          "id": "arbitratead-2024",
+          "title": "arbitrateAD (ADCCAC) Arbitration Rules 2024",
+          "effective": "2024-02-01",
+          "pdf": "https://www.arbitratead.ae/files/arbitration-rules.pdf",
+          "fetch": "ok",
+          "confidence": "high",
+          "download": "https://www.arbitratead.ae/files/arbitration-rules.pdf"
+        },
+        {
+          "id": "qicca-2024",
+          "title": "QICCA Arbitration Rules 2024",
+          "effective": "2025-01-01",
+          "landing": "https://qicca.org/",
+          "fetch": "manual",
+          "confidence": "low",
+          "note": "官网同时并列 2024 与 2012 两套仲裁规则，另有 2026 年调解规则；2024 版规则 PDF（8.6MB）自动下载截断、无法解析，生效日未经官方文本确证。并行版本须按条款现查，否则按降级披露处理。"
+        },
+        {
+          "id": "crcica-2024",
+          "title": "CRCICA Arbitration Rules 2024",
+          "effective": "2024-01-15",
+          "pdf": "https://crcica.org/rules/arbitration/cr_arb_rules_en.pdf",
+          "landing": "https://crcica.org/arbitration/crcica-arbitration-rules/",
+          "fetch": "ok",
+          "confidence": "high",
+          "download": "https://crcica.org/rules/arbitration/cr_arb_rules_en.pdf"
+        },
+        {
+          "id": "bcdr-2022",
+          "title": "BCDR Rules of Arbitration 2022",
+          "effective": null,
+          "landing": "https://bcdr.org/2022-rules-of-arbitration/",
+          "fetch": "manual",
+          "confidence": "medium",
+          "note": "官网现行规则页为 2022 Rules of Arbitration，2017 版仅作存档；2022 规则自身生效与适用日起点未官方标明，须人工确认后填写，不得沿用 2017 版条号。"
+        },
+        {
+          "id": "sca-2023",
+          "title": "沙特商事仲裁中心（SCA）Arbitration Rules 2023（取代旧 GCAI 路径）",
+          "effective": "2023-05-01",
+          "landing": "https://sadr.org/en/arbitration-rules/2023-arbitration-rules",
+          "pdf": "https://sadr.org/public/upload/pdf-files/2023-Arbitration-Rules-En.pdf",
+          "fetch": "ok",
+          "confidence": "high",
+          "download": "https://sadr.org/public/upload/pdf-files/2023-Arbitration-Rules-En.pdf"
+        },
+        {
+          "id": "sca-small-claims-2026",
+          "title": "SCA 小额程序规则（2026 年新增）",
+          "effective": "2026-08-01",
+          "rule_set": "sca-small-claims",
+          "role": "annex",
+          "landing": "https://sadr.org/en/arbitration-rules/2023-arbitration-rules",
+          "fetch": "manual",
+          "confidence": "medium",
+          "note": "官方 2023 规则页新增小额程序，2026-08-01 生效；另有 SCA Mediation Rules 2026。适用门槛与程序条号须现取官方文本，不得凭旧版推断。"
+        }
+      ],
+      "filing": {
+        "portal": null,
+        "url": null,
+        "email": null,
+        "mandatory": null,
+        "fetch": "unknown",
+        "checked_at": null,
+        "notes": "未核验；提交当日核对官方收件方式"
+      }
+    }
+  },
+  "statutes": [
+    {
+      "id": "cn-arbitration-law-2025",
+      "juris": "中国大陆",
+      "title": "中华人民共和国仲裁法（2025 修订，2026-03-01 施行）",
+      "landing": "https://cicc.court.gov.cn/html/1/218/149/156/12620.html",
+      "alt": "https://policy.mofcom.gov.cn/claw/clawContent.shtml?id=103718",
+      "url": "https://ydzk.chineselaw.com/zxt/statuteDetail/detailPage/321d2994439dd60547f8d95b3cc8cf65",
+      "fetch": "ok",
+      "confidence": "high",
+      "note": "2025 年修订文本全文已按主席令编号、公布与施行日期在法条检索通道（元典）核对，现行有效；引用条号须按取回文本命中，旧版条号不得沿用。仲裁地制度、临时措施与涉外仲裁章节的司法解释衔接另见 china_judicial_review 条目"
+    },
+    {
+      "id": "sg-iaa-1994",
+      "juris": "新加坡",
+      "title": "International Arbitration Act 1994",
+      "url": "https://sso.agc.gov.sg/act/iaa1994",
+      "fetch": "manual",
+      "confidence": "low",
+      "note": "SSO 对自动抓取返回 403，合并文本的 as-at 更新日无法官方确证，亦未见修订线索。引用条文须人工取 SSO 现行文本并记其 as-at 日期。"
+    },
+    {
+      "id": "hk-cap609",
+      "juris": "香港",
+      "title": "仲裁条例（Cap. 609）",
+      "url": "https://www.elegislation.gov.hk/hk/cap609",
+      "fetch": "manual",
+      "confidence": "high",
+      "note": "2026-10-18 实测官方立法页仅返回脚本外壳，条文须人工取文本。2026-09-28 律政司就仲裁法例检讨启动公众咨询（HKIAC 同日发布配合公告），条例本身尚未修订，但必须在后续每轮核验中检查是否已提出修订草案。"
+    },
+    {
+      "id": "uk-arbitration-act",
+      "juris": "英格兰及威尔士",
+      "title": "Arbitration Act 1996（并关注 2025 年新法）",
+      "url": "https://www.legislation.gov.uk/ukpga/1996/23",
+      "fetch": "ok",
+      "confidence": "medium"
+    },
+    {
+      "id": "fr-cpc-arbitration",
+      "juris": "法国",
+      "title": "法国民事诉讼法仲裁相关编章（官方立法库）",
+      "url": "https://www.legifrance.gouv.fr/loda/id/LEGITIF00000744861",
+      "fetch": "manual",
+      "confidence": "low"
+    },
+    {
+      "id": "us-faa",
+      "juris": "美国",
+      "title": "Federal Arbitration Act (9 U.S.C. §1 et seq.)",
+      "url": "https://www.govinfo.gov/content/pkg/USCODE-2023-title9/html/USCODE-2023-title9-chap1.htm",
+      "fetch": "ok",
+      "confidence": "medium"
+    },
+    {
+      "id": "au-iaa-1974",
+      "juris": "澳大利亚",
+      "title": "International Arbitration Act 1974",
+      "url": "https://www.legislation.gov.au/C2004A00390/latest/text",
+      "fetch": "ok",
+      "confidence": "high",
+      "note": "2026-10-18 由 AustLII（实测 403 反爬）改为联邦立法门户合并文本，实测 200。"
+    },
+    {
+      "id": "my-arbitration-act-2005",
+      "juris": "马来西亚",
+      "title": "Arbitration Act 2005 (Act 646，2024 修正，2026-01-01 起适用)",
+      "url": "https://www.investmalaysia.gov.my/media/vbiclrxq/arbitration-act-2005.pdf",
+      "fetch": "ok",
+      "confidence": "medium"
+    },
+    {
+      "id": "in-acact-1996",
+      "juris": "印度",
+      "title": "Arbitration and Conciliation Act 1996",
+      "url": "https://indiacode.gov.in/act/51601006-0e76-4a81-83ce-739f3a021112",
+      "fetch": "ok",
+      "confidence": "high"
+    },
+    {
+      "id": "jp-arbitration-act",
+      "juris": "日本",
+      "title": "仲裁法（2003，2023 修正、2024-04-01 施行）英译",
+      "url": "https://www.japaneselawtranslation.go.jp/en/laws/view/2784/en",
+      "fetch": "ok",
+      "confidence": "high"
+    },
+    {
+      "id": "kr-arbitration-act",
+      "juris": "韩国",
+      "title": "韩国仲裁法英译",
+      "url": "https://www.kcabinternational.or.kr/judgment/korean_arbitration_act.do",
+      "alt": "https://elaw.klri.re.kr",
+      "fetch": "ok",
+      "confidence": "medium"
+    },
+    {
+      "id": "ch-pila-ch12",
+      "juris": "瑞士",
+      "title": "瑞士国际私法法典（仲裁编章）",
+      "url": "https://www.fedlex.admin.ch/eli/cc/1987/740_781_799/en",
+      "fetch": "ok",
+      "confidence": "medium"
+    },
+    {
+      "id": "ae-federal-arb-law",
+      "juris": "阿联酋（大陆）",
+      "title": "Federal Decree-Law No. 6 of 2018 on Arbitration",
+      "note": "官方免费全文 URL 未证实；DIFC/ADGM 不适用",
+      "url": "https://www.diac.ae/",
+      "fetch": "manual",
+      "confidence": "low"
+    }
+  ],
+  "treaties": [
+    {
+      "id": "ny-convention-status",
+      "title": "纽约公约（1958）缔约国、保留与领土适用核查入口",
+      "url": "https://uncitral.un.org/en/texts/arbitration/conventions/foreign_arbitral_awards/status2",
+      "alt": "https://www.newyorkconvention.org/contracting-states",
+      "fetch": "manual",
+      "confidence": "medium",
+      "note": "本项是状态检索入口，不是公约全文或本案适用性证明。逐案核验有关国家／地区、生效日、保留及领土延伸；不沿用历史缔约方数量。公约正文、保存机关记录及执行地实施法分别取文核验。"
+    },
+    {
+      "id": "singapore-convention",
+      "title": "新加坡调解公约资料入口",
+      "url": "https://www.singaporeconvention.org/convention/about",
+      "fetch": "manual",
+      "confidence": "medium",
+      "note": "仅用于识别符合条件的国际商事调解和解路径并转交；不作为仲裁裁决执行的替代捷径。须另核主体、争议、排除事项、保留及相关国家适用状态。"
+    }
+  ],
+  "soft_law": [
+    {
+      "id": "uncitral-rules-2010",
+      "title": "UNCITRAL Arbitration Rules (as revised 2010)",
+      "effective": "2010-08-15",
+      "pdf": "https://uncitral.un.org/sites/default/files/media-documents/uncitral/en/arb-rules-revised-2010-e.pdf",
+      "landing": "https://uncitral.un.org/en/texts/arbitration/contractualtexts/arbitration",
+      "fetch": "blocked",
+      "confidence": "high",
+      "note": "uncitral.un.org 实测 2026-10-19 对普通 curl 返回 200（旧登记的 403 说明已过期）。官方现行文本为合并版；引用时须注明所引为合并版及各修正年份。规则本体见 institutions.uncitral-pca 之 uncitral-rules-2021。"
+    },
+    {
+      "id": "uncitral-expedited-2021",
+      "title": "UNCITRAL Expedited Arbitration Rules (2021)",
+      "effective": "2021-09-19",
+      "pdf": "https://uncitral.un.org/sites/default/files/media-documents/uncitral/en/21-07996_expedited-arbitration-e-ebook.pdf",
+      "fetch": "ok",
+      "confidence": "high",
+      "note": "官方 PDF 直链实测 200；旧登记路径缺 /en/ 段，实测 404，已修正。快速规则的适用条件与生效表述须按官方文本核对。"
+    },
+    {
+      "id": "uncitral-model-law",
+      "title": "UNCITRAL Model Law on International Commercial Arbitration (1985), with amendments as adopted in 2006",
+      "effective": "2006-07-07",
+      "url": "https://uncitral.un.org/en/texts/arbitration/modellaw/commercial_arbitration",
+      "fetch": "blocked",
+      "confidence": "high",
+      "note": "官方题为 \"(1985), with amendments as adopted in 2006\"，2006 修订条文由 UNCITRAL 于 2006-07-07 通过，无更新版本。旧登记 URL 误指向仲裁规则页，已改为示范法专页。"
+    },
+    {
+      "id": "uncitral-notes-2016",
+      "title": "UNCITRAL Notes for Organising Arbitral Proceedings (2016)",
+      "pdf": "https://uncitral.un.org/sites/default/files/media-documents/uncitral/en/arb-notes-2016-e.pdf",
+      "fetch": "ok",
+      "confidence": "high",
+      "note": "PDF 直链实测 200"
+    },
+    {
+      "id": "iba-evidence-2020",
+      "title": "IBA Rules on the Taking of Evidence in International Arbitration (2020)",
+      "effective": "2020-01-01",
+      "pdf": "https://www.ibanet.org/MediaHandler?id=def0807b-9fec-43ef-b624-f2cb2af7cf7b",
+      "fetch": "blocked",
+      "confidence": "medium",
+      "note": "2026-10-18 本机访问 ibanet.org 超时（curl 28 / 抓取失败），2020 版是否已被修订无法确证；曾登记的第三方镜像为无效占位链接，已删除。引用条文号前须人工取官方文本，并披露未核验最新仲裁规则的可适用性。"
+    },
+    {
+      "id": "iba-conflicts-2024",
+      "title": "IBA Guidelines on Conflicts of Interest in International Arbitration (2024)",
+      "effective": "2024-01-01",
+      "pdf": "https://www.ibanet.org/document?id=Guidelines-on-Conflicts-of-Interest-in-International-Arbitration-2024",
+      "fetch": "blocked",
+      "confidence": "high"
+    },
+    {
+      "id": "prague-rules-2018",
+      "title": "Prague Rules on the Efficient Conduct of Proceedings in International Arbitration (2018)",
+      "effective": "2018-12-14",
+      "url": "https://praguerules.org/",
+      "fetch": "manual",
+      "confidence": "medium",
+      "note": "此前登记完全缺项。官方站 \"Final Versions\" 栏目显示 2018-12-14 首发、未见更新版，生效日表述须以官方文本自述为准。当事人约定适用或仲裁庭指示参照时，条文号须人工取官方文本核对后方可写入文书。"
+    },
+    {
+      "id": "ciarb-rules-2015",
+      "title": "CIArb Arbitration Rules 2015（可用于临时仲裁机构化）",
+      "effective": "2015-12-01",
+      "pdf": "https://www.ciarb.org/media/v1lpnacq/1-ciarb-arbitration-rules.pdf",
+      "fetch": "ok",
+      "confidence": "high"
+    },
+    {
+      "id": "icca-ny-guide",
+      "title": "ICCA Guide to the Interpretation of the 1958 New York Convention",
+      "url": "https://www.arbitration-icca.org/iccas-guide-interpretation-1958-new-york-convention",
+      "fetch": "ok",
+      "confidence": "high"
+    }
+  ],
+  "open_data": [
+    {
+      "id": "mendeley-investment-arb",
+      "kind": "dataset",
+      "url": "https://data.mendeley.com/datasets/2cstvvhdm5",
+      "license": "check before redistribution",
+      "refresh": "annual",
+      "use": "对照检索，不得作为法律依据引用"
+    }
+  ],
+  "community_and_guidance": [
+    {
+      "id": "kluwer-arb-blog",
+      "kind": "commentary",
+      "url": "https://legalblogs.wolterskluwer.com/arbitration-blog/",
+      "fetch": "ok",
+      "use": "实务与新规导航；不得作为引用依据"
+    },
+    {
+      "id": "gar-news",
+      "kind": "news",
+      "url": "https://globalarbitrationreview.com/",
+      "fetch": "blocked",
+      "use": "机构动态预警（深度内容付费）"
+    },
+    {
+      "id": "jusmundi",
+      "kind": "award-library",
+      "url": "https://jusmundi.com/",
+      "fetch": "blocked",
+      "use": "需授权；仅在用户已有权限时使用"
+    },
+    {
+      "id": "lexmea",
+      "kind": "per-article-rules",
+      "url": "https://www.lexmea.de/",
+      "fetch": "blocked",
+      "use": "前端渲染，脚本抓取为空；改用浏览器工具或官方 PDF"
+    }
+  ],
+  "drafting_instruments": [
+    {
+      "id": "icc-award-checklist",
+      "title": "ICC Award Checklist（裁决核对清单）",
+      "kind": "checklist",
+      "pdf": "https://iccwbo.org/wp-content/uploads/sites/3/2016/04/ICC-Award-Checklist-English.pdf",
+      "landing": "https://iccwbo.org/news-publications/arbitration-adr-rules-and-tools/icc-award-checklist-english-version/",
+      "fetch": "ok",
+      "confidence": "high",
+      "use": "裁决与裁决后环节核对表"
+    },
+    {
+      "id": "viac-award-checklist-2025",
+      "title": "VIAC Award Checklist 2025（可填写）",
+      "kind": "checklist",
+      "pdf": "https://www.viac.eu/wp-content/uploads/2025/12/VIAC-Award-Checklist-2025_Fillable-FINAL.pdf",
+      "fetch": "ok",
+      "confidence": "high",
+      "use": "裁决结构与要素核对"
+    },
+    {
+      "id": "iba-award-toolkit",
+      "title": "IBA Toolkit for Award Writing",
+      "kind": "checklist",
+      "url": "https://www.ibanet.org/MediaHandler?id=C2AF46AA-5D7A-4DF3-817E-F94149004219",
+      "fetch": "blocked",
+      "confidence": "medium",
+      "use": "裁决写作结构；须浏览器下载"
+    },
+    {
+      "id": "iba-party-representation-mirror",
+      "title": "IBA Guidelines on Party Representation in International Arbitration（第三方案例镜像）",
+      "kind": "soft-law",
+      "pdf": "https://www.advokatsamfundet.se/globalassets/advokatsamfundet/advokatdagarna/18okt_11.45_theibaguidelines_f.andersson.pdf",
+      "fetch": "ok",
+      "confidence": "low",
+      "use": "仅应急定位，引用前须回 IBA 官网核验"
+    },
+    {
+      "id": "delos-gap-traffic-lights",
+      "title": "Delos GAP Rules Toolkit 交通灯表（第 2 版）",
+      "kind": "seat-tool",
+      "pdf": "https://delosdr.org/wp-content/uploads/2021/06/Delos-GAP-2nd-edn-Combined-traffic-lights.pdf",
+      "landing": "https://delosdr.org/gap/overview-methodology/",
+      "fetch": "ok",
+      "confidence": "high",
+      "use": "仲裁地/机构选择的程序风险对照"
+    },
+    {
+      "id": "delos-gap-model-clauses",
+      "title": "Delos GAP Model Clauses",
+      "kind": "model-clause",
+      "url": "https://delosdr.org/gap/model-clauses/",
+      "fetch": "ok",
+      "confidence": "high",
+      "use": "条款重写参考"
+    },
+    {
+      "id": "uncitral-akn-xml",
+      "title": "UNCITRAL 文书 AKN4UN XML 结构化文本",
+      "kind": "structured-text",
+      "url": "https://github.com/UNxml/uncitral",
+      "fetch": "manual",
+      "confidence": "medium",
+      "use": "条文结构化检索（许可需核对）",
+      "note": "2026-10-18 本机网络不可达（连接超时）。维护时改在可出网环境跑 check；办案引用时以浏览器打开页面为准，不以本条充当来源。"
+    },
+    {
+      "id": "aaa-clause-builder-mcp",
+      "title": "AAA Clause Builder 官方托管 MCP",
+      "url": "https://github.com/American-Arbitration-Association/clause-builder-ai",
+      "mcp": "https://mcp.adr.org/clause-builder/mcp",
+      "access": "mcp",
+      "refresh": "semiannual",
+      "use": "条款起草可用时优先官方输出；服务不可用时禁止以模型自撰条款替代",
+      "fetch": "manual"
+    }
+  ],
+  "model_clauses": [
+    {
+      "id": "icc-model-clause",
+      "title": "ICC 示范条款页",
+      "url": "https://iccwbo.org/dispute-resolution/dispute-resolution-services/arbitration/rules-procedure/arbitration-clause/",
+      "fetch": "ok",
+      "confidence": "high"
+    },
+    {
+      "id": "lcia-recommended-clause",
+      "title": "LCIA 推荐条款",
+      "url": "https://www.lcia.org/dispute_resolution_services/lcia_recommended_clauses.aspx",
+      "fetch": "ok",
+      "confidence": "high"
+    },
+    {
+      "id": "hkiac-model-clauses",
+      "title": "HKIAC 示范条款（含机构/临时/专家条款组合）",
+      "url": "https://hkiac.org/arbitration/model-clauses/",
+      "fetch": "ok",
+      "confidence": "high"
+    },
+    {
+      "id": "scc-dispute-clauses",
+      "title": "SCC 争议解决条款",
+      "url": "https://sccarbitrationinstitute.se/en/dispute-resolution-clauses/",
+      "fetch": "ok",
+      "confidence": "high"
+    },
+    {
+      "id": "aaa-clause-drafting",
+      "title": "AAA 条款起草工具",
+      "url": "https://www.adr.org/clause-drafting/",
+      "fetch": "ok",
+      "confidence": "high"
+    },
+    {
+      "id": "jams-model-clauses",
+      "title": "JAMS 示范条款",
+      "url": "https://www.jamsadr.com/clauses",
+      "fetch": "ok",
+      "confidence": "medium",
+      "note": "2026-10-18 更正路径（原 /rules-clauses/ 已 404），实测 200。"
+    },
+    {
+      "id": "siac-model-clauses",
+      "title": "SIAC 示范条款（含仲裁地/语言/人数整合版）",
+      "url": "https://siac.org.sg/model-clauses",
+      "fetch": "blocked",
+      "confidence": "high"
+    },
+    {
+      "id": "swiss-model-clause",
+      "title": "Swiss Arbitration Centre 示范条款",
+      "url": "https://www.swissarbitration.org/centre/arbitration/arbitration-rules/",
+      "fetch": "ok",
+      "confidence": "medium"
+    }
+  ],
+  "china_judicial_review": [
+    {
+      "id": "cn-spc-reporting-rule",
+      "title": "最高人民法院仲裁司法审查案件报核规定",
+      "kind": "judicial-interpretation",
+      "url": "https://gongbao.court.gov.cn/Details/d17983803cada81e2fb2d3e16c4f4f.html",
+      "fetch": "manual",
+      "confidence": "medium",
+      "note": "官网 HTTPS 入口重定向循环，自动抓取不可用；仅浏览器人工查阅并以取回文本核对",
+      "use": "境内仲裁地撤销/不予执行/承认执行的报核机制——中方案件的关键程序杠杆"
+    },
+    {
+      "id": "cn-spc-arb-review-provisions",
+      "title": "最高人民法院仲裁司法审查案件规定（修订）",
+      "kind": "judicial-interpretation",
+      "url": "https://gongbao.court.gov.cn/Details/6828ce472f23e02266d6776574fc53.html",
+      "fetch": "manual",
+      "confidence": "medium",
+      "note": "官网 HTTPS 入口重定向循环，自动抓取不可用；仅浏览器人工查阅并以取回文本核对"
+    },
+    {
+      "id": "cn-cicc-typical-cases",
+      "title": "国际商事法庭仲裁司法审查典型案例",
+      "kind": "cases",
+      "url": "https://cicc.court.gov.cn/html/1/218/62/163/2444.html",
+      "fetch": "manual",
+      "confidence": "medium",
+      "note": "curl 遇重定向循环；用浏览器查阅，不做爬取依赖"
+    },
+    {
+      "id": "cn-wenshu",
+      "title": "中国裁判文书网",
+      "kind": "cases",
+      "url": "https://wenshu.court.gov.cn",
+      "fetch": "blocked",
+      "confidence": "high",
+      "note": "需登录与滑块验证、无开放 API、爬取违反服务条款：仅允许逐案人工导出，禁止作为数据源依赖"
+    },
+    {
+      "id": "mofcom-12335",
+      "title": "商务部走出去公共服务平台（国别风险与经贸摩擦预警）",
+      "kind": "country-guide",
+      "url": "https://12335.mofcom.gov.cn",
+      "fetch": "ok",
+      "confidence": "medium"
+    },
+    {
+      "id": "moj-foreign-service-platform",
+      "title": "司法部涉外法律服务平台建设公告",
+      "kind": "platform",
+      "url": "https://www.moj.gov.cn/pub/sfbgw/gwxw/xwyw/202610/t20261010_540522.html",
+      "fetch": "ok",
+      "confidence": "low"
+    }
+  ],
+  "benchmarks": [
+    {
+      "id": "icc-stats-2024",
+      "title": "ICC 争议解决统计（2024）",
+      "kind": "stats",
+      "fetch": "manual",
+      "confidence": "medium",
+      "use": "期间与费用估算的经验参照，不得当作规则依据",
+      "landing": "https://iccwbo.org/",
+      "note": "2026-10-18 统计 PDF 路径按年版轮换（原链接 404），须在官网统计页现场取当期链接。"
+    },
+    {
+      "id": "hkiac-costs-report",
+      "title": "HKIAC 成本与期间报告",
+      "url": "https://hkiac.org/why-hkiac/costs-duration/",
+      "fetch": "ok",
+      "confidence": "medium"
+    },
+    {
+      "id": "arbitration-cost-calculator-mr",
+      "title": "Arbitration Costs Calculator（机器可读费用包）",
+      "kind": "machine-readable",
+      "url": "https://virjee-arbitration.com/arbitration-costs-calculator-machine-readable/",
+      "fetch": "ok",
+      "confidence": "medium",
+      "note": "仅行政费与仲裁员费用的区间估算，无服务端接口；输出必须注明为估算区间"
+    },
+    {
+      "id": "scc-cost-calculator",
+      "title": "SCC 费用计算器",
+      "url": "https://sccarbitrationinstitute.se/en/our-services/cost-calculator/",
+      "fetch": "ok",
+      "confidence": "high"
+    },
+    {
+      "id": "cietac-cost-calculator",
+      "title": "贸仲费用快算",
+      "url": "https://www.cietac.org/cost-calculator",
+      "fetch": "ok",
+      "confidence": "high"
+    },
+    {
+      "id": "cietac-minority-languages",
+      "title": "贸仲规则多语译本页",
+      "kind": "translation",
+      "url": "https://www.cietac.org/articles/21027",
+      "fetch": "ok",
+      "confidence": "medium",
+      "use": "非英语条款核对与双语一致性检查"
+    },
+    {
+      "id": "lcia-guidance-note",
+      "title": "LCIA Guidance Note（仲裁协议与程序操作要点）",
+      "kind": "practice-note",
+      "url": "https://www.lcia.org/adr-services/guidance-note.aspx",
+      "fetch": "ok",
+      "confidence": "high"
+    }
+  ]
+}

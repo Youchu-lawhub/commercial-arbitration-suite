@@ -1,0 +1,4 @@
+interface:
+  display_name: "中国企业涉外商事仲裁陪跑式专家"
+  short_description: "为出海企业法务串联协议体检、案件构建、仲裁程序与跨境执行，配套 Word 和中文审阅说明"
+  default_prompt: "使用 $commercial-arbitration-suite，先读我提供的材料，识别紧急期限和本轮商业目标；沿用已知信息，仅问影响当前决定的关键缺项，给出可执行的下一步。"

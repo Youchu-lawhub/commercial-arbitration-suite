@@ -1,0 +1,5077 @@
+version: 2
+policy: |
+  本表只登记"官方出处（或登记表已注明的镜像全文）+ 条号级检索定位"，不登记规则内容、天数、金额、费率或机制结论。
+  每条锚点必须同时具备：官方来源 id、条号定位、核验日期、在该版本文本中的命中说明。
+  官方站点拒绝自动抓取、全文仅能由记哈希的镜像文本取回时，锚点可以保留：via 须写明命中于镜像文本，
+  登记表 confidence 按 medium 登记，对外交付前须回官方 PDF 复核。
+  锚点不是可引用结论：写入文书前必须重新 fetch / lookup 本案适用版本，并把命中原文与来源标记一并交付。
+  无法绑定稳定官方来源的规则不得写入本表，也不得写入 references/、skills/、assets/templates/ 中的规则表述；
+  此类事项一律进入 open_questions，按问题处理，不按答案处理。
+freshness_days: 90
+status_values:
+  verified: 已在 basis_source 登记的规则全文（官方文本或已注明的镜像文本）中命中条号标题；须带 checked_at 与 via
+  # unverified / absent / superseded 不再允许出现在本文件中。
+  # 旧版条号、二手资料与"某机构没有某机制"的否定性断言，均不属于可保留的规则内容。
+consumers:
+  - references/forum-rules-matrix.md
+  - references/procedural-timetable.md
+  - scripts/fetch_official.py
+  - scripts/rule_audit.py
+usage:
+  - 锚点只回答"去哪一条找"，不回答"该条写的是什么"。
+  - 使用前运行 fetch_official.py applicable 定位本案适用版本，再 fetch 取文、lookup 命中短语。
+  - 缓存文本、版本 id 与校验日期不一致时，锚点按未核处理，条号写占位。
+  - 官方站点不可达时照常完成本轮工作，但须披露"未核验最新规则可适用性"，不得凭记忆回填条号。
+  - 新增锚点只能来自本次实际取回的该版本规则全文；不得从旧版、评论、二手汇编或模型记忆转录，
+    镜像命中一律不得写成官方文本命中。
+
+anchors:
+
+  icc.commencement:
+    institution: icc
+    topic: 启动与首轮文书
+    mechanism: 仲裁申请与受理
+    locator: "Art. 5"
+    basis_source: icc-arb-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 取回 ICC 官方 PDF 并转文本层；目录与正文均命中『Article 5 Request for Arbitration』"
+
+  icc.answer:
+    institution: icc
+    topic: 启动与首轮文书
+    mechanism: 答辩与反请求
+    locator: "Art. 6"
+    basis_source: icc-arb-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『Article 6 Answer to the Request"
+
+  icc.jurisdiction:
+    institution: icc
+    topic: 管辖权
+    mechanism: 仲裁协议效力与管辖权异议
+    locator: "Art. 7"
+    basis_source: icc-arb-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『Article 7 Effect of the Arbitration Agreement』"
+
+  icc.tribunal-constitution:
+    institution: icc
+    topic: 组庭
+    mechanism: 仲裁员人数、指定与确认
+    locator: "Art. 12-14"
+    basis_source: icc-arb-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中 Article 12 General Provisions、Article 13 Constitution of the Arbitral Tribunal、Article 14 Appointment of Arbitrators"
+
+  icc.joinder:
+    institution: icc
+    topic: 合并与追加
+    mechanism: 追加当事人
+    locator: "Art. 8"
+    basis_source: icc-arb-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『Article 8 Joinder of Additional Parties』"
+
+  icc.multiple-contracts:
+    institution: icc
+    topic: 合并与追加
+    mechanism: 多合同单案
+    locator: "Art. 10"
+    basis_source: icc-arb-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『Article 10 Multiple Contracts』"
+
+  icc.consolidation:
+    institution: icc
+    topic: 合并与追加
+    mechanism: 合并仲裁
+    locator: "Art. 11"
+    basis_source: icc-arb-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『Article 11 Consolidation of Arbitrations』"
+
+  icc.time-computation:
+    institution: icc
+    topic: 期间与送达
+    mechanism: 书面通讯与期间计算
+    locator: "Art. 3-4"
+    basis_source: icc-arb-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『Article 3 Written Communications』与『Article 4 Time Limits』"
+
+  icc.new-claims:
+    institution: icc
+    topic: 请求范围
+    mechanism: 组庭后新增或变更请求
+    locator: "Art. 25"
+    basis_source: icc-arb-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『Article 25 New Claims』"
+
+  icc.document-production:
+    institution: icc
+    topic: 证据与披露
+    mechanism: 事实查明与文件披露
+    locator: "Art. 26"
+    basis_source: icc-arb-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『Article 26 Establishing the Facts of the Case』"
+
+  icc.interim-measures:
+    institution: icc
+    topic: 临时措施
+    mechanism: 仲裁庭临时与保全措施
+    locator: "Art. 29"
+    basis_source: icc-arb-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『Article 29 Conservatory and Interim Measures』"
+
+  icc.early-determination:
+    institution: icc
+    topic: 早期处理
+    mechanism: 早期确定
+    locator: "Art. 30"
+    basis_source: icc-arb-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『Article 30 Early Determination』"
+
+  icc.emergency-arbitrator:
+    institution: icc
+    topic: 临时措施
+    mechanism: 紧急仲裁员
+    locator: "Art. 31 + Appendix IV"
+    basis_source: icc-arb-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 31 Emergency Arbitrator』，目录命中『Appendix IV Emergency Arbitrator Provisions』"
+
+  icc.expedited:
+    institution: icc
+    topic: 程序轨道
+    mechanism: 快速程序
+    locator: "Art. 32 + Appendix V"
+    basis_source: icc-arb-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『Article 32 Expedited Procedure』，目录命中 Appendix V"
+
+  icc.highly-expedited:
+    institution: icc
+    topic: 程序轨道
+    mechanism: 高度快速程序
+    locator: "Art. 33 + Appendix VI"
+    basis_source: icc-arb-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『Article 33 Highly Expedited Arbitration』，目录命中 Appendix VI"
+
+  icc.award-time-limit:
+    institution: icc
+    topic: 裁决
+    mechanism: 终局裁决期限
+    locator: "Art. 34"
+    basis_source: icc-arb-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『Article 34 Time Limit for the Final Award』"
+
+  icc.award-scrutiny:
+    institution: icc
+    topic: 裁决
+    mechanism: 裁决核稿
+    locator: "Art. 37"
+    basis_source: icc-arb-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『Article 37 Scrutiny of the Award by the Court』"
+
+  icc.post-award:
+    institution: icc
+    topic: 裁决后救济
+    mechanism: 更正、解释、追加裁决与发回
+    locator: "Art. 39"
+    basis_source: icc-arb-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『Article 39 Correction and Interpretation of the Award"
+
+  icc.costs-advance:
+    institution: icc
+    topic: 费用
+    mechanism: 预缴费用
+    locator: "Art. 40 + Appendix III"
+    basis_source: icc-arb-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『Article 40 Advance to Cover the Costs of the Arbitration』，目录命中 Appendix III"
+
+  bac.commencement:
+    institution: bac-biac
+    topic: 启动与首轮文书
+    mechanism: 仲裁申请与受理
+    locator: "第13条"
+    basis_source: bac-intl-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『第十三条 仲裁申请与受理』"
+
+  bac.answer:
+    institution: bac-biac
+    topic: 启动与首轮文书
+    mechanism: 答辩与反请求
+    locator: "第16-17条"
+    basis_source: bac-intl-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『第十六条 答辩』与『第十七条 反请求、多方请求』"
+
+  bac.jurisdiction:
+    institution: bac-biac
+    topic: 管辖权
+    mechanism: 仲裁协议效力与管辖权异议
+    locator: "第11-12条、第15条"
+    basis_source: bac-intl-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『第十一条 仲裁协议的定义和形式』、『第十二条 仲裁协议的独立性』、『第十五条 管辖权异议』"
+
+  bac.tribunal-constitution:
+    institution: bac-biac
+    topic: 组庭
+    mechanism: 仲裁员人数、指定与确认
+    locator: "第21-24条"
+    basis_source: bac-intl-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『第二十一条 仲裁庭的人数和组成方式』、『第二十二条 仲裁员的选定与指定』、『第二十三条 独任仲裁庭的组成』、『第二十四条 三人仲裁庭的组成』"
+
+  bac.joinder:
+    institution: bac-biac
+    topic: 合并与追加
+    mechanism: 追加当事人
+    locator: "第49条"
+    basis_source: bac-intl-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『第四十九条 追加当事人』"
+
+  bac.multiple-contracts:
+    institution: bac-biac
+    topic: 合并与追加
+    mechanism: 多合同单案
+    locator: "第14条"
+    basis_source: bac-intl-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『第十四条 多合同合并申请及仲裁中追加合同』"
+
+  bac.consolidation:
+    institution: bac-biac
+    topic: 合并与追加
+    mechanism: 合并仲裁
+    locator: "第51条"
+    basis_source: bac-intl-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『第五十一条 合并仲裁』"
+
+  bac.time-computation:
+    institution: bac-biac
+    topic: 期间与送达
+    mechanism: 书面通讯与期间计算
+    locator: "第8-9条"
+    basis_source: bac-intl-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『第八条 送达』与『第九条 期限』"
+
+  bac.new-claims:
+    institution: bac-biac
+    topic: 请求范围
+    mechanism: 组庭后新增或变更请求
+    locator: "第18条"
+    basis_source: bac-intl-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『第十八条 变更仲裁请求』"
+
+  bac.document-production:
+    institution: bac-biac
+    topic: 证据与披露
+    mechanism: 事实查明与文件披露
+    locator: "第37条、第39条、第42条"
+    basis_source: bac-intl-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『第三十七条 证据』、『第三十九条 事实证人』、『第四十二条 鉴定』"
+
+  bac.interim-measures:
+    institution: bac-biac
+    topic: 临时措施
+    mechanism: 仲裁庭临时与保全措施
+    locator: "第34-35条"
+    basis_source: bac-intl-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『第三十四条 仲裁保全』与『第三十五条 临时措施』"
+
+  bac.early-determination:
+    institution: bac-biac
+    topic: 早期处理
+    mechanism: 早期驳回
+    locator: "第53条"
+    basis_source: bac-intl-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『第五十三条 早期驳回』"
+
+  bac.emergency-arbitrator:
+    institution: bac-biac
+    topic: 临时措施
+    mechanism: 紧急仲裁员
+    locator: "第36条"
+    basis_source: bac-intl-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『第三十六条 紧急仲裁员』"
+
+  bac.expedited:
+    institution: bac-biac
+    topic: 程序轨道
+    mechanism: 简易程序
+    locator: "第68-74条"
+    basis_source: bac-intl-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『第六十八条 简易程序的适用』至『第七十四条 本规则其他条款的适用』"
+
+  bac.award-time-limit:
+    institution: bac-biac
+    topic: 裁决
+    mechanism: 终局裁决期限
+    locator: "第58条、第72条"
+    basis_source: bac-intl-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『第五十八条 裁决作出期限』（普通程序）与『第七十二条 裁决作出期限』（简易程序）"
+
+  bac.award-scrutiny:
+    institution: bac-biac
+    topic: 裁决
+    mechanism: 裁决核阅
+    locator: "第59条"
+    basis_source: bac-intl-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『第五十九条 裁决书草案的核阅』"
+
+  bac.post-award:
+    institution: bac-biac
+    topic: 裁决后救济
+    mechanism: 更正与补充裁决
+    locator: "第64-65条"
+    basis_source: bac-intl-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『第六十四条 裁决书的补正』与『第六十五条 补充裁决』"
+
+  bac.costs-advance:
+    institution: bac-biac
+    topic: 费用
+    mechanism: 费用预交
+    locator: "第75条"
+    basis_source: bac-intl-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『第七十五条 费用预交』"
+
+
+  lcia.commencement:
+    institution: lcia
+    topic: 启动与首轮文书
+    mechanism: 仲裁申请与受理
+    locator: "Art. 1"
+    basis_source: lcia-2020
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 1 Request for Arbitration』"
+
+  lcia.answer:
+    institution: lcia
+    topic: 启动与首轮文书
+    mechanism: 答辩与反请求
+    locator: "Art. 2"
+    basis_source: lcia-2020
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 2 Response』"
+
+  lcia.jurisdiction:
+    institution: lcia
+    topic: 管辖权
+    mechanism: 管辖权异议与 Kompetenz-Kompetenz
+    locator: "Art. 23"
+    basis_source: lcia-2020
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 23 Jurisdiction and Authority』"
+
+  lcia.tribunal-constitution:
+    institution: lcia
+    topic: 组庭
+    mechanism: 仲裁庭的组建、指定、确认与异议
+    locator: "Art. 5, Art. 6, Art. 7, Art. 9A, Art. 9C, Art. 10, Art. 11"
+    basis_source: lcia-2020
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 5 Formation of Arbitral Tribunal』"
+
+  lcia.joinder:
+    institution: lcia
+    topic: 合并与追加
+    mechanism: 追加第三方当事人
+    locator: "Art. 22.1(x)"
+    basis_source: lcia-2020
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 22.1(x)』"
+
+  lcia.multiple-contracts:
+    institution: lcia
+    topic: 合并与追加
+    mechanism: 多合同在同一仲裁中审理
+    locator: "Art. 1.2"
+    basis_source: lcia-2020
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 1.2』"
+
+  lcia.consolidation:
+    institution: lcia
+    topic: 合并与追加
+    mechanism: 仲裁合并
+    locator: "Art. 22A"
+    basis_source: lcia-2020
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 22A Power to Order Consolidation/Concurrent Conduct of Arbitrations』"
+
+  lcia.time-computation:
+    institution: lcia
+    topic: 期间与送达
+    mechanism: 书面通讯与期间计算
+    locator: "Art. 4"
+    basis_source: lcia-2020
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 4 Written Communications and Periods of Time』"
+
+  lcia.new-claims:
+    institution: lcia
+    topic: 请求范围
+    mechanism: 组庭后新增或修改请求
+    locator: "Art. 22.1(i)"
+    basis_source: lcia-2020
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 22.1(i)』"
+
+  lcia.document-production:
+    institution: lcia
+    topic: 证据与披露
+    mechanism: 文件披露与证据出示
+    locator: "Art. 22.1(iv)-(vi)"
+    basis_source: lcia-2020
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 22.1(iv) order inspection"
+
+  lcia.interim-measures:
+    institution: lcia
+    topic: 临时措施
+    mechanism: 仲裁庭的临时保全措施
+    locator: "Art. 25"
+    basis_source: lcia-2020
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 25 Interim and Conservatory Measures』"
+
+  lcia.early-determination:
+    institution: lcia
+    topic: 早期处理
+    mechanism: 早期驳回程序
+    locator: "Art. 22.1(viii)"
+    basis_source: lcia-2020
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 22.1(viii) Early Determination』"
+
+  lcia.emergency-arbitrator:
+    institution: lcia
+    topic: 临时措施
+    mechanism: 紧急仲裁员
+    locator: "Art. 9B"
+    basis_source: lcia-2020
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 9B Emergency Arbitrator』"
+
+  lcia.expedited:
+    institution: lcia
+    topic: 程序轨道
+    mechanism: 快速组庭程序
+    locator: "Art. 9A"
+    basis_source: lcia-2020
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 9A Expedited Formation of Arbitral Tribunal』"
+
+  lcia.award-time-limit:
+    institution: lcia
+    topic: 裁决
+    mechanism: 裁决作出期限
+    locator: "Art. 15.10"
+    basis_source: lcia-2020
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 15.10』"
+
+  lcia.award-scrutiny:
+    institution: lcia
+    topic: 裁决
+    mechanism: 裁决核阅
+    locator: "Art. 26.7"
+    basis_source: lcia-2020
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 26.7』"
+
+  lcia.post-award:
+    institution: lcia
+    topic: 裁决
+    mechanism: 裁决更正、补充裁决
+    locator: "Art. 27"
+    basis_source: lcia-2020
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 27 Correction of Award(s) and Additional Award(s)』"
+
+  lcia.costs-advance:
+    institution: lcia
+    topic: 费用
+    mechanism: 费用预付
+    locator: "Art. 24"
+    basis_source: lcia-2020
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 24 Advance Payment for Costs』"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ICDR 2021
+# ─────────────────────────────────────────────────────────────────────────────
+
+  icdr.commencement:
+    institution: aaa-icdr
+    topic: 启动与首轮文书
+    mechanism: 仲裁通知与申请
+    locator: "Art. 2"
+    basis_source: icdr-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 2: Notice of Arbitration and Statement of Claim』"
+
+  icdr.answer:
+    institution: aaa-icdr
+    topic: 启动与首轮文书
+    mechanism: 答辩与反请求
+    locator: "Art. 3"
+    basis_source: icdr-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 3: Answer and Counterclaim』"
+
+  icdr.jurisdiction:
+    institution: aaa-icdr
+    topic: 管辖权
+    mechanism: 仲裁庭管辖权
+    locator: "Art. 21"
+    basis_source: icdr-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 21: Arbitral Jurisdiction』"
+
+  icdr.tribunal-constitution:
+    institution: aaa-icdr
+    topic: 组庭
+    mechanism: 仲裁员人数、指定、确认与异议
+    locator: "Art. 12, Art. 13, Art. 14, Art. 15, Art. 16"
+    basis_source: icdr-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 12: Number of Arbitrators"
+
+  icdr.joinder:
+    institution: aaa-icdr
+    topic: 合并与追加
+    mechanism: 追加当事人
+    locator: "Art. 8"
+    basis_source: icdr-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 8: Joinder』"
+
+  icdr.consolidation:
+    institution: aaa-icdr
+    topic: 合并与追加
+    mechanism: 仲裁合并
+    locator: "Art. 9"
+    basis_source: icdr-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 9: Consolidation』"
+
+  icdr.time-computation:
+    institution: aaa-icdr
+    topic: 期间与送达
+    mechanism: 通知与期间计算
+    locator: "Art. 11"
+    basis_source: icdr-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 11: Notices』"
+
+  icdr.new-claims:
+    institution: aaa-icdr
+    topic: 请求范围
+    mechanism: 修改或补充请求
+    locator: "Art. 10"
+    basis_source: icdr-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 10: Amendment or Supplement of Claim, Counterclaim, or Defense』"
+
+  icdr.document-production:
+    institution: aaa-icdr
+    topic: 证据与披露
+    mechanism: 信息交换与文件出示
+    locator: "Art. 24"
+    basis_source: icdr-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 24: Exchange of Information』"
+
+  icdr.interim-measures:
+    institution: aaa-icdr
+    topic: 临时措施
+    mechanism: 仲裁庭临时保全措施
+    locator: "Art. 27"
+    basis_source: icdr-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 27: Interim Measures』"
+
+  icdr.early-determination:
+    institution: aaa-icdr
+    topic: 早期处理
+    mechanism: 早期处决
+    locator: "Art. 23"
+    basis_source: icdr-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 23: Early Disposition』"
+
+  icdr.emergency-arbitrator:
+    institution: aaa-icdr
+    topic: 临时措施
+    mechanism: 紧急措施保护
+    locator: "Art. 7"
+    basis_source: icdr-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 7: Emergency Measures of Protection』"
+
+  icdr.expedited:
+    institution: aaa-icdr
+    topic: 程序轨道
+    mechanism: 快速程序
+    locator: "Art. E-1 – Art. E-10"
+    basis_source: icdr-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『International Expedited Procedures, Article E-1 through E-10』"
+
+  icdr.award-time-limit:
+    institution: aaa-icdr
+    topic: 裁决
+    mechanism: 裁决作出期限
+    locator: "Art. 33(1)"
+    basis_source: icdr-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 33(1): Time, Form, and Effect of the Award』"
+
+  icdr.award-scrutiny:
+    institution: aaa-icdr
+    topic: 裁决
+    mechanism: 裁决核阅
+    locator: "Art. 33(3)"
+    basis_source: icdr-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 33(3)』"
+
+  icdr.post-award:
+    institution: aaa-icdr
+    topic: 裁决
+    mechanism: 裁决解释、更正与补充裁决
+    locator: "Art. 36"
+    basis_source: icdr-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 36: Interpretation and Correction of Award』"
+
+  icdr.costs-advance:
+    institution: aaa-icdr
+    topic: 费用
+    mechanism: 费用预存
+    locator: "Art. 39"
+    basis_source: icdr-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 39: Deposits』"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# AAA Commercial 2022
+# ─────────────────────────────────────────────────────────────────────────────
+
+  aaa-commercial.commencement:
+    institution: aaa-icdr
+    topic: 启动与首轮文书
+    mechanism: 仲裁申请与立案
+    locator: "R-4"
+    basis_source: aaa-commercial-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『R-4: Filing Requirements and Procedures』"
+
+  aaa-commercial.answer:
+    institution: aaa-icdr
+    topic: 启动与首轮文书
+    mechanism: 答辩与反请求
+    locator: "R-5"
+    basis_source: aaa-commercial-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『R-5: Answers and Counterclaims』"
+
+  aaa-commercial.jurisdiction:
+    institution: aaa-icdr
+    topic: 管辖权
+    mechanism: 仲裁员管辖权
+    locator: "R-7"
+    basis_source: aaa-commercial-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『R-7: Jurisdiction』"
+
+  aaa-commercial.tribunal-constitution:
+    institution: aaa-icdr
+    topic: 组庭
+    mechanism: 仲裁员指定、披露与异议
+    locator: "R-13, R-14, R-15, R-17, R-18, R-19, R-21"
+    basis_source: aaa-commercial-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『R-13: Appointment from National Roster"
+
+  aaa-commercial.joinder:
+    institution: aaa-icdr
+    topic: 合并与追加
+    mechanism: 追加当事人
+    locator: "R-8(b)"
+    basis_source: aaa-commercial-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『R-8(b): Consolidation and Joinder』"
+
+  aaa-commercial.consolidation:
+    institution: aaa-icdr
+    topic: 合并与追加
+    mechanism: 仲裁合并
+    locator: "R-8(a)"
+    basis_source: aaa-commercial-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『R-8(a): Consolidation』"
+
+  aaa-commercial.time-computation:
+    institution: aaa-icdr
+    topic: 期间与送达
+    mechanism: 通知与送达方式
+    locator: "R-44, R-43"
+    basis_source: aaa-commercial-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『R-44: Serving of Notice and Communications"
+
+  aaa-commercial.new-claims:
+    institution: aaa-icdr
+    topic: 请求范围
+    mechanism: 变更请求
+    locator: "R-6"
+    basis_source: aaa-commercial-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『R-6: Changes of Claim』"
+
+  aaa-commercial.document-production:
+    institution: aaa-icdr
+    topic: 证据与披露
+    mechanism: 文件交换与出示
+    locator: "R-23"
+    basis_source: aaa-commercial-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『R-23: Pre-Hearing Exchange and Production of Information』"
+
+  aaa-commercial.interim-measures:
+    institution: aaa-icdr
+    topic: 临时措施
+    mechanism: 仲裁庭临时措施
+    locator: "R-38"
+    basis_source: aaa-commercial-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『R-38: Interim Measures』"
+
+  aaa-commercial.early-determination:
+    institution: aaa-icdr
+    topic: 早期处理
+    mechanism: 即决裁决动议
+    locator: "R-34"
+    basis_source: aaa-commercial-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『R-34: Dispositive Motions』"
+
+  aaa-commercial.emergency-arbitrator:
+    institution: aaa-icdr
+    topic: 临时措施
+    mechanism: 紧急保护措施
+    locator: "R-39"
+    basis_source: aaa-commercial-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『R-39: Emergency Measures of Protection』"
+
+  aaa-commercial.expedited:
+    institution: aaa-icdr
+    topic: 程序轨道
+    mechanism: 快速程序
+    locator: "E-1 – E-10"
+    basis_source: aaa-commercial-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Expedited Procedures E-1 through E-10』"
+
+  aaa-commercial.award-time-limit:
+    institution: aaa-icdr
+    topic: 裁决
+    mechanism: 裁决作出期限
+    locator: "R-47"
+    basis_source: aaa-commercial-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『R-47: Time of Award』"
+
+  aaa-commercial.post-award:
+    institution: aaa-icdr
+    topic: 裁决
+    mechanism: 裁决修改
+    locator: "R-52"
+    basis_source: aaa-commercial-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『R-52: Modification of Award』"
+
+  aaa-commercial.costs-advance:
+    institution: aaa-icdr
+    topic: 费用
+    mechanism: 费用预存
+    locator: "R-58"
+    basis_source: aaa-commercial-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『R-58: Deposits』"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Swiss Rules 2021
+# ─────────────────────────────────────────────────────────────────────────────
+
+  swiss-rules.commencement:
+    institution: swiss
+    topic: 启动与首轮文书
+    mechanism: 仲裁通知
+    locator: "Art. 3"
+    basis_source: swiss-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 3 Notice of Arbitration』"
+
+  swiss-rules.answer:
+    institution: swiss
+    topic: 启动与首轮文书
+    mechanism: 答辩与反请求
+    locator: "Art. 4"
+    basis_source: swiss-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 4 Answer to the Notice of Arbitration』"
+
+  swiss-rules.jurisdiction:
+    institution: swiss
+    topic: 管辖权
+    mechanism: 管辖权异议
+    locator: "Art. 23"
+    basis_source: swiss-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 23 Objections to the Jurisdiction of the Arbitral Tribunal』"
+
+  swiss-rules.tribunal-constitution:
+    institution: swiss
+    topic: 组庭
+    mechanism: 仲裁员确认、指定、异议与替换
+    locator: "Art. 8, Art. 9, Art. 10, Art. 11, Art. 12, Art. 13, Art. 14, Art. 15"
+    basis_source: swiss-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Section II: Composition of the Arbitral Tribunal』"
+
+  swiss-rules.joinder:
+    institution: swiss
+    topic: 合并与追加
+    mechanism: 追加当事人 / 介入
+    locator: "Art. 6"
+    basis_source: swiss-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 6 Cross-claim, Joinder, Intervention』"
+
+  swiss-rules.multiple-contracts:
+    institution: swiss
+    topic: 合并与追加
+    mechanism: 多合同在同一仲裁中审理
+    locator: "Art. 5(1)(b), Art. 23(1)"
+    basis_source: swiss-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 5(1)(b)』"
+
+  swiss-rules.consolidation:
+    institution: swiss
+    topic: 合并与追加
+    mechanism: 仲裁合并
+    locator: "Art. 7"
+    basis_source: swiss-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 7 Consolidation』"
+
+  swiss-rules.time-computation:
+    institution: swiss
+    topic: 期间与送达
+    mechanism: 通知与期间计算
+    locator: "Art. 2"
+    basis_source: swiss-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 2 Notice, Calculation of Time Limits』"
+
+  swiss-rules.new-claims:
+    institution: swiss
+    topic: 请求范围
+    mechanism: 修改或补充请求
+    locator: "Art. 22"
+    basis_source: swiss-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 22 Amendments to the Claim or Defence』"
+
+  swiss-rules.document-production:
+    institution: swiss
+    topic: 证据与披露
+    mechanism: 证据与文件出示
+    locator: "Art. 26"
+    basis_source: swiss-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 26 Evidence』"
+
+  swiss-rules.interim-measures:
+    institution: swiss
+    topic: 临时措施
+    mechanism: 临时措施
+    locator: "Art. 29"
+    basis_source: swiss-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 29 Interim Measures』"
+
+  swiss-rules.emergency-arbitrator:
+    institution: swiss
+    topic: 临时措施
+    mechanism: 紧急救济
+    locator: "Art. 43"
+    basis_source: swiss-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 43 Emergency Relief』"
+
+  swiss-rules.expedited:
+    institution: swiss
+    topic: 程序轨道
+    mechanism: 快速程序
+    locator: "Art. 42"
+    basis_source: swiss-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 42 Expedited Procedure』"
+
+  swiss-rules.award-time-limit:
+    institution: swiss
+    topic: 裁决
+    mechanism: 裁决作出期限
+    locator: "Art. 42(2)(e)"
+    basis_source: swiss-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 42(2)(e)』"
+
+  swiss-rules.award-scrutiny:
+    institution: swiss
+    topic: 裁决
+    mechanism: 裁决核阅
+    locator: "Art. 39(5)"
+    basis_source: swiss-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 39(5)』"
+
+  swiss-rules.post-award:
+    institution: swiss
+    topic: 裁决
+    mechanism: 裁决解释、更正与补充裁决
+    locator: "Art. 37"
+    basis_source: swiss-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 37 Interpretation or Correction of the Award, Additional Award』"
+
+  swiss-rules.costs-advance:
+    institution: swiss
+    topic: 费用
+    mechanism: 费用预存
+    locator: "Art. 41"
+    basis_source: swiss-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 41 Deposit of Costs』"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# DIS 2018
+# ─────────────────────────────────────────────────────────────────────────────
+
+  dis.commencement:
+    institution: dis
+    topic: 启动与首轮文书
+    mechanism: 仲裁申请
+    locator: "Art. 5, Art. 6"
+    basis_source: dis-2018
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 5 Request for Arbitration"
+
+  dis.answer:
+    institution: dis
+    topic: 启动与首轮文书
+    mechanism: 答辩与反请求
+    locator: "Art. 7"
+    basis_source: dis-2018
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 7 Respondent's Notification, Answer and Counterclaim』"
+
+  dis.jurisdiction:
+    institution: dis
+    topic: "管辖权"
+    mechanism: "管辖权异议之放弃（未及时提出视为放弃）"
+    locator: "Art. 43"
+    basis_source: dis-2018
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本 DIS 2018 命中『Article 43』"
+  dis.tribunal-constitution:
+    institution: dis
+    topic: 组庭
+    mechanism: 仲裁员人数、指定、异议与终止
+    locator: "Art. 9, Art. 10, Art. 11, Art. 12, Art. 13, Art. 15, Art. 16"
+    basis_source: dis-2018
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 9-16: The Arbitral Tribunal』"
+
+  dis.joinder:
+    institution: dis
+    topic: 合并与追加
+    mechanism: 追加当事人
+    locator: "Art. 19"
+    basis_source: dis-2018
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 19 Joinder of Additional Parties』"
+
+  dis.multiple-contracts:
+    institution: dis
+    topic: 合并与追加
+    mechanism: 多合同仲裁
+    locator: "Art. 17"
+    basis_source: dis-2018
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 17 Multi-Contract Arbitration』"
+
+  dis.consolidation:
+    institution: dis
+    topic: 合并与追加
+    mechanism: 仲裁合并
+    locator: "Art. 8"
+    basis_source: dis-2018
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 8 Consolidation of Arbitrations』"
+
+  dis.time-computation:
+    institution: dis
+    topic: 期间与送达
+    mechanism: 提交、期间与时限
+    locator: "Art. 4"
+    basis_source: dis-2018
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 4 Submissions, Time Periods, and Time Limits』"
+
+  dis.new-claims:
+    institution: dis
+    topic: "请求范围"
+    mechanism: "程序关闭后新增或变更请求须经仲裁庭许可"
+    locator: "Art. 31"
+    basis_source: dis-2018
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 命中『Article 31』，程序关闭后须经许可方得提交陈述"
+  dis.document-production:
+    institution: dis
+    topic: 证据与披露
+    mechanism: 文件出示与证据
+    locator: "Art. 28"
+    basis_source: dis-2018
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 28 Establishing the Facts, Tribunal-Appointed Expert』"
+
+  dis.interim-measures:
+    institution: dis
+    topic: 临时措施
+    mechanism: 临时保全措施
+    locator: "Art. 25"
+    basis_source: dis-2018
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 25 Interim Relief』"
+
+  dis.early-determination:
+    institution: dis
+    topic: "早期处理"
+    mechanism: "争点早期裁定（程序效率措施与部分裁决）"
+    locator: "Annex 3"
+    basis_source: dis-2018
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 命中 Annex 3『Measures for Increasing Procedural Efficiency』C–D：就特定争点作出部分裁决或程序令"
+  dis.expedited:
+    institution: dis
+    topic: 程序轨道
+    mechanism: 快速程序
+    locator: "Annex 4"
+    basis_source: dis-2018
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Annex 4 Expedited Proceedings』"
+
+  dis.award-time-limit:
+    institution: dis
+    topic: 裁决
+    mechanism: 裁决作出期限
+    locator: "Art. 37"
+    basis_source: dis-2018
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 37 Time Limit for the Final Award』"
+
+  dis.award-scrutiny:
+    institution: dis
+    topic: 裁决
+    mechanism: 裁决核阅
+    locator: "Art. 39.3"
+    basis_source: dis-2018
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 39.3』"
+
+  dis.post-award:
+    institution: dis
+    topic: 裁决
+    mechanism: 裁决更正与补充裁决
+    locator: "Art. 40"
+    basis_source: dis-2018
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 40 Correction of the Arbitral Award』"
+
+  dis.costs-advance:
+    institution: dis
+    topic: 费用
+    mechanism: 费用预存
+    locator: "Art. 35"
+    basis_source: dis-2018
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 35 Deposit for Fees and Expenses of the Arbitral Tribunal』"
+
+
+  scc.commencement:
+    institution: scc
+    topic: 启动与首轮文书
+    mechanism: 仲裁申请与受理
+    locator: "Art. 6–8"
+    basis_source: scc-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 6 Request for arbitration』"
+
+  scc.answer:
+    institution: scc
+    topic: 启动与首轮文书
+    mechanism: 答辩与反请求
+    locator: "Art. 9"
+    basis_source: scc-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 9 Answer』"
+
+  scc.jurisdiction:
+    institution: scc
+    topic: 管辖权
+    mechanism: 管辖权异议与表面审查
+    locator: "Art. 12"
+    basis_source: scc-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 12 Dismissal』"
+
+  scc.tribunal-constitution:
+    institution: scc
+    topic: 组庭
+    mechanism: 仲裁员人数、指定、确认与回避
+    locator: "Art. 16–21"
+    basis_source: scc-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 16 Number of arbitrators, Article 17 Appointment of arbitrators, Article 18 Impartiality independence and availability, Article 19 Challenge to arbitrators, Article 20 Release, Article 21 Replacement』"
+
+  scc.joinder:
+    institution: scc
+    topic: 合并与追加
+    mechanism: 追加当事人
+    locator: "Art. 13"
+    basis_source: scc-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 13 Joinder of additional parties』"
+
+  scc.multiple-contracts:
+    institution: scc
+    topic: 合并与追加
+    mechanism: 多合同合并仲裁
+    locator: "Art. 14"
+    basis_source: scc-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 14 Multiple contracts in a single arbitration』"
+
+  scc.consolidation:
+    institution: scc
+    topic: 合并与追加
+    mechanism: 仲裁合并
+    locator: "Art. 15"
+    basis_source: scc-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 15 Consolidation of arbitrations』"
+
+  scc.time-computation:
+    institution: scc
+    topic: 期间与送达
+    mechanism: 期间计算与文书送达
+    locator: "Art. 4–5"
+    basis_source: scc-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 4 Time periods』"
+
+  scc.new-claims:
+    institution: scc
+    topic: 请求范围
+    mechanism: 变更或补充请求
+    locator: "Art. 30"
+    basis_source: scc-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 30 Amendments』"
+
+  scc.document-production:
+    institution: scc
+    topic: 证据与披露
+    mechanism: 证据与文件提交
+    locator: "Art. 31"
+    basis_source: scc-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 31 Evidence』"
+
+  scc.interim-measures:
+    institution: scc
+    topic: 临时措施
+    mechanism: 仲裁庭临时措施
+    locator: "Art. 37"
+    basis_source: scc-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 37 Interim measures』"
+
+  scc.early-determination:
+    institution: scc
+    topic: 早期处理
+    mechanism: 简易程序
+    locator: "Art. 39"
+    basis_source: scc-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 39 Summary procedure』"
+
+  scc.emergency-arbitrator:
+    institution: scc
+    topic: 临时措施
+    mechanism: 紧急仲裁员
+    locator: "App. II, Art. 1–10"
+    basis_source: scc-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『APPENDIX II』"
+
+  scc.expedited:
+    institution: scc
+    topic: "程序轨道"
+    mechanism: "快速程序适用（独任仲裁员；机构可邀请改用普通规则）"
+    locator: "Art. 11"
+    basis_source: scc-expedited-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 命中 SCC 快速程序规则 2023『Article 11』适用与『Article 17』独任仲裁员"
+  scc.award-time-limit:
+    institution: scc
+    topic: 裁决
+    mechanism: 裁决时限
+    locator: "Art. 43"
+    basis_source: scc-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 43 Time limit for final award』"
+
+  scc.post-award:
+    institution: scc
+    topic: 裁决
+    mechanism: 裁决更正、解释与补充裁决
+    locator: "Art. 47–48"
+    basis_source: scc-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 47 Correction and interpretation of an award』"
+
+  scc.costs-advance:
+    institution: scc
+    topic: 费用
+    mechanism: 费用预付金
+    locator: "Art. 51"
+    basis_source: scc-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 51 Advance on costs』"
+
+# =========================================
+# SCC Expedited Arbitration Rules 2023
+# =========================================
+
+  scc-exp.commencement:
+    institution: scc
+    topic: 启动与首轮文书
+    mechanism: 快速仲裁申请与受理
+    locator: "Art. 6–8"
+    basis_source: scc-expedited-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 6 Request for arbitration』"
+
+  scc-exp.answer:
+    institution: scc
+    topic: 启动与首轮文书
+    mechanism: 快速答辩（含反请求）
+    locator: "Art. 9"
+    basis_source: scc-expedited-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 9 Answer』"
+
+  scc-exp.jurisdiction:
+    institution: scc
+    topic: 管辖权
+    mechanism: 快速管辖权异议
+    locator: "Art. 13"
+    basis_source: scc-expedited-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 13 Dismissal』"
+
+  scc-exp.tribunal-constitution:
+    institution: scc
+    topic: 组庭
+    mechanism: 快速独任仲裁员指定与回避
+    locator: "Art. 17–22"
+    basis_source: scc-expedited-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 17 Number of arbitrators』"
+
+  scc-exp.joinder:
+    institution: scc
+    topic: 合并与追加
+    mechanism: 快速追加当事人
+    locator: "Art. 14"
+    basis_source: scc-expedited-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 14 Joinder of additional parties』"
+
+  scc-exp.multiple-contracts:
+    institution: scc
+    topic: 合并与追加
+    mechanism: 快速多合同合并仲裁
+    locator: "Art. 15"
+    basis_source: scc-expedited-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 15 Multiple contracts in a single arbitration』"
+
+  scc-exp.consolidation:
+    institution: scc
+    topic: 合并与追加
+    mechanism: 快速仲裁合并
+    locator: "Art. 16"
+    basis_source: scc-expedited-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 16 Consolidation of arbitrations』"
+
+  scc-exp.time-computation:
+    institution: scc
+    topic: 期间与送达
+    mechanism: 快速期间计算与送达
+    locator: "Art. 4–5"
+    basis_source: scc-expedited-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 4 Time periods』"
+
+  scc-exp.new-claims:
+    institution: scc
+    topic: 请求范围
+    mechanism: 快速变更或补充请求
+    locator: "Art. 31"
+    basis_source: scc-expedited-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 31 Amendments』"
+
+  scc-exp.document-production:
+    institution: scc
+    topic: 证据与披露
+    mechanism: 快速证据与文件提交
+    locator: "Art. 32"
+    basis_source: scc-expedited-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 32 Evidence』"
+
+  scc-exp.interim-measures:
+    institution: scc
+    topic: 临时措施
+    mechanism: 快速仲裁庭临时措施
+    locator: "Art. 38"
+    basis_source: scc-expedited-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 38 Interim measures』"
+
+  scc-exp.early-determination:
+    institution: scc
+    topic: 早期处理
+    mechanism: 快速简易程序
+    locator: "Art. 40"
+    basis_source: scc-expedited-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 40 Summary procedure』"
+
+  scc-exp.emergency-arbitrator:
+    institution: scc
+    topic: 临时措施
+    mechanism: 快速紧急仲裁员
+    locator: "App. II, Art. 1–10"
+    basis_source: scc-expedited-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『APPENDIX II』"
+
+  scc-exp.expedited:
+    institution: scc
+    topic: 程序轨道
+    mechanism: 快速程序（整体规则即为快速规则）
+    locator: "Art. 1–52 (entire instrument)"
+    basis_source: scc-expedited-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中全文均为『Rules for Expedited Arbitrations of the SCC Arbitration Institute』"
+
+  scc-exp.award-time-limit:
+    institution: scc
+    topic: 裁决
+    mechanism: 快速裁决时限
+    locator: "Art. 43"
+    basis_source: scc-expedited-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 43 Time limit for final award』"
+
+  scc-exp.post-award:
+    institution: scc
+    topic: 裁决
+    mechanism: 快速裁决更正、解释与补充裁决
+    locator: "Art. 47–48"
+    basis_source: scc-expedited-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 47 Correction and interpretation』"
+
+  scc-exp.costs-advance:
+    institution: scc
+    topic: 费用
+    mechanism: 快速费用预付金
+    locator: "Art. 51"
+    basis_source: scc-expedited-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 51 Advance on costs』"
+
+# =========================================
+# Vienna Rules 2021 (VIAC)
+# =========================================
+
+  vienna.commencement:
+    institution: vienna
+    topic: 启动与首轮文书
+    mechanism: 仲裁申请书与受理
+    locator: "Art. 7"
+    basis_source: vienna-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 7 Statement of Claim』"
+
+  vienna.answer:
+    institution: vienna
+    topic: 启动与首轮文书
+    mechanism: 答辩状与反请求
+    locator: "Art. 8–9"
+    basis_source: vienna-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 8 Answer to the Statement of Claim』"
+
+  vienna.jurisdiction:
+    institution: vienna
+    topic: 管辖权
+    mechanism: 管辖权自裁与异议时限
+    locator: "Art. 24"
+    basis_source: vienna-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 24 Jurisdiction of the Arbitral Tribunal』"
+
+  vienna.tribunal-constitution:
+    institution: vienna
+    topic: 组庭
+    mechanism: 仲裁庭组成、确认与回避
+    locator: "Art. 16–22"
+    basis_source: vienna-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 16 General Provisions, Article 17 Constitution of the Arbitral Tribunal, Article 18 Multi-Party Proceedings, Article 19 Confirmation of the Nomination, Article 20 Challenge of Arbitrators, Article 21 Premature Termination, Article 22 Effects』"
+
+  vienna.joinder:
+    institution: vienna
+    topic: 合并与追加
+    mechanism: 追加第三人
+    locator: "Art. 14"
+    basis_source: vienna-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 14 Joinder of Third Parties』"
+
+  vienna.consolidation:
+    institution: vienna
+    topic: 合并与追加
+    mechanism: 仲裁合并
+    locator: "Art. 15"
+    basis_source: vienna-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 15 Consolidation』"
+
+  vienna.time-computation:
+    institution: vienna
+    topic: 期间与送达
+    mechanism: 书面通信、期间计算与案卷处置
+    locator: "Art. 12"
+    basis_source: vienna-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 12 Written Communications, Time Limits and Disposal of File』"
+
+  vienna.new-claims:
+    institution: vienna
+    topic: 请求范围
+    mechanism: 反请求与补充请求
+    locator: "Art. 9"
+    basis_source: vienna-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 9 Counterclaim』"
+
+  vienna.document-production:
+    institution: vienna
+    topic: 证据与披露
+    mechanism: 事实查明与证据
+    locator: "Art. 29"
+    basis_source: vienna-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 29 Establishing the Facts of the Case』"
+
+  vienna.interim-measures:
+    institution: vienna
+    topic: 临时措施
+    mechanism: 临时与保全措施
+    locator: "Art. 33"
+    basis_source: vienna-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 33 Interim and Conservatory Measures / Security for Costs』"
+
+  vienna.early-determination:
+    institution: vienna
+    topic: 早期处理
+    mechanism: 无独立早期驳回机制（由快速程序与Art. 28裁量权覆盖）
+    locator: "Art. 28, Art. 45"
+    basis_source: vienna-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本未发现独立的 early dismissal / summary procedure 条款"
+
+  vienna.expedited:
+    institution: vienna
+    topic: 程序轨道
+    mechanism: 快速程序
+    locator: "Art. 45"
+    basis_source: vienna-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 45 Expedited Proceedings』"
+
+  vienna.award-time-limit:
+    institution: vienna
+    topic: 裁决
+    mechanism: 裁决时限
+    locator: "Art. 32(2)"
+    basis_source: vienna-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 32(2)』"
+
+  vienna.post-award:
+    institution: vienna
+    topic: 裁决
+    mechanism: 裁决更正、澄清、补充与发回
+    locator: "Art. 39–40"
+    basis_source: vienna-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 39 Correction, Clarification and Supplementation of the Arbitral Award』"
+
+  vienna.costs-advance:
+    institution: vienna
+    topic: 费用
+    mechanism: 费用预付金
+    locator: "Art. 42"
+    basis_source: vienna-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 42 Advance on Costs』"
+
+# =========================================
+# UNCITRAL Arbitration Rules 2021
+# =========================================
+
+  uncitral.commencement:
+    institution: uncitral-pca
+    topic: 启动与首轮文书
+    mechanism: 仲裁通知与程序启动
+    locator: "Art. 3"
+    basis_source: uncitral-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 3 Notice of arbitration』"
+
+  uncitral.answer:
+    institution: uncitral-pca
+    topic: 启动与首轮文书
+    mechanism: 答辩通知与反请求
+    locator: "Art. 4"
+    basis_source: uncitral-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 4 Response to the notice of arbitration』"
+
+  uncitral.jurisdiction:
+    institution: uncitral-pca
+    topic: 管辖权
+    mechanism: 管辖权自裁管辖
+    locator: "Art. 23"
+    basis_source: uncitral-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 23 Pleas as to the jurisdiction of the arbitral tribunal』"
+
+  uncitral.tribunal-constitution:
+    institution: uncitral-pca
+    topic: 组庭
+    mechanism: 仲裁员人数、指定与回避
+    locator: "Art. 7–15"
+    basis_source: uncitral-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 7 Number of arbitrators, Articles 8–10 Appointment of arbitrators, Articles 11–13 Disclosures by and challenge of arbitrators, Article 14 Replacement, Article 15 Repetition of hearings』"
+
+  uncitral.joinder:
+    institution: uncitral-pca
+    topic: 合并与追加
+    mechanism: 追加第三方
+    locator: "Art. 17(5)"
+    basis_source: uncitral-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 17(5)』"
+
+  uncitral.time-computation:
+    institution: uncitral-pca
+    topic: 期间与送达
+    mechanism: 期间计算与通知送达
+    locator: "Art. 2"
+    basis_source: uncitral-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 2 Notice and calculation of periods of time』"
+
+  uncitral.new-claims:
+    institution: uncitral-pca
+    topic: 请求范围
+    mechanism: 变更或补充请求
+    locator: "Art. 22"
+    basis_source: uncitral-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 22 Amendments to the claim or defence』"
+
+  uncitral.document-production:
+    institution: uncitral-pca
+    topic: 证据与披露
+    mechanism: 证据与文件提交
+    locator: "Art. 27"
+    basis_source: uncitral-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 27 Evidence』"
+
+  uncitral.interim-measures:
+    institution: uncitral-pca
+    topic: 临时措施
+    mechanism: 临时措施
+    locator: "Art. 26"
+    basis_source: uncitral-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 26 Interim measures』including maintaining status quo, preserving assets, preserving evidence"
+
+  uncitral.expedited:
+    institution: uncitral-pca
+    topic: 程序轨道
+    mechanism: 快速仲裁规则（附录）
+    locator: "Appendix — Expedited Arbitration Rules, Art. 1–16"
+    basis_source: uncitral-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Appendix』"
+
+  uncitral.award-time-limit:
+    institution: uncitral-pca
+    topic: 裁决
+    mechanism: 裁决时限（仅快速规则规定）
+    locator: "Expedited Rules Art. 16"
+    basis_source: uncitral-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 16 Period of time for making the award』"
+
+  uncitral.post-award:
+    institution: uncitral-pca
+    topic: 裁决
+    mechanism: 裁决解释、更正与补充裁决
+    locator: "Art. 37–39"
+    basis_source: uncitral-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 37 Interpretation of the award』"
+
+  uncitral.costs-advance:
+    institution: uncitral-pca
+    topic: 费用
+    mechanism: 费用押金
+    locator: "Art. 43"
+    basis_source: uncitral-rules-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 43 Deposit of costs』"
+
+# =========================================
+# PCA Arbitration Rules 2024
+# =========================================
+
+  pca.commencement:
+    institution: uncitral-pca
+    topic: 启动与首轮文书
+    mechanism: 仲裁通知与程序启动
+    locator: "Art. 3"
+    basis_source: pca-arbitration-rules
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 3 Notice of arbitration』"
+
+  pca.answer:
+    institution: uncitral-pca
+    topic: 启动与首轮文书
+    mechanism: 答辩通知与反请求
+    locator: "Art. 4"
+    basis_source: pca-arbitration-rules
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 4 Response to the notice of arbitration』"
+
+  pca.jurisdiction:
+    institution: uncitral-pca
+    topic: 管辖权
+    mechanism: 管辖权自裁管辖
+    locator: "Art. 23"
+    basis_source: pca-arbitration-rules
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 23 Pleas as to the jurisdiction of the arbitral tribunal』"
+
+  pca.tribunal-constitution:
+    institution: uncitral-pca
+    topic: 组庭
+    mechanism: 仲裁员人数（1/3/5）、指定与回避
+    locator: "Art. 7–15"
+    basis_source: pca-arbitration-rules
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 7 Number of arbitrators』"
+
+  pca.joinder:
+    institution: uncitral-pca
+    topic: 合并与追加
+    mechanism: 追加第三方
+    locator: "Art. 17(5)"
+    basis_source: pca-arbitration-rules
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 17(5)』"
+
+  pca.time-computation:
+    institution: uncitral-pca
+    topic: 期间与送达
+    mechanism: 期间计算与通知送达
+    locator: "Art. 2"
+    basis_source: pca-arbitration-rules
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 2 Notice and calculation of periods of time』"
+
+  pca.new-claims:
+    institution: uncitral-pca
+    topic: 请求范围
+    mechanism: 变更或补充请求
+    locator: "Art. 22"
+    basis_source: pca-arbitration-rules
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 22 Amendments to the claim or defence』"
+
+  pca.document-production:
+    institution: uncitral-pca
+    topic: 证据与披露
+    mechanism: 证据与文件提交
+    locator: "Art. 27"
+    basis_source: pca-arbitration-rules
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 27 Evidence』"
+
+  pca.interim-measures:
+    institution: uncitral-pca
+    topic: 临时措施
+    mechanism: 临时措施
+    locator: "Art. 26"
+    basis_source: pca-arbitration-rules
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 26 Interim measures』"
+
+  pca.emergency-arbitrator:
+    institution: uncitral-pca
+    topic: 临时措施
+    mechanism: 紧急临时措施（可选议定书）
+    locator: "Optional Protocol on Emergency Interim Measures, Art. 1–11"
+    basis_source: pca-arbitration-rules
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Permanent Court of Arbitration Optional Protocol on Emergency Interim Measures』"
+
+  pca.expedited:
+    institution: uncitral-pca
+    topic: 程序轨道
+    mechanism: 快速程序（可选议定书）
+    locator: "Optional Protocol on Expedited Procedure, Art. 1–3"
+    basis_source: pca-arbitration-rules
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Permanent Court of Arbitration Optional Protocol on Expedited Procedure』"
+
+  pca.award-time-limit:
+    institution: uncitral-pca
+    topic: 裁决
+    mechanism: 裁决时限（仅快速议定书规定）
+    locator: "Expedited Protocol Art. 2(1)(e)"
+    basis_source: pca-arbitration-rules
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Optional Protocol on Expedited Procedure Art. 2(1)(e)』"
+
+  pca.award-scrutiny:
+    institution: uncitral-pca
+    topic: 裁决
+    mechanism: 裁决核阅（可选议定书）
+    locator: "Optional Protocol on Scrutiny of Awards, Art. 1–6"
+    basis_source: pca-arbitration-rules
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Permanent Court of Arbitration Optional Protocol on Scrutiny of Awards』"
+
+  pca.post-award:
+    institution: uncitral-pca
+    topic: 裁决
+    mechanism: 裁决解释、更正与补充裁决
+    locator: "Art. 37–39"
+    basis_source: pca-arbitration-rules
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 37 Interpretation of the award』"
+
+  pca.costs-advance:
+    institution: uncitral-pca
+    topic: 费用
+    mechanism: 费用押金
+    locator: "Art. 43"
+    basis_source: pca-arbitration-rules
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 43 Deposit of costs』"
+
+
+  # ============================
+  # SIAC (2025, 7th Edition)
+  # ============================
+
+  siac.commencement:
+    institution: siac
+    topic: 启动与首轮文书
+    mechanism: 仲裁通知与程序启动
+    locator: "Rule 6"
+    basis_source: siac-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: 2026-10-24 SIAC 官方 PDF 全文（官网 SIAC Rules 2025 页取回）目录与正文命中『Rule 6 Notice of Arbitration』
+
+  siac.answer:
+    institution: siac
+    topic: 启动与首轮文书
+    mechanism: 答辩与反请求
+    locator: "Rule 7"
+    basis_source: siac-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: 2026-10-24 SIAC 官方 PDF 全文目录与正文命中『Rule 7 Response to the Notice of Arbitration』
+
+  siac.jurisdiction:
+    institution: siac
+    topic: 管辖权
+    mechanism: 管辖权异议与仲裁庭自裁管辖
+    locator: "Rule 8, Rule 31"
+    basis_source: siac-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: 2026-10-24 SIAC 官方 PDF 全文目录与正文命中『Rule 8 Prima Facie Jurisdictional Objection』及『Rule 31 Jurisdiction of the Tribunal』
+
+  siac.tribunal-constitution:
+    institution: siac
+    topic: 组庭
+    mechanism: 仲裁庭组成、指定与回避替换
+    locator: "Rule 19–Rule 30"
+    basis_source: siac-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: 2026-10-24 SIAC 官方 PDF 全文目录命中 Section IV：Rule 19 Rules on Appointment、Rule 20 Disclosure、Rule 21 Sole Arbitrator、Rule 22 Three Arbitrators、Rule 24 Tribunal Secretary；Section V：Rule 26–28 Challenge、Rule 29 Removal、Rule 30 Replacement
+
+  siac.joinder:
+    institution: siac
+    topic: 合并与追加
+    mechanism: 追加当事人
+    locator: "Rule 18"
+    basis_source: siac-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: 2026-10-24 SIAC 官方 PDF 全文目录与正文命中『Rule 18 Joinder』
+
+  siac.multiple-contracts:
+    institution: siac
+    topic: 合并与追加
+    mechanism: 多合同单案
+    locator: "Rule 15"
+    basis_source: siac-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: 2026-10-24 SIAC 官方 PDF 全文目录与正文命中『Rule 15 Multiple Contracts』
+
+  siac.consolidation:
+    institution: siac
+    topic: 合并与追加
+    mechanism: 合并仲裁
+    locator: "Rule 16"
+    basis_source: siac-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: 2026-10-24 SIAC 官方 PDF 全文目录与正文命中『Rule 16 Consolidation』
+
+  siac.time-computation:
+    institution: siac
+    topic: 期间与送达
+    mechanism: 期间计算
+    locator: "Rule 5"
+    basis_source: siac-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: 2026-10-24 SIAC 官方 PDF 全文目录与正文命中『Rule 5 Periods of Time』
+
+  siac.new-claims:
+    institution: siac
+    topic: 请求范围
+    mechanism: 请求与答辩的变更
+    locator: "Rule 33.5"
+    basis_source: siac-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: 2026-10-24 SIAC 官方 PDF 全文正文命中『Rule 33 Written Submissions』第 33.5 段；组庭前的变更定位见 Rule 9.1（该条条题无新增请求字样）
+
+  siac.document-production:
+    institution: siac
+    topic: 证据与披露
+    mechanism: 文件披露与证据提出
+    locator: "Rule 50.2(f)"
+    basis_source: siac-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: 2026-10-24 SIAC 官方 PDF 全文正文命中『Rule 50 Additional Powers of the Tribunal』第 50.2 项 (f) 分段
+
+  siac.interim-measures:
+    institution: siac
+    topic: 临时措施
+    mechanism: 仲裁庭临时保全措施
+    locator: "Rule 45"
+    basis_source: siac-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: 2026-10-24 SIAC 官方 PDF 全文目录与正文命中『Rule 45 Interim Relief』；紧急救济另见 Rule 12 与 Schedule 1
+
+  siac.early-determination:
+    institution: siac
+    topic: 早期处理
+    mechanism: 早期驳回
+    locator: "Rule 47"
+    basis_source: siac-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: 2026-10-24 SIAC 官方 PDF 全文目录与正文命中『Rule 47 Early Dismissal of Claims and Defences』
+
+  siac.emergency-arbitrator:
+    institution: siac
+    topic: 临时措施
+    mechanism: 紧急仲裁员
+    locator: "Rule 12, Schedule 1"
+    basis_source: siac-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: 2026-10-24 SIAC 官方 PDF 全文命中『Rule 12 Emergency Arbitrator』，目录命中『Schedule 1 Emergency Arbitrator Procedure』
+
+  siac.expedited:
+    institution: siac
+    topic: 程序轨道
+    mechanism: 快速程序
+    locator: "Rule 14, Schedule 3"
+    basis_source: siac-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: 2026-10-24 SIAC 官方 PDF 全文命中『Rule 14 Expedited Procedure』，目录命中『Schedule 3 Expedited Procedure』
+
+  siac.award-time-limit:
+    institution: siac
+    topic: 裁决
+    mechanism: 裁决期限与核稿时间线
+    locator: "Rule 53, Schedule 2 para 15, Schedule 3 para 6"
+    basis_source: siac-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: 2026-10-24 SIAC 官方 PDF 全文命中『Rule 53』第 53.2 段、Schedule 2 第 15 段与 Schedule 3 第 6 段
+
+  siac.award-scrutiny:
+    institution: siac
+    topic: 裁决
+    mechanism: 裁决核稿
+    locator: "Rule 53"
+    basis_source: siac-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: 2026-10-24 SIAC 官方 PDF 全文目录与正文命中『Rule 53 Scrutiny of the Award』
+
+  siac.post-award:
+    institution: siac
+    topic: 裁决后救济
+    mechanism: 更正、解释、追加裁决与发回
+    locator: "Rule 54, Rule 55"
+    basis_source: siac-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: 2026-10-24 SIAC 官方 PDF 全文目录命中『Rule 54 Correction, Interpretation, and Additional Awards』及『Rule 55 Remission』
+
+  siac.costs-advance:
+    institution: siac
+    topic: 费用
+    mechanism: 费用预缴与费用分担
+    locator: "Rule 56, Rule 57"
+    basis_source: siac-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: 2026-10-24 SIAC 官方 PDF 全文目录命中『Rule 56 Deposits』及『Rule 57 Costs of the Arbitration』
+
+  hkiac.commencement:
+    institution: hkiac
+    topic: 启动与首轮文书
+    mechanism: 仲裁通知与程序启动
+    locator: "Art. 4"
+    basis_source: hkiac-admin-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 取回 HKIAC 官方全文；目录与正文命中『Article 4 Notice of Arbitration』"
+
+  hkiac.answer:
+    institution: hkiac
+    topic: 启动与首轮文书
+    mechanism: 答辩与反请求
+    locator: "Art. 5"
+    basis_source: hkiac-admin-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『Article 5 Answer to the Notice of Arbitration』"
+
+  hkiac.jurisdiction:
+    institution: hkiac
+    topic: 管辖权
+    mechanism: 管辖权异议与仲裁庭自裁管辖
+    locator: "Art. 19"
+    basis_source: hkiac-admin-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『Article 19 Jurisdiction of the Arbitral Tribunal』"
+
+  hkiac.tribunal-constitution:
+    institution: hkiac
+    topic: 组庭
+    mechanism: 仲裁员人数、指定、确认与替换
+    locator: "Art. 6–Art. 12"
+    basis_source: hkiac-admin-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中 Section III The Arbitral Tribunal：Art. 6 Number of Arbitrators、Art. 7 Appointment of a Sole Arbitrator、Art. 8 Appointment of Three Arbitrators、Art. 9 Confirmation、Art. 9A Diversity、Art. 10 Fees and Expenses、Art. 11 Qualifications and Challenge、Art. 12 Replacement"
+
+  hkiac.joinder:
+    institution: hkiac
+    topic: 合并与追加
+    mechanism: 追加当事人
+    locator: "Art. 27"
+    basis_source: hkiac-admin-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『Article 27 Joinder of Additional Parties』"
+
+  hkiac.multiple-contracts:
+    institution: hkiac
+    topic: 合并与追加
+    mechanism: 多合同单案
+    locator: "Art. 29"
+    basis_source: hkiac-admin-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『Article 29 Single Arbitration under Multiple Contracts』"
+
+  hkiac.consolidation:
+    institution: hkiac
+    topic: 合并与追加
+    mechanism: 合并仲裁
+    locator: "Art. 28"
+    basis_source: hkiac-admin-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『Article 28 Consolidation of Arbitrations』"
+
+  hkiac.time-computation:
+    institution: hkiac
+    topic: 期间与送达
+    mechanism: 书面通讯与期间计算
+    locator: "Art. 3, Art. 21"
+    basis_source: hkiac-admin-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『Article 3 Written Communications, Time Limits and Calculation』及『Article 21 Time Limits』"
+
+  hkiac.new-claims:
+    institution: hkiac
+    topic: 请求范围
+    mechanism: 组庭后变更或新增请求
+    locator: "Art. 18"
+    basis_source: hkiac-admin-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『Article 18 Amendments to the Claim or Defence』"
+
+  hkiac.document-production:
+    institution: hkiac
+    topic: 证据与披露
+    mechanism: 文件披露与证据提出
+    locator: "Art. 22.3"
+    basis_source: hkiac-admin-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本正文命中 HKIAC Rules『Article 22.3』"
+
+  hkiac.interim-measures:
+    institution: hkiac
+    topic: 临时措施
+    mechanism: 仲裁庭临时与保全措施
+    locator: "Art. 23"
+    basis_source: hkiac-admin-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『Article 23 Interim Measures of Protection and Emergency Relief』"
+
+  hkiac.early-determination:
+    institution: hkiac
+    topic: 早期处理
+    mechanism: 早期确定程序
+    locator: "Art. 43"
+    basis_source: hkiac-admin-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『Article 43 Early Determination Procedure』"
+
+  hkiac.emergency-arbitrator:
+    institution: hkiac
+    topic: 临时措施
+    mechanism: 紧急仲裁员
+    locator: "Art. 23.1, Schedule 4"
+    basis_source: hkiac-admin-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 23.1』，目录命中『Schedule 4 Emergency Arbitrator Procedure』"
+
+  hkiac.expedited:
+    institution: hkiac
+    topic: 程序轨道
+    mechanism: 快速程序
+    locator: "Art. 42"
+    basis_source: hkiac-admin-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『Article 42 Expedited Procedure』"
+
+  hkiac.award-time-limit:
+    institution: hkiac
+    topic: 裁决
+    mechanism: 终局裁决期限
+    locator: "Art. 31.2"
+    basis_source: hkiac-admin-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本正文命中 HKIAC Rules『Article 31.2』"
+
+  # HKIAC 无独立裁决核稿机制，跳过 award-scrutiny
+
+  hkiac.post-award:
+    institution: hkiac
+    topic: 裁决后救济
+    mechanism: 更正、解释与追加裁决
+    locator: "Art. 38–Art. 40"
+    basis_source: hkiac-admin-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『Article 38 Correction of the Award』、『Article 39 Interpretation of the Award』、『Article 40 Additional Award』"
+
+  hkiac.costs-advance:
+    institution: hkiac
+    topic: 费用
+    mechanism: 预缴费用
+    locator: "Art. 41"
+    basis_source: hkiac-admin-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『Article 41 Deposits for Costs』"
+
+  # ============================
+  # CIETAC (2024)
+  # ============================
+
+  cietac.commencement:
+    institution: cietac
+    topic: 启动与首轮文书
+    mechanism: 仲裁申请与受理
+    locator: "第十一条、第十二条"
+    basis_source: cietac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 取回 CIETAC 官方全文；目录命中『第十一条 仲裁程序的开始』与『第十二条 申请仲裁』"
+
+  cietac.answer:
+    institution: cietac
+    topic: 启动与首轮文书
+    mechanism: 答辩与反请求
+    locator: "第十五条、第十六条"
+    basis_source: cietac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『第十五条 答辩』与『第十六条 反请求』"
+
+  cietac.jurisdiction:
+    institution: cietac
+    topic: 管辖权
+    mechanism: 管辖权异议与仲裁协议效力
+    locator: "第六条"
+    basis_source: cietac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『第六条 管辖权异议』"
+
+  cietac.tribunal-constitution:
+    institution: cietac
+    topic: 组庭
+    mechanism: 仲裁员义务、人数、指定、披露与回避
+    locator: "第二十四条–第三十四条"
+    basis_source: cietac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中第二节『仲裁员及仲裁庭』：第二十四条 仲裁员的义务、第二十五条 仲裁庭的人数、第二十六条 仲裁员的选定或指定、第二十七条–第二十九条 三人/独任/多方仲裁庭的组成、第三十条 考虑因素、第三十一条 披露、第三十二条 回避、第三十三条 更换、第三十四条 多数仲裁员继续程序"
+
+  cietac.joinder:
+    institution: cietac
+    topic: 合并与追加
+    mechanism: 追加当事人
+    locator: "第十八条"
+    basis_source: cietac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『第十八条 追加当事人』"
+
+  cietac.multiple-contracts:
+    institution: cietac
+    topic: 合并与追加
+    mechanism: 多合同合并仲裁
+    locator: "第十四条"
+    basis_source: cietac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『第十四条 多合同仲裁』"
+
+  cietac.consolidation:
+    institution: cietac
+    topic: 合并与追加
+    mechanism: 合并仲裁
+    locator: "第十九条"
+    basis_source: cietac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『第十九条 合并仲裁』"
+
+  cietac.time-computation:
+    institution: cietac
+    topic: 期间与送达
+    mechanism: 送达与期间计算
+    locator: "第八条"
+    basis_source: cietac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『第八条 送达及期限』"
+
+  cietac.new-claims:
+    institution: cietac
+    topic: 请求范围
+    mechanism: 变更或追加仲裁请求
+    locator: "第十七条"
+    basis_source: cietac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『第十七条 变更仲裁请求』"
+
+  cietac.document-production:
+    institution: cietac
+    topic: 证据与披露
+    mechanism: 举证与证据交换
+    locator: "第四十一条、第四十二条"
+    basis_source: cietac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『第四十一条 举证』与『第四十二条 证据交换』"
+
+  cietac.interim-measures:
+    institution: cietac
+    topic: 临时措施
+    mechanism: 保全措施与临时措施
+    locator: "第二十三条"
+    basis_source: cietac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『第二十三条 保全措施及临时措施』"
+
+  cietac.early-determination:
+    institution: cietac
+    topic: 早期处理
+    mechanism: 早期驳回程序
+    locator: "第五十条"
+    basis_source: cietac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『第五十条 早期驳回程序』"
+
+  cietac.emergency-arbitrator:
+    institution: cietac
+    topic: 临时措施
+    mechanism: 紧急仲裁员
+    locator: "附件三"
+    basis_source: cietac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『附件三 紧急仲裁员程序』"
+
+  cietac.expedited:
+    institution: cietac
+    topic: 程序轨道
+    mechanism: 简易程序
+    locator: "第五十九条–第六十七条"
+    basis_source: cietac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中第四章 简易程序：第五十九条至第六十七条"
+
+  cietac.award-time-limit:
+    institution: cietac
+    topic: 裁决
+    mechanism: 终局裁决期限
+    locator: "第五十一条、第六十五条、第七十四条"
+    basis_source: cietac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『第五十一条 作出裁决的期限』普通程序6个月"
+
+  cietac.award-scrutiny:
+    institution: cietac
+    topic: 裁决
+    mechanism: 裁决书草案核阅
+    locator: "第五十四条"
+    basis_source: cietac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『第五十四条 裁决书草案核阅』"
+
+  cietac.post-award:
+    institution: cietac
+    topic: 裁决后救济
+    mechanism: 更正与补充裁决
+    locator: "第五十六条、第五十七条"
+    basis_source: cietac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『第五十六条 裁决书更正』与『第五十七条 补充裁决』"
+
+  cietac.costs-advance:
+    institution: cietac
+    topic: 费用
+    mechanism: 预缴仲裁费用
+    locator: "第十二条第（三）项、附件二"
+    basis_source: cietac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中第十二条第（三）项申请仲裁时预交费用，目录命中『附件二 中国国际经济贸易仲裁委员会仲裁费用表』"
+
+  # ============================
+  # SHIAC (2024)
+  # ============================
+
+  shiac.commencement:
+    institution: shiac
+    topic: 启动与首轮文书
+    mechanism: 仲裁程序开始与申请仲裁
+    locator: "第十三条、第十四条"
+    basis_source: shiac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 取回 SHIAC 官方全文；目录命中『第十三条 仲裁程序的开始』与『第十四条 申请仲裁』"
+
+  shiac.answer:
+    institution: shiac
+    topic: 启动与首轮文书
+    mechanism: 答辩与反请求
+    locator: "第十七条、第十八条"
+    basis_source: shiac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『第十七条 答辩』与『第十八条 反请求』"
+
+  shiac.jurisdiction:
+    institution: shiac
+    topic: 管辖权
+    mechanism: 管辖权异议与仲裁协议效力
+    locator: "第六条"
+    basis_source: shiac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『第六条 管辖权异议』"
+
+  shiac.tribunal-constitution:
+    institution: shiac
+    topic: 组庭
+    mechanism: 仲裁员义务、人数、指定、披露与回避
+    locator: "第二十九条–第三十八条"
+    basis_source: shiac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中第四章 仲裁庭：第二十九条 仲裁员的义务、第三十条 仲裁庭的人数和组成方式、第三十一条 仲裁员的人选、第三十二条 三人仲裁庭的组成、第三十三条 独任仲裁庭、第三十四条 多方当事人案件仲裁庭的组成、第三十五条 信息披露、第三十六条 仲裁员的回避、第三十七条 替换仲裁员、第三十八条 多数仲裁员继续仲裁程序"
+
+  shiac.joinder:
+    institution: shiac
+    topic: 合并与追加
+    mechanism: 案外人加入仲裁程序
+    locator: "第四十一条"
+    basis_source: shiac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『第四十一条 案外人加入仲裁程序』"
+
+  shiac.multiple-contracts:
+    institution: shiac
+    topic: 合并与追加
+    mechanism: 多份合同合并申请仲裁
+    locator: "第十五条"
+    basis_source: shiac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『第十五条 多份合同合并申请仲裁』"
+
+  shiac.consolidation:
+    institution: shiac
+    topic: 合并与追加
+    mechanism: 合并仲裁
+    locator: "第四十条"
+    basis_source: shiac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『第四十条 合并仲裁』"
+
+  shiac.time-computation:
+    institution: shiac
+    topic: 期间与送达
+    mechanism: 送达与期间计算
+    locator: "第八十五条、第八十六条"
+    basis_source: shiac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『第八十五条 送达』与『第八十六条 期限』"
+
+  shiac.new-claims:
+    institution: shiac
+    topic: 请求范围
+    mechanism: 变更或追加仲裁请求
+    locator: "第十九条"
+    basis_source: shiac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『第十九条 变更仲裁请求』"
+
+  shiac.document-production:
+    institution: shiac
+    topic: 证据与披露
+    mechanism: 举证与证据材料
+    locator: "第四十六条"
+    basis_source: shiac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『第四十六条 举证』"
+
+  shiac.interim-measures:
+    institution: shiac
+    topic: 临时措施
+    mechanism: 临时措施
+    locator: "第二十四条"
+    basis_source: shiac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『第二十四条 临时措施』"
+
+  # SHIAC 无独立早期确定/驳回程序，跳过 early-determination
+
+  shiac.emergency-arbitrator:
+    institution: shiac
+    topic: 临时措施
+    mechanism: 紧急仲裁员
+    locator: "第二十五条"
+    basis_source: shiac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『第二十五条 紧急仲裁员』"
+
+  shiac.expedited:
+    institution: shiac
+    topic: 程序轨道
+    mechanism: 简易程序
+    locator: "第六十九条–第七十六条"
+    basis_source: shiac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中第八章 简易程序：第六十九条至第七十六条"
+
+  shiac.award-time-limit:
+    institution: shiac
+    topic: 裁决
+    mechanism: 终局裁决期限
+    locator: "第五十八条、第七十四条"
+    basis_source: shiac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『第五十八条 裁决期限』普通程序4个月（涉外6个月）"
+
+  shiac.award-scrutiny:
+    institution: shiac
+    topic: 裁决
+    mechanism: 裁决书草案核阅
+    locator: "第六十四条"
+    basis_source: shiac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录与正文命中『第六十四条 裁决书草案核阅』"
+
+  shiac.post-award:
+    institution: shiac
+    topic: 裁决后救济
+    mechanism: 更正与补充裁决
+    locator: "第六十五条、第六十六条"
+    basis_source: shiac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本目录命中『第六十五条 裁决书更正』与『第六十六条 补充裁决』"
+
+  shiac.costs-advance:
+    institution: shiac
+    topic: 费用
+    mechanism: 预缴仲裁费用
+    locator: "第八十七条、第十四条"
+    basis_source: shiac-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『第八十七条 仲裁费用』及第十四条申请仲裁时须『预交仲裁费用』"
+
+
+  kcab.commencement:
+    institution: kcab
+    topic: 启动与首轮文书
+    mechanism: 仲裁申请与受理
+    locator: "Art. 8"
+    basis_source: kcab-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 8 Request for Arbitration』, Chapter 2 Commencing the Arbitration"
+
+  kcab.answer:
+    institution: kcab
+    topic: 启动与首轮文书
+    mechanism: 答辩与反请求
+    locator: "Art. 9"
+    basis_source: kcab-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 9 Answer to the Request and Counterclaims』"
+
+  kcab.jurisdiction:
+    institution: kcab
+    topic: 管辖权
+    mechanism: 管辖权自决与仲裁协议效力
+    locator: "Art. 26"
+    basis_source: kcab-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 26 Jurisdiction of the Arbitral Tribunal』"
+
+  kcab.tribunal-constitution:
+    institution: kcab
+    topic: 组庭
+    mechanism: 仲裁员人数、指定、确认、异议
+    locator: "Art. 10–15"
+    basis_source: kcab-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Chapter 3: Art. 10 General Provisions, Art. 11 Number of Arbitrators, Art. 12 Appointment, Art. 13 Confirmation, Art. 14 Challenge, Art. 15 Replacement and Removal"
+
+  kcab.joinder:
+    institution: kcab
+    topic: 合并与追加
+    mechanism: 追加当事人
+    locator: "Art. 21"
+    basis_source: kcab-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 21 Joinder of Additional Parties』"
+
+  kcab.multiple-contracts:
+    institution: kcab
+    topic: 合并与追加
+    mechanism: 多合同合并仲裁
+    locator: "Art. 22"
+    basis_source: kcab-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 22 Single Arbitration under Multiple Contracts』"
+
+  kcab.consolidation:
+    institution: kcab
+    topic: 合并与追加
+    mechanism: 仲裁合并
+    locator: "Art. 23"
+    basis_source: kcab-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 23 Consolidation of Arbitrations』"
+
+  kcab.time-computation:
+    institution: kcab
+    topic: 期间与送达
+    mechanism: 期间计算与文书送达
+    locator: "Art. 4–5"
+    basis_source: kcab-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 4 Notification and Document Submission』及『Article 5 Time Limits』"
+
+  kcab.new-claims:
+    institution: kcab
+    topic: 请求范围
+    mechanism: 变更或增加请求
+    locator: "Art. 20"
+    basis_source: kcab-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 20 Amendment to Claims, Defenses and Counterclaims』"
+
+  kcab.document-production:
+    institution: kcab
+    topic: 证据与披露
+    mechanism: 证据与文件出示
+    locator: "Art. 27"
+    basis_source: kcab-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 27 Evidence』"
+
+  kcab.interim-measures:
+    institution: kcab
+    topic: 临时措施
+    mechanism: 保全与临时措施
+    locator: "Art. 33"
+    basis_source: kcab-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 33 Conservatory and Interim Measures』"
+
+  kcab.early-determination:
+    institution: kcab
+    topic: 早期处理
+    mechanism: 早期驳回/简易处理
+    locator: "Art. 36"
+    basis_source: kcab-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 36 Early Determination』"
+
+  kcab.emergency-arbitrator:
+    institution: kcab
+    topic: 临时措施
+    mechanism: 紧急仲裁员
+    locator: "App. 3"
+    basis_source: kcab-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『APPENDIX 3 EMERGENCY MEASURES BY EMERGENCY ARBITRATOR』, Art. 1–6 of Appendix 3"
+
+  kcab.expedited:
+    institution: kcab
+    topic: 程序轨道
+    mechanism: 简易程序与快速程序
+    locator: "Art. 45–53"
+    basis_source: kcab-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Chapter 6 Expedited Procedure (Art. 45–49) 及 Chapter 7 Fast-Track Procedure (Art. 50–53)"
+
+  kcab.award-time-limit:
+    institution: kcab
+    topic: 裁决
+    mechanism: 裁决作出期限
+    locator: "Art. 39"
+    basis_source: kcab-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 39 Time Limit for the Final Award』"
+
+  kcab.award-scrutiny:
+    institution: kcab
+    topic: 裁决
+    mechanism: 裁决核阅
+    locator: "Art. 40"
+    basis_source: kcab-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 40 Scrutiny of the Award』"
+
+  kcab.post-award:
+    institution: kcab
+    topic: 裁决
+    mechanism: 更正、解释、补充裁决与发回
+    locator: "Art. 42–44"
+    basis_source: kcab-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 42 Correction and Interpretation of the Award』,『Article 43 Additional Award』,『Article 44 Remission of the Award』"
+
+  kcab.costs-advance:
+    institution: kcab
+    topic: 费用
+    mechanism: 仲裁费用预付
+    locator: "Art. 54"
+    basis_source: kcab-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 54 Advance to Cover the Arbitration Costs』"
+
+# ────────────────────────────────────────────────────────────
+#  2. JCAA (Japan Commercial Arbitration Association) – 2021
+# ────────────────────────────────────────────────────────────
+
+  jcaa.commencement:
+    institution: jcaa
+    topic: 启动与首轮文书
+    mechanism: 仲裁申请
+    locator: "Art. 14"
+    basis_source: jcaa-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 14 Request for Arbitration』, Chapter II Commencement of Arbitration"
+
+  jcaa.answer:
+    institution: jcaa
+    topic: 启动与首轮文书
+    mechanism: 答辩、反请求与抵销抗辩
+    locator: "Art. 18–20"
+    basis_source: jcaa-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 18 Answer』,『Article 19 Counterclaim』,『Article 20 Set-off Defense』"
+
+  jcaa.jurisdiction:
+    institution: jcaa
+    topic: 管辖权
+    mechanism: 仲裁庭管辖权自决
+    locator: "Art. 47"
+    basis_source: jcaa-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 47 Competence of Arbitral Tribunal to Determine Jurisdiction』"
+
+  jcaa.tribunal-constitution:
+    institution: jcaa
+    topic: 组庭
+    mechanism: 仲裁员指定、确认与异议
+    locator: "Art. 24–38"
+    basis_source: jcaa-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Chapter III: Art. 24 Impartiality and Independence, Art. 25 Appointment and Confirmation, Art. 26 Number, Art. 27–29 Appointment procedures, Art. 34 Challenge, Art. 35 Removal"
+
+  jcaa.joinder:
+    institution: jcaa
+    topic: 合并与追加
+    mechanism: 第三人加入
+    locator: "Art. 56"
+    basis_source: jcaa-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 56 Third Party Joinder』"
+
+  jcaa.multiple-contracts:
+    institution: jcaa
+    topic: 合并与追加
+    mechanism: 多请求合并仲裁
+    locator: "Art. 15"
+    basis_source: jcaa-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 15 Single Arbitration for Multiple Claims』"
+
+  jcaa.consolidation:
+    institution: jcaa
+    topic: 合并与追加
+    mechanism: 仲裁合并
+    locator: "Art. 57"
+    basis_source: jcaa-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 57 Consolidation』"
+
+  jcaa.time-computation:
+    institution: jcaa
+    topic: 期间与送达
+    mechanism: 期间计算
+    locator: "Art. 12"
+    basis_source: jcaa-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 12 Period of Time』"
+
+  jcaa.new-claims:
+    institution: jcaa
+    topic: 请求范围
+    mechanism: 请求变更
+    locator: "Art. 21"
+    basis_source: jcaa-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 21 Amendment to Claim』"
+
+  jcaa.document-production:
+    institution: jcaa
+    topic: 证据与披露
+    mechanism: 证据与披露
+    locator: "Art. 54"
+    basis_source: jcaa-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 54 Evidence』"
+
+  jcaa.interim-measures:
+    institution: jcaa
+    topic: 临时措施
+    mechanism: 仲裁庭临时措施
+    locator: "Art. 71–74"
+    basis_source: jcaa-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Chapter V Section 1: Art. 71 Interim Measures, Art. 72 Provision of Security, Art. 73 Disclosure, Art. 74 Modification, Suspension, Termination"
+
+  jcaa.early-determination:
+    institution: jcaa
+    topic: 早期处理
+    mechanism: 早期驳回/简易处理
+    locator: "Art. 41"
+    basis_source: jcaa-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 41 Rejection of Party's Untimely Submission of Statement or Evidence』"
+
+  jcaa.emergency-arbitrator:
+    institution: jcaa
+    topic: 临时措施
+    mechanism: 紧急仲裁员
+    locator: "Art. 75–79"
+    basis_source: jcaa-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Chapter V Section 2: Art. 75 Application for Emergency Measures, Art. 76 Appointment of Emergency Arbitrator, Art. 77 Mandate, Art. 78 Approval/Modification, Art. 79 Mutatis Mutandis"
+
+  jcaa.expedited:
+    institution: jcaa
+    topic: 程序轨道
+    mechanism: 简易仲裁程序
+    locator: "Art. 83–90"
+    basis_source: jcaa-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Part 2 Expedited Arbitration Procedures: Art. 83–90, including Art. 84 Scope, Art. 87 Document Only Proceedings, Art. 88 Time Limit of Award"
+
+  jcaa.award-time-limit:
+    institution: jcaa
+    topic: 裁决
+    mechanism: 裁决期限与程序日程
+    locator: "Art. 43"
+    basis_source: jcaa-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 43 Time Limit of Arbitral Award and Procedural Schedule』"
+
+  jcaa.post-award:
+    institution: jcaa
+    topic: 裁决
+    mechanism: 更正、解释与补充裁决
+    locator: "Art. 68–70"
+    basis_source: jcaa-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 68 Correction of Arbitral Award』,『Article 69 Interpretation of Arbitral Award』,『Article 70 Additional Arbitral Award』"
+
+  jcaa.costs-advance:
+    institution: jcaa
+    topic: 费用
+    mechanism: 费用预付与缴纳
+    locator: "Art. 82"
+    basis_source: jcaa-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 82 Payment, Deposit and Accounting』"
+
+# ────────────────────────────────────────────────────────────
+#  3. AIAC (Asian International Arbitration Centre) – 2026
+# ────────────────────────────────────────────────────────────
+
+  aiac.commencement:
+    institution: aiac
+    topic: 启动与首轮文书
+    mechanism: 仲裁通知
+    locator: "Rule 5"
+    basis_source: aiac-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 5 Notice of Arbitration』"
+
+  aiac.answer:
+    institution: aiac
+    topic: 启动与首轮文书
+    mechanism: 答辩与反请求
+    locator: "Rule 6, Rule 33"
+    basis_source: aiac-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 6 Response to the Notice of Arbitration』及『Rule 33 Statement of Defence and Counterclaim』"
+
+  aiac.jurisdiction:
+    institution: aiac
+    topic: 管辖权
+    mechanism: 仲裁庭管辖权自决
+    locator: "Rule 26"
+    basis_source: aiac-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 26 Jurisdiction of the Arbitral Tribunal』"
+
+  aiac.tribunal-constitution:
+    institution: aiac
+    topic: 组庭
+    mechanism: 仲裁员指定、异议与替换
+    locator: "Rule 15–25"
+    basis_source: aiac-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Rules 15–25: Rule 15 General Rules of Appointment, Rule 18 Sole Arbitrator, Rule 19 Three Arbitrators, Rule 23 Challenge, Rule 24 Removal, Rule 25 Replacement"
+
+  aiac.joinder:
+    institution: aiac
+    topic: 合并与追加
+    mechanism: 追加当事人
+    locator: "Rule 10"
+    basis_source: aiac-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 10 Joinder of Parties』"
+
+  aiac.consolidation:
+    institution: aiac
+    topic: 合并与追加
+    mechanism: 仲裁合并
+    locator: "Rule 8"
+    basis_source: aiac-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 8 Consolidation of Arbitrations』"
+
+  aiac.multiple-contracts:
+    institution: aiac
+    topic: 合并与追加
+    mechanism: 多合同合并仲裁通知
+    locator: "Rule 5.3"
+    basis_source: aiac-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Rule 5.3"
+
+  aiac.time-computation:
+    institution: aiac
+    topic: 期间与送达
+    mechanism: 期间计算与送达
+    locator: "Rule 3"
+    basis_source: aiac-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 3 Communication and Calculation of Time Limits』"
+
+  aiac.new-claims:
+    institution: aiac
+    topic: 请求范围
+    mechanism: 变更请求或答辩
+    locator: "Rule 34"
+    basis_source: aiac-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 34 Amendments to the Claim or Defence』"
+
+  aiac.document-production:
+    institution: aiac
+    topic: 证据与披露
+    mechanism: 证据
+    locator: "Rule 36"
+    basis_source: aiac-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 36 Evidence』"
+
+  aiac.interim-measures:
+    institution: aiac
+    topic: 临时措施
+    mechanism: 临时措施
+    locator: "Rule 11"
+    basis_source: aiac-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 11 Interim Measures』"
+
+  aiac.early-determination:
+    institution: aiac
+    topic: 早期处理
+    mechanism: 简易裁定
+    locator: "Rule 9"
+    basis_source: aiac-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 9 Summary Determination』"
+
+  aiac.emergency-arbitrator:
+    institution: aiac
+    topic: 临时措施
+    mechanism: 紧急仲裁员
+    locator: "Rule 12–14"
+    basis_source: aiac-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 12 Emergency Arbitrator Request』,『Rule 13 Emergency Arbitration』,『Rule 14 Costs of Emergency Arbitration』"
+
+  aiac.expedited:
+    institution: aiac
+    topic: 程序轨道
+    mechanism: 快速程序
+    locator: "Rule 7"
+    basis_source: aiac-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 7 Fast Track Procedure』"
+
+  aiac.award-time-limit:
+    institution: aiac
+    topic: "裁决"
+    mechanism: "程序终结与裁决草案提交时限"
+    locator: "Rule 40.1"
+    basis_source: aiac-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 命中 AIAC 2026『Rule 40』与『Rule 42』"
+  aiac.award-scrutiny:
+    institution: aiac
+    topic: 裁决
+    mechanism: 裁决技术核阅
+    locator: "Rule 42"
+    basis_source: aiac-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 42 Technical Review』"
+
+  aiac.post-award:
+    institution: aiac
+    topic: 裁决
+    mechanism: 更正、解释与补充裁决
+    locator: "Rule 44–46"
+    basis_source: aiac-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 44 Interpretation of the Award』,『Rule 45 Correction of the Award』,『Rule 46 Additional Award』"
+
+  aiac.costs-advance:
+    institution: aiac
+    topic: 费用
+    mechanism: 费用预付
+    locator: "Rule 48"
+    basis_source: aiac-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 48 Deposits』"
+
+# ────────────────────────────────────────────────────────────
+#  4. ACICA (Australian Centre for International Commercial
+#     Arbitration) – 2021
+# ────────────────────────────────────────────────────────────
+
+  acica.commencement:
+    institution: oceania
+    topic: 启动与首轮文书
+    mechanism: 仲裁通知
+    locator: "Art. 6"
+    basis_source: acica-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 6 Notice of Arbitration』"
+
+  acica.answer:
+    institution: oceania
+    topic: 启动与首轮文书
+    mechanism: 对仲裁通知的答辩
+    locator: "Art. 7"
+    basis_source: acica-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 7 Answer to Notice of Arbitration』"
+
+  acica.jurisdiction:
+    institution: oceania
+    topic: 管辖权
+    mechanism: 仲裁庭管辖权自决
+    locator: "Art. 32"
+    basis_source: acica-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 32 Jurisdiction of the Arbitral Tribunal』"
+
+  acica.tribunal-constitution:
+    institution: oceania
+    topic: 组庭
+    mechanism: 仲裁员人数、指定、确认与异议
+    locator: "Art. 11–24"
+    basis_source: acica-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Section II: Art. 11 Number of Arbitrators, Art. 12–13 Appointment, Art. 14 Confirmation, Art. 15 Multi-Party, Art. 20 Disclosures, Art. 21–22 Challenge, Art. 23 Replacement"
+
+  acica.joinder:
+    institution: oceania
+    topic: 合并与追加
+    mechanism: 追加当事人
+    locator: "Art. 17"
+    basis_source: acica-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 17 Joinder』"
+
+  acica.multiple-contracts:
+    institution: oceania
+    topic: 合并与追加
+    mechanism: 多合同合并仲裁
+    locator: "Art. 18"
+    basis_source: acica-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 18 Single Arbitration under Multiple Contracts』"
+
+  acica.consolidation:
+    institution: oceania
+    topic: 合并与追加
+    mechanism: 仲裁合并
+    locator: "Art. 16"
+    basis_source: acica-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 16 Consolidation of Arbitrations』"
+
+  acica.time-computation:
+    institution: oceania
+    topic: 期间与送达
+    mechanism: 通知与期间计算
+    locator: "Art. 4"
+    basis_source: acica-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 4 Notice, Calculation of Periods of Time』"
+
+  acica.new-claims:
+    institution: oceania
+    topic: 请求范围
+    mechanism: 变更请求或答辩
+    locator: "Art. 31"
+    basis_source: acica-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 31 Amendments to the Claim or Defence』"
+
+  acica.document-production:
+    institution: oceania
+    topic: 证据与披露
+    mechanism: 证据与听证
+    locator: "Art. 35"
+    basis_source: acica-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 35 Evidence and Hearings』"
+
+  acica.interim-measures:
+    institution: oceania
+    topic: 临时措施
+    mechanism: 临时保全措施
+    locator: "Art. 37"
+    basis_source: acica-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 37 Interim Measures of Protection』"
+
+  acica.early-determination:
+    institution: oceania
+    topic: 早期处理
+    mechanism: 早期驳回
+    locator: "Art. 25.7"
+    basis_source: acica-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 25.7』"
+
+  acica.emergency-arbitrator:
+    institution: oceania
+    topic: 临时措施
+    mechanism: 紧急仲裁员
+    locator: "Sch. 1 (App. A)"
+    basis_source: acica-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『APPENDIX A: Application for Emergency Interim Measures of Protection』, Schedule 1 paras 1–7"
+
+  acica.expedited:
+    institution: oceania
+    topic: 程序轨道
+    mechanism: 简易程序
+    locator: "Art. 8; Expedited Rules"
+    basis_source: acica-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 8 Expedited Procedure』(main Rules) 及独立 ACICA Expedited Arbitration Rules"
+
+  acica.award-time-limit:
+    institution: oceania
+    topic: "裁决"
+    mechanism: "裁决作出期限（结案后限期，ACICA 可延长）"
+    locator: "Art. 39.3"
+    basis_source: acica-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 命中 ACICA 2021『Article 39』裁决作出期限条款"
+  acica.post-award:
+    institution: oceania
+    topic: 裁决
+    mechanism: 更正、解释与补充裁决
+    locator: "Art. 45–47"
+    basis_source: acica-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 45 Interpretation of the Award』,『Article 46 Correction of the Award』,『Article 47 Additional Award』"
+
+  acica.costs-advance:
+    institution: oceania
+    topic: 费用
+    mechanism: 费用预付
+    locator: "Art. 49"
+    basis_source: acica-2021
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 49 Deposit of Costs』"
+
+# ────────────────────────────────────────────────────────────
+#  5. MCIA (Mumbai Centre for International Arbitration) – 2025
+# ────────────────────────────────────────────────────────────
+
+  mcia.commencement:
+    institution: india
+    topic: 启动与首轮文书
+    mechanism: 仲裁申请
+    locator: "Rule 3"
+    basis_source: mcia-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 3 Request for Arbitration』"
+
+  mcia.answer:
+    institution: india
+    topic: 启动与首轮文书
+    mechanism: 答辩与反请求
+    locator: "Rule 4, Rule 23"
+    basis_source: mcia-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 4 Response to the Request for Arbitration』及『Rule 23 Statements of Defence and Counterclaim』"
+
+  mcia.jurisdiction:
+    institution: india
+    topic: 管辖权
+    mechanism: 仲裁庭管辖权自决与 prima facie 审查
+    locator: "Rule 26"
+    basis_source: mcia-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 26 Jurisdiction』"
+
+  mcia.tribunal-constitution:
+    institution: india
+    topic: 组庭
+    mechanism: 仲裁员指定、异议与替换
+    locator: "Rule 9–15"
+    basis_source: mcia-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Rules 9–15: Rule 9 Independence, Rule 10 Appointment, Rule 11 Sole Arbitrator, Rule 12 Three Arbitrators, Rule 14 Challenge, Rule 15 Replacement"
+
+  mcia.joinder:
+    institution: india
+    topic: 合并与追加
+    mechanism: 追加当事人
+    locator: "Rule 8"
+    basis_source: mcia-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 8 Joinder』"
+
+  mcia.multiple-contracts:
+    institution: india
+    topic: 合并与追加
+    mechanism: 合并申请
+    locator: "Rule 5"
+    basis_source: mcia-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 5 Combined Requests for Arbitration』"
+
+  mcia.consolidation:
+    institution: india
+    topic: 合并与追加
+    mechanism: 仲裁合并
+    locator: "Rule 6"
+    basis_source: mcia-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 6 Consolidation』"
+
+  mcia.time-computation:
+    institution: india
+    topic: 期间与送达
+    mechanism: 文书送达与期间计算
+    locator: "Rule 2"
+    basis_source: mcia-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 2 Written Communications and the Calculation of Periods of Time』"
+
+  mcia.new-claims:
+    institution: india
+    topic: 请求范围
+    mechanism: 变更请求或答辩
+    locator: "Rule 24"
+    basis_source: mcia-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 24 Amendments to the Statements of Claim or Defence』"
+
+  mcia.document-production:
+    institution: india
+    topic: 证据与披露
+    mechanism: 证据
+    locator: "Rule 33"
+    basis_source: mcia-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 33 Evidence』"
+
+  mcia.interim-measures:
+    institution: india
+    topic: 临时措施
+    mechanism: 临时救济与费用担保
+    locator: "Rule 20–21"
+    basis_source: mcia-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 20 Interim Relief』及『Rule 21 Security for costs』"
+
+  mcia.early-determination:
+    institution: india
+    topic: 早期处理
+    mechanism: 早期驳回与简易程序
+    locator: "Rule 16"
+    basis_source: mcia-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 16 Early Dismissal and Summary Procedure』"
+
+  mcia.emergency-arbitrator:
+    institution: india
+    topic: 临时措施
+    mechanism: 紧急仲裁员
+    locator: "Rule 19"
+    basis_source: mcia-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 19 Emergency Arbitrator』"
+
+  mcia.expedited:
+    institution: india
+    topic: 程序轨道
+    mechanism: 简易程序
+    locator: "Rule 17–18"
+    basis_source: mcia-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 17 Expedited Procedure』及『Rule 18 Expedited Formation of the Tribunal』"
+
+  mcia.award-time-limit:
+    institution: india
+    topic: 裁决
+    mechanism: 裁决期限
+    locator: "Rule 40.2–40.3, Rule 27.8"
+    basis_source: mcia-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Rule 40.2(草案须在程序终结后90天内提交) 及 Rule 27.8(final Award within 12 months from completion of pleadings)"
+
+  mcia.award-scrutiny:
+    institution: india
+    topic: 裁决
+    mechanism: 裁决核阅
+    locator: "Rule 40.2"
+    basis_source: mcia-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Rule 40.2"
+
+  mcia.post-award:
+    institution: india
+    topic: 裁决
+    mechanism: 裁决更正与补充裁决
+    locator: "Rule 41"
+    basis_source: mcia-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 41 Correction of Awards and Additional Awards』"
+
+  mcia.costs-advance:
+    institution: india
+    topic: 费用
+    mechanism: 费用预付
+    locator: "Rule 44"
+    basis_source: mcia-2025
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 44 Advance on Costs』"
+
+# ────────────────────────────────────────────────────────────
+#  6. LMAA (London Maritime Arbitrators Association) – 2021
+#     NOTE: LMAA Terms are lightweight / party-autonomy driven.
+#     Many institutional mechanisms (joinder, consolidation,
+#     emergency arbitrator, expedited, award scrutiny) do not
+#     exist as such.
+# ────────────────────────────────────────────────────────────
+
+  lmaa.commencement:
+    institution: sectoral-maritime-commodity
+    topic: 启动与首轮文书
+    mechanism: 仲裁程序启动
+    locator: "Para. 4 (ref. Arbitration Act 1996 s. 14)"
+    basis_source: lmaa-terms
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Para. 4:"
+
+  lmaa.jurisdiction:
+    institution: sectoral-maritime-commodity
+    topic: 管辖权
+    mechanism: 管辖权范围与追加争议
+    locator: "Para. 13"
+    basis_source: lmaa-terms
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Para. 13"
+
+  lmaa.tribunal-constitution:
+    institution: sectoral-maritime-commodity
+    topic: 组庭
+    mechanism: 仲裁员指定与替换
+    locator: "Para. 8–12"
+    basis_source: lmaa-terms
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Para. 8 (三人庭), Para. 9 (两人+公断人), Para. 10 ( sole appointment in default), Para. 11 (sole arbitrator), Para. 12 (substitute appointment by President)"
+
+  lmaa.time-computation:
+    institution: sectoral-maritime-commodity
+    topic: 期间与送达
+    mechanism: 期间与送达
+    locator: "Para. 1(e), Para. 30, Arbitration Act 1996"
+    basis_source: lmaa-terms
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Para. 1(e) (节假日顺延,工作日截止16:00) 及 Para. 30 (送达律师即视为有效送达);其余适用 Arbitration Act 1996"
+
+  lmaa.new-claims:
+    institution: sectoral-maritime-commodity
+    topic: 请求范围
+    mechanism: 追加争议
+    locator: "Para. 13"
+    basis_source: lmaa-terms
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Para. 13"
+
+  lmaa.document-production:
+    institution: sectoral-maritime-commodity
+    topic: 证据与披露
+    mechanism: 证据与文件出示
+    locator: "Para. 15, Second Schedule"
+    basis_source: lmaa-terms
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Para. 15(a)"
+
+  lmaa.interim-measures:
+    institution: sectoral-maritime-commodity
+    topic: 临时措施
+    mechanism: 费用担保与程序命令
+    locator: "Para. 17(c), First Schedule (E)"
+    basis_source: lmaa-terms
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Para. 17(c) (不执行费用担保peremptory order的后果) 及 First Schedule (E) Security for Tribunal costs"
+
+  lmaa.early-determination:
+    institution: sectoral-maritime-commodity
+    topic: "早期处理"
+    mechanism: "部分或先行终局裁决（就不容争辩款项）"
+    locator: "Second Schedule, para. 4"
+    basis_source: lmaa-terms
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 命中 LMAA Terms 2021『Second Schedule』para.4：就不容争辩到期款项作部分或先行终局裁决"
+  lmaa.expedited:
+    institution: sectoral-maritime-commodity
+    topic: "程序轨道"
+    mechanism: "书面审理程序轨道（documents alone）"
+    locator: "Para. 16(c)"
+    basis_source: lmaa-terms
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 命中 LMAA Terms 2021『Para. 16 Arbitrations on documents alone』，程序轨道由仲裁庭决定"
+  lmaa.award-time-limit:
+    institution: sectoral-maritime-commodity
+    topic: 裁决
+    mechanism: 裁决期限
+    locator: "Para. 23"
+    basis_source: lmaa-terms
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Para. 23"
+
+  lmaa.post-award:
+    institution: sectoral-maritime-commodity
+    topic: 裁决
+    mechanism: 裁决更正与解释
+    locator: "Para. 28"
+    basis_source: lmaa-terms
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Para. 28"
+
+  lmaa.costs-advance:
+    institution: sectoral-maritime-commodity
+    topic: 费用
+    mechanism: 仲裁员费用预付
+    locator: "First Schedule (A)–(E)"
+    basis_source: lmaa-terms
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 First Schedule: (A) Appointment fee, (B) Interim fees, (D) Booking fees, (E) Security for Tribunal costs"
+
+  lmaa.consolidation:
+    institution: sectoral-maritime-commodity
+    topic: 合并与追加
+    mechanism: 仲裁合并
+    locator: "Para. 17(b)"
+    basis_source: lmaa-terms
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Para. 17(b)"
+
+  lmaa.answer:
+    institution: sectoral-maritime-commodity
+    topic: 启动与首轮文书
+    mechanism: 答辩
+    locator: "Second Schedule"
+    basis_source: lmaa-terms
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Second Schedule』通常程序步骤，含答辩"
+
+# ────────────────────────────────────────────────────────────
+#  7. FOSFA (Federation of Oil Seeds and Fats Associations)
+#     – 2026
+#     NOTE: FOSFA is a commodity trade arbitration body.
+#     Its rules are lightweight; many institutional mechanisms
+#     do not exist.
+# ────────────────────────────────────────────────────────────
+
+  fosfa.commencement:
+    institution: sectoral-maritime-commodity
+    topic: 启动与首轮文书
+    mechanism: 仲裁申请与时效
+    locator: "Rule 1"
+    basis_source: fosfa-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 1 PROCEDURE FOR CLAIMING ARBITRATION AND TIME LIMITS』"
+
+  fosfa.answer:
+    institution: sectoral-maritime-commodity
+    topic: 启动与首轮文书
+    mechanism: 答辩
+    locator: "Rule 4(a)(ii), 4(b)(ii)"
+    basis_source: fosfa-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Rule 4(a)(ii)"
+
+  fosfa.jurisdiction:
+    institution: sectoral-maritime-commodity
+    topic: 管辖权
+    mechanism: 管辖权自决
+    locator: "Rule 5"
+    basis_source: fosfa-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 5 JURISDICTION』"
+
+  fosfa.tribunal-constitution:
+    institution: sectoral-maritime-commodity
+    topic: 组庭
+    mechanism: 仲裁员指定
+    locator: "Rule 2"
+    basis_source: fosfa-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Rule 2 APPOINTMENT OF ARBITRATORS』"
+
+  fosfa.time-computation:
+    institution: sectoral-maritime-commodity
+    topic: 期间与送达
+    mechanism: 期间计算
+    locator: "Rule 1(d)–1(e)"
+    basis_source: fosfa-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Rule 1(d) (通知须以快速书面方式,16:00后视为次日收到) 及 Rule 1(e) (节假日顺延;工作日截止16:00)"
+
+  fosfa.costs-advance:
+    institution: sectoral-maritime-commodity
+    topic: 费用
+    mechanism: 费用预付
+    locator: "Rule 1(f), Rule 4(g)"
+    basis_source: fosfa-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Rule 1(f)"
+
+  fosfa.post-award:
+    institution: sectoral-maritime-commodity
+    topic: 裁决
+    mechanism: 裁决上诉
+    locator: "Rule 6–7"
+    basis_source: fosfa-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Rule 6 (裁决程序与发布) 及 Rule 7 (28天内可上诉至Board of Appeal);FOSFA特色为内部上诉机制"
+
+  fosfa.multiple-contracts:
+    institution: sectoral-maritime-commodity
+    topic: 合并与追加
+    mechanism: 多合同合并仲裁
+    locator: "Rule 6(c)"
+    basis_source: fosfa-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Rule 6(c)"
+
+  fosfa.consolidation:
+    institution: sectoral-maritime-commodity
+    topic: 合并与追加
+    mechanism: 上诉合并
+    locator: "Rule 8(c)"
+    basis_source: fosfa-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Rule 8(c)"
+
+  fosfa.document-production:
+    institution: sectoral-maritime-commodity
+    topic: 证据与披露
+    mechanism: 证据与文件出示
+    locator: "Rule 4(d)"
+    basis_source: fosfa-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中 Rule 4(d)"
+
+  fosfa.interim-measures:
+    institution: sectoral-maritime-commodity
+    topic: "临时措施"
+    mechanism: "上诉阶段命令款项存放银行之保全指令"
+    locator: "Rule 9(f)"
+    basis_source: fosfa-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 命中 FOSFA『Rule 9』(f)：上诉委员会得命令将款项存放于银行作为延期条件"
+  fosfa.early-determination:
+    institution: sectoral-maritime-commodity
+    topic: "早期处理"
+    mechanism: "先行管辖权裁决（不得上诉）"
+    locator: "Rule 5(b)"
+    basis_source: fosfa-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 命中 FOSFA『Rule 5』(b)：仲裁员可就管辖权作出先行裁决，且不得上诉"
+  fosfa.expedited:
+    institution: sectoral-maritime-commodity
+    topic: "程序轨道"
+    mechanism: "默认书面推进、开庭与否由仲裁员裁量"
+    locator: "Rule 4(e)"
+    basis_source: fosfa-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 命中 FOSFA『Rule 4』(e)：是否开庭及程序进行由仲裁员裁量"
+  fosfa.award-time-limit:
+    institution: sectoral-maritime-commodity
+    topic: "裁决"
+    mechanism: "仲裁员速办职责与不尽职时之处置"
+    locator: "Rule 4(h)"
+    basis_source: fosfa-2026
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 命中 FOSFA『Rule 4』(h)：仲裁员未尽职速办时，协会可要求说明并责令辞职"
+  diac.commencement:
+    institution: west-asia
+    topic: 启动与首轮文书
+    mechanism: 仲裁申请与受理
+    locator: "Art. 4"
+    basis_source: diac-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 4 Commencement of Arbitration』"
+
+  diac.answer:
+    institution: west-asia
+    topic: 启动与首轮文书
+    mechanism: 答辩与反请求
+    locator: "Art. 5"
+    basis_source: diac-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 5 The Answer』"
+
+  diac.jurisdiction:
+    institution: west-asia
+    topic: 管辖权
+    mechanism: 管辖权异议与 Kompetenz-Kompetenz
+    locator: "Art. 6"
+    basis_source: diac-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 6 Jurisdiction』"
+
+  diac.tribunal-constitution:
+    institution: west-asia
+    topic: 组庭
+    mechanism: 仲裁员人数、指定、确认与异议
+    locator: "Art. 10, Art. 11, Art. 12, Art. 13"
+    basis_source: diac-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 10 Number of Arbitrators"
+
+  diac.joinder:
+    institution: west-asia
+    topic: 合并与追加
+    mechanism: 追加第三方当事人
+    locator: "Art. 9"
+    basis_source: diac-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 9 Joinder of Additional Parties』"
+
+  diac.multiple-contracts:
+    institution: west-asia
+    topic: 合并与追加
+    mechanism: 多合同在同一仲裁中审理
+    locator: "Art. 8"
+    basis_source: diac-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 8 Multiple Contracts and Consolidation』"
+
+  diac.consolidation:
+    institution: west-asia
+    topic: 合并与追加
+    mechanism: 仲裁合并
+    locator: "Art. 8.2"
+    basis_source: diac-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 8.2 Consolidation』"
+
+  diac.time-computation:
+    institution: west-asia
+    topic: 期间与送达
+    mechanism: 期间计算与送达
+    locator: "Art. 3"
+    basis_source: diac-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 3 Time Periods』"
+
+  diac.new-claims:
+    institution: west-asia
+    topic: 请求范围
+    mechanism: 组庭后新增或修改请求
+    locator: "Art. 24.3"
+    basis_source: diac-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 24.3』"
+
+  diac.document-production:
+    institution: west-asia
+    topic: 证据与披露
+    mechanism: 文件出示
+    locator: "Art. 25.3"
+    basis_source: diac-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 25.3』"
+
+  diac.interim-measures:
+    institution: west-asia
+    topic: 临时措施
+    mechanism: 仲裁庭的临时保全措施
+    locator: "App. II Art. 1"
+    basis_source: diac-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Appendix II Article 1 Interim Measures』"
+
+  diac.early-determination:
+    institution: west-asia
+    topic: "早期处理"
+    mechanism: "争点初步裁定与纯书面审理"
+    locator: "Article 17"
+    basis_source: diac-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 命中 DIAC 2022『Article 17』：仲裁庭得就争点作初步裁定并以纯书面方式审理"
+  diac.emergency-arbitrator:
+    institution: west-asia
+    topic: 临时措施
+    mechanism: 紧急仲裁员
+    locator: "App. II Art. 2"
+    basis_source: diac-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Appendix II Article 2 Emergency Arbitrator』"
+
+  diac.expedited:
+    institution: west-asia
+    topic: 程序轨道
+    mechanism: 快速程序
+    locator: "Art. 32"
+    basis_source: diac-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 32 Expedited Proceedings』"
+
+  diac.award-time-limit:
+    institution: west-asia
+    topic: 裁决
+    mechanism: 裁决作出期限
+    locator: "Art. 35"
+    basis_source: diac-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 35 Time Limit for Awards』"
+
+  diac.award-scrutiny:
+    institution: west-asia
+    topic: 裁决
+    mechanism: 裁决核阅
+    locator: "Art. 34.5"
+    basis_source: diac-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 34.5』"
+
+  diac.post-award:
+    institution: west-asia
+    topic: 裁决
+    mechanism: 裁决更正与补充裁决
+    locator: "Art. 37"
+    basis_source: diac-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 37 Correction and Supplementation of Awards』"
+
+  diac.costs-advance:
+    institution: west-asia
+    topic: 费用
+    mechanism: 费用预付
+    locator: "App. I Art. 2, Art. 3"
+    basis_source: diac-2022
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Appendix I Article 2 Advance on Costs"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# ArbitrateAD 2024
+# ─────────────────────────────────────────────────────────────────────────────
+
+  arbitratead.commencement:
+    institution: west-asia
+    topic: 启动与首轮文书
+    mechanism: 仲裁通知与申请
+    locator: "Art. 6"
+    basis_source: arbitratead-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 6 Commencement of Arbitration』"
+
+  arbitratead.answer:
+    institution: west-asia
+    topic: 启动与首轮文书
+    mechanism: 答辩与反请求
+    locator: "Art. 7"
+    basis_source: arbitratead-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 7 Answer to the Notice of Arbitration』"
+
+  arbitratead.jurisdiction:
+    institution: west-asia
+    topic: 管辖权
+    mechanism: 仲裁庭管辖权
+    locator: "Art. 8"
+    basis_source: arbitratead-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 8 Tribunal's Competence to Rule on its Own Jurisdiction』"
+
+  arbitratead.tribunal-constitution:
+    institution: west-asia
+    topic: 组庭
+    mechanism: 仲裁员人数、指定、确认与异议
+    locator: "Art. 13, Art. 14, Art. 15, Art. 16, Art. 17"
+    basis_source: arbitratead-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 13-17: The Arbitral Tribunal』"
+
+  arbitratead.joinder:
+    institution: west-asia
+    topic: 合并与追加
+    mechanism: 追加当事人
+    locator: "Art. 11"
+    basis_source: arbitratead-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 11 Joinder of Additional Parties』"
+
+  arbitratead.multiple-contracts:
+    institution: west-asia
+    topic: 合并与追加
+    mechanism: 多合同在同一仲裁中审理
+    locator: "Art. 10"
+    basis_source: arbitratead-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 10 Multiple Contracts』"
+
+  arbitratead.consolidation:
+    institution: west-asia
+    topic: 合并与追加
+    mechanism: 仲裁合并
+    locator: "Art. 12"
+    basis_source: arbitratead-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 12 Consolidation of Arbitrations』"
+
+  arbitratead.time-computation:
+    institution: west-asia
+    topic: 期间与送达
+    mechanism: 期间计算
+    locator: "Art. 5"
+    basis_source: arbitratead-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 5 Calculation of Time Periods』"
+
+  arbitratead.new-claims:
+    institution: west-asia
+    topic: 请求范围
+    mechanism: 修改或补充请求
+    locator: "Art. 30"
+    basis_source: arbitratead-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 30 Amendments to the Claim or Defence』"
+
+  arbitratead.document-production:
+    institution: west-asia
+    topic: 证据与披露
+    mechanism: 证据与文件出示
+    locator: "Art. 31, Art. 32"
+    basis_source: arbitratead-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 31 Evidence"
+
+  arbitratead.interim-measures:
+    institution: west-asia
+    topic: 临时措施
+    mechanism: 仲裁庭临时措施
+    locator: "Art. 34"
+    basis_source: arbitratead-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 34 Interim Measures』"
+
+  arbitratead.early-determination:
+    institution: west-asia
+    topic: 早期处理
+    mechanism: 早期驳回
+    locator: "Art. 45"
+    basis_source: arbitratead-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 45 Early Dismissal of Claims』"
+
+  arbitratead.emergency-arbitrator:
+    institution: west-asia
+    topic: 临时措施
+    mechanism: 紧急仲裁员
+    locator: "Art. 35"
+    basis_source: arbitratead-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 35 Emergency Arbitrator』"
+
+  arbitratead.expedited:
+    institution: west-asia
+    topic: 程序轨道
+    mechanism: 快速程序
+    locator: "Art. 36"
+    basis_source: arbitratead-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 36 Expedited Procedure』"
+
+  arbitratead.award-time-limit:
+    institution: west-asia
+    topic: 裁决
+    mechanism: 裁决作出期限
+    locator: "Art. 38"
+    basis_source: arbitratead-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 38 Time Limit for Awards』"
+
+  arbitratead.award-scrutiny:
+    institution: west-asia
+    topic: 裁决
+    mechanism: 裁决核阅
+    locator: "Art. 40"
+    basis_source: arbitratead-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 40 Scrutiny of the Award by the Court』"
+
+  arbitratead.post-award:
+    institution: west-asia
+    topic: 裁决
+    mechanism: 裁决更正与补充裁决
+    locator: "Art. 42, Art. 43"
+    basis_source: arbitratead-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 42 Correction of the Award"
+
+  arbitratead.costs-advance:
+    institution: west-asia
+    topic: 费用
+    mechanism: 费用预付
+    locator: "Art. 51"
+    basis_source: arbitratead-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 51 Advance on Costs』"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# CRCICA 2024
+# ─────────────────────────────────────────────────────────────────────────────
+
+  crcica.commencement:
+    institution: west-asia
+    topic: 启动与首轮文书
+    mechanism: 仲裁申请与受理
+    locator: "Art. 3"
+    basis_source: crcica-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 3 Commencement of Arbitration』"
+
+  crcica.answer:
+    institution: west-asia
+    topic: 启动与首轮文书
+    mechanism: 答辩与反请求
+    locator: "Art. 4"
+    basis_source: crcica-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 4 The Answer』"
+
+  crcica.jurisdiction:
+    institution: west-asia
+    topic: 管辖权
+    mechanism: 管辖权异议与 Kompetenz-Kompetenz
+    locator: "Art. 6, Art. 23"
+    basis_source: crcica-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 6 Prima Facie Jurisdiction"
+
+  crcica.tribunal-constitution:
+    institution: west-asia
+    topic: 组庭
+    mechanism: 仲裁员人数、指定、确认与异议
+    locator: "Art. 7, Art. 8, Art. 9, Art. 10, Art. 11, Art. 12, Art. 13, Art. 14, Art. 15, Art. 16"
+    basis_source: crcica-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Articles 7-16: The Arbitral Tribunal』"
+
+  crcica.joinder:
+    institution: west-asia
+    topic: 合并与追加
+    mechanism: 追加第三方当事人
+    locator: "Art. 17.5"
+    basis_source: crcica-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 17.5 Joinder of Additional Parties』"
+
+  crcica.multiple-contracts:
+    institution: west-asia
+    topic: 合并与追加
+    mechanism: 多合同在同一仲裁中审理
+    locator: "Art. 51"
+    basis_source: crcica-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 51 Multiple Contracts』"
+
+  crcica.consolidation:
+    institution: west-asia
+    topic: 合并与追加
+    mechanism: 仲裁合并
+    locator: "Art. 50"
+    basis_source: crcica-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 50 Consolidation of Arbitrations』"
+
+  crcica.time-computation:
+    institution: west-asia
+    topic: 期间与送达
+    mechanism: 期间计算
+    locator: "Art. 2"
+    basis_source: crcica-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 2 Calculation of Time Periods』"
+
+  crcica.new-claims:
+    institution: west-asia
+    topic: 请求范围
+    mechanism: 修改或补充请求
+    locator: "Art. 22"
+    basis_source: crcica-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 22 Amendments to the Claim or Defence』"
+
+  crcica.document-production:
+    institution: west-asia
+    topic: 证据与披露
+    mechanism: 证据与文件出示
+    locator: "Art. 27"
+    basis_source: crcica-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 27 Evidence』"
+
+  crcica.interim-measures:
+    institution: west-asia
+    topic: 临时措施
+    mechanism: 仲裁庭临时措施
+    locator: "Art. 26"
+    basis_source: crcica-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 26 Interim Measures and Emergency Arbitrator』"
+
+  crcica.early-determination:
+    institution: west-asia
+    topic: 早期处理
+    mechanism: 早期驳回
+    locator: "Art. 52"
+    basis_source: crcica-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 52 Early Dismissal』"
+
+  crcica.emergency-arbitrator:
+    institution: west-asia
+    topic: 临时措施
+    mechanism: 紧急仲裁员
+    locator: "Art. 26, Annex 2"
+    basis_source: crcica-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 26 / Annex 2 Emergency Arbitrator』"
+
+  crcica.expedited:
+    institution: west-asia
+    topic: 程序轨道
+    mechanism: 快速程序
+    locator: "Annex 3"
+    basis_source: crcica-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Annex 3 Expedited Procedure』"
+
+  crcica.award-time-limit:
+    institution: west-asia
+    topic: 裁决
+    mechanism: 裁决作出期限
+    locator: "Art. 35"
+    basis_source: crcica-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 35 Time Limit for Awards』"
+
+  crcica.award-scrutiny:
+    institution: west-asia
+    topic: 裁决
+    mechanism: 裁决核阅
+    locator: "Art. 34.5"
+    basis_source: crcica-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 34.5 Scrutiny of the Award』"
+
+  crcica.post-award:
+    institution: west-asia
+    topic: 裁决
+    mechanism: 裁决解释、更正与补充裁决
+    locator: "Art. 38, Art. 39, Art. 40"
+    basis_source: crcica-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 38 Interpretation"
+
+  crcica.costs-advance:
+    institution: west-asia
+    topic: 费用
+    mechanism: 费用预付
+    locator: "Art. 46"
+    basis_source: crcica-2024
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 46 Deposit of Fees and Expenses』"
+
+# ─────────────────────────────────────────────────────────────────────────────
+# SCCA 2023
+# ─────────────────────────────────────────────────────────────────────────────
+
+  scca.commencement:
+    institution: west-asia
+    topic: 启动与首轮文书
+    mechanism: 仲裁通知
+    locator: "Art. 5"
+    basis_source: sca-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 5 Commencement of Arbitration』"
+
+  scca.answer:
+    institution: west-asia
+    topic: 启动与首轮文书
+    mechanism: 答辩与反请求
+    locator: "Art. 6"
+    basis_source: sca-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 6 Answer to the Notice of Arbitration』"
+
+  scca.jurisdiction:
+    institution: west-asia
+    topic: 管辖权
+    mechanism: 仲裁庭管辖权
+    locator: "Art. 24"
+    basis_source: sca-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 24 Jurisdiction』"
+
+  scca.tribunal-constitution:
+    institution: west-asia
+    topic: 组庭
+    mechanism: 仲裁员人数、指定、确认与异议
+    locator: "Art. 15, Art. 16, Art. 17, Art. 18, Art. 19"
+    basis_source: sca-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Articles 15-19: The Arbitral Tribunal』"
+
+  scca.joinder:
+    institution: west-asia
+    topic: 合并与追加
+    mechanism: 追加当事人
+    locator: "Art. 12"
+    basis_source: sca-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 12 Joinder of Additional Parties』"
+
+  scca.multiple-contracts:
+    institution: west-asia
+    topic: 合并与追加
+    mechanism: 多合同在同一仲裁中审理
+    locator: "Art. 11"
+    basis_source: sca-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 11 Multiple Contracts』"
+
+  scca.consolidation:
+    institution: west-asia
+    topic: 合并与追加
+    mechanism: 仲裁合并
+    locator: "Art. 13"
+    basis_source: sca-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 13 Consolidation of Arbitrations』"
+
+  scca.time-computation:
+    institution: west-asia
+    topic: 期间与送达
+    mechanism: 期间计算
+    locator: "Art. 4"
+    basis_source: sca-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 4 Calculation of Time Periods』"
+
+  scca.new-claims:
+    institution: west-asia
+    topic: 请求范围
+    mechanism: 修改或补充请求
+    locator: "Art. 8"
+    basis_source: sca-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 8 Amendments to the Claim or Defence』"
+
+  scca.document-production:
+    institution: west-asia
+    topic: 证据与披露
+    mechanism: 信息交换与文件出示
+    locator: "Art. 27"
+    basis_source: sca-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 27 Exchange of Information and Document Production』"
+
+  scca.interim-measures:
+    institution: west-asia
+    topic: 临时措施
+    mechanism: 仲裁庭临时措施
+    locator: "Art. 28"
+    basis_source: sca-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 28 Interim Measures』"
+
+  scca.early-determination:
+    institution: west-asia
+    topic: 早期处理
+    mechanism: 早期处决
+    locator: "Art. 26"
+    basis_source: sca-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 26 Early Disposition of Issues』"
+
+  scca.emergency-arbitrator:
+    institution: west-asia
+    topic: 临时措施
+    mechanism: 紧急仲裁员
+    locator: "Art. 7, Appendix III"
+    basis_source: sca-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 7 / Appendix III Emergency Arbitrator』"
+
+  scca.expedited:
+    institution: west-asia
+    topic: 程序轨道
+    mechanism: 快速程序
+    locator: "Appendix II"
+    basis_source: sca-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Appendix II Rules for Expedited Arbitration』"
+
+  scca.award-time-limit:
+    institution: west-asia
+    topic: 裁决
+    mechanism: 裁决作出期限
+    locator: "Art. 33"
+    basis_source: sca-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 33 Time Limit for Awards』"
+
+  scca.award-scrutiny:
+    institution: west-asia
+    topic: 裁决
+    mechanism: 裁决核阅
+    locator: "Art. 36(4)"
+    basis_source: sca-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 36(4)』"
+
+  scca.post-award:
+    institution: west-asia
+    topic: 裁决
+    mechanism: 裁决更正与补充裁决
+    locator: "Art. 39"
+    basis_source: sca-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 39 Correction and Supplementation of Awards』"
+
+  scca.costs-advance:
+    institution: west-asia
+    topic: 费用
+    mechanism: 费用预付
+    locator: "Art. 43"
+    basis_source: sca-2023
+    status: verified
+    checked_at: "2026-10-24"
+    via: "2026-10-24 官方文本命中『Article 43 Deposits』"
+
+#─────────────────────────────────────────────────────────────────────────────
+# SCIA — 深圳国际仲裁院仲裁规则（2025 年第四次修正，2025-07-01 生效）
+#─────────────────────────────────────────────────────────────────────────────
+
+  scia.answer:
+    institution: scia
+    topic: 启动与首轮文书
+    mechanism: 答辩与反请求
+    locator: 第十四条、第十五条
+    basis_source: scia-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『第十四条 答辩』『第十五条 反请求』
+
+  scia.arbitrator-disclosure:
+    institution: scia
+    topic: 组庭
+    mechanism: 仲裁员信息披露、回避与替换
+    locator: 第三十二条、第三十三条、第三十四条
+    basis_source: scia-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『第三十二条 仲裁员信息披露』『第三十三条 仲裁员回避』『第三十四条 仲裁员替换』
+
+  scia.award:
+    institution: scia
+    topic: 裁决
+    mechanism: 作出裁决的期限、裁决的作出与裁决书核阅
+    locator: 第五十条、第五十一条、第五十三条
+    basis_source: scia-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『第五十条 作出裁决的期限』『第五十一条 裁决的作出』『第五十三条 裁决书草案的核阅』
+
+  scia.commencement:
+    institution: scia
+    topic: 启动与首轮文书
+    mechanism: 申请仲裁、受理与仲裁通知
+    locator: 第十一条、第十二条、第十三条
+    basis_source: scia-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『第十一条 申请仲裁』『第十二条 受理』『第十三条 仲裁通知』
+
+  scia.consolidation:
+    institution: scia
+    topic: 合并与追加
+    mechanism: 合并仲裁与合并开庭
+    locator: 第十八条、第十九条
+    basis_source: scia-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『第十八条 合并仲裁』『第十九条 合并开庭』
+
+  scia.costs:
+    institution: scia
+    topic: 费用
+    mechanism: 预缴仲裁费、仲裁费用与费用承担
+    locator: 第二十二条、第六十三条、第六十四条
+    basis_source: scia-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『第二十二条 预缴仲裁费』『第六十三条 仲裁费用』『第六十四条 费用承担』
+
+  scia.document-production:
+    institution: scia
+    topic: 证据与披露
+    mechanism: 仲裁庭调查取证与庭前证据交换、要求披露相关文件
+    locator: 第三十六条、第四十四条
+    basis_source: scia-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『第三十六条 审理方式』（庭前证据交换与文件披露的指引在该条第（三）款）与『第四十四条 仲裁庭调查』
+
+  scia.emergency-arbitrator:
+    institution: scia
+    topic: 临时措施
+    mechanism: 紧急仲裁员
+    locator: 第二十六条
+    basis_source: scia-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『第二十六条 紧急仲裁员』，位于『第四章 临时措施』
+
+  scia.evidence:
+    institution: scia
+    topic: 证据与披露
+    mechanism: 举证与质证
+    locator: 第四十二条、第四十三条
+    basis_source: scia-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『第四十二条 举证』『第四十三条 质证』
+
+  scia.expedited:
+    institution: scia
+    topic: 程序轨道
+    mechanism: 快速程序的适用与程序变更
+    locator: 第五十六条、第六十一条
+    basis_source: scia-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『第五十六条 快速程序的适用』与『第六十一条 程序变更』，位于『第九章 快速程序』；适用门槛数值须现取现用
+
+  scia.fee-schedule:
+    institution: scia
+    topic: 费用
+    mechanism: 作为规则组成部分的《仲裁费用规定》与仲裁费用表
+    locator: 第六十三条、附件
+    basis_source: scia-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『第六十三条 仲裁费用』，同页尾部链接到『附件：仲裁费用规定』即『仲裁费用规定（2025）』全文页
+
+  scia.interim-measures:
+    institution: scia
+    topic: 临时措施
+    mechanism: 保全
+    locator: 第二十五条
+    basis_source: scia-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『第二十五条 保全』，位于『第四章 临时措施』
+
+  scia.joinder:
+    institution: scia
+    topic: 合并与追加
+    mechanism: 追加当事人
+    locator: 第二十条
+    basis_source: scia-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『第二十条 追加当事人』
+
+  scia.jurisdiction:
+    institution: scia
+    topic: 管辖权
+    mechanism: 仲裁协议书面形式、独立性与管辖权异议
+    locator: 第八条、第九条、第十条
+    basis_source: scia-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『第八条 仲裁协议』『第九条 仲裁协议的独立性』『第十条 管辖权异议及管辖权决定』
+
+  scia.multiple-contracts:
+    institution: scia
+    topic: 合并与追加
+    mechanism: 多份合同的单次仲裁
+    locator: 第十七条
+    basis_source: scia-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『第十七条 多份合同的单次仲裁』
+
+  scia.new-claims:
+    institution: scia
+    topic: 请求范围
+    mechanism: 变更仲裁请求或反请求
+    locator: 第十六条
+    basis_source: scia-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『第十六条 变更仲裁请求或反请求』
+
+  scia.post-award:
+    institution: scia
+    topic: 裁决后救济
+    mechanism: 裁决书补正、补充裁决与选择性复裁
+    locator: 第五十四条、第六十八条
+    basis_source: scia-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『第五十四条 裁决书补正』与『第六十八条 选择性复裁程序』
+
+  scia.service-time:
+    institution: scia
+    topic: 期间与送达
+    mechanism: 送达方式、视为送达与期限计算
+    locator: 第六条、第六十五条
+    basis_source: scia-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『第六条 送达』『第六十五条 期限的计算』
+
+  scia.tribunal-constitution:
+    institution: scia
+    topic: 组庭
+    mechanism: 仲裁庭人数与组成方式
+    locator: 第二十九条、第三十条、第三十一条
+    basis_source: scia-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『第二十九条 仲裁庭的人数和组成方式』『第三十条 三人仲裁庭的组成』『第三十一条 独任仲裁庭的组成』
+
+#─────────────────────────────────────────────────────────────────────────────
+# SCIAHK — SCIAHK Arbitration Rules（2025-03-31）
+#─────────────────────────────────────────────────────────────────────────────
+
+  sciahk.appellate:
+    institution: sciahk
+    topic: 裁决后救济
+    mechanism: 可选复裁（上诉仲裁）程序
+    locator: Art. 39A, Appendix 2
+    basis_source: sciahk-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: '2026-10-24 官方文本命中『Article 39A Optional Appellate Arbitration Procedure』『Appendix 2: Optional Appellate Arbitration Procedure』'
+
+  sciahk.arbitrator-disclosure:
+    institution: sciahk
+    topic: 组庭
+    mechanism: 仲裁员披露、回避与替换
+    locator: Art. 11, Art. 12, Art. 14
+    basis_source: sciahk-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中小节标题『Disclosures by and Challenge of Arbitrators (Articles 11 to 13)』与『Article 14 Replacement of an Arbitrator』
+
+  sciahk.award:
+    institution: sciahk
+    topic: 裁决
+    mechanism: 程序关闭与裁决形式、效力
+    locator: Art. 31, Art. 33, Art. 34
+    basis_source: sciahk-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『Article 31 Closure of Proceedings』『Article 33 Decisions』『Article 34 Form and Effect of the Award』
+
+  sciahk.commencement:
+    institution: sciahk
+    topic: 启动与首轮文书
+    mechanism: 仲裁通知与对仲裁通知的答复
+    locator: Art. 3, Art. 4
+    basis_source: sciahk-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『Article 3 Notice of Arbitration』『Article 4 Response to the Notice of Arbitration』
+
+  sciahk.costs:
+    institution: sciahk
+    topic: 费用
+    mechanism: 费用定义、分担与预缴
+    locator: Art. 40, Art. 42, Art. 43, Art. 26A
+    basis_source: sciahk-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『Article 40 Definition of Costs』『Article 42 Allocation of Costs』『Article 43 Deposit of Costs』『Article 26A Security for Costs』
+
+  sciahk.early-determination:
+    institution: sciahk
+    topic: 早期处理
+    mechanism: 简易驳回请求与答辩
+    locator: Art. 23B
+    basis_source: sciahk-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『Article 23B Summary Dismissal of Claims and Defences』
+
+  sciahk.emergency-arbitrator:
+    institution: sciahk
+    topic: 临时措施
+    mechanism: 紧急仲裁员程序
+    locator: App. 1, Art. 1–14
+    basis_source: sciahk-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: '2026-10-24 官方文本命中『Appendix 1: Emergency Arbitrator Procedure』，内含 Article 1 Application 至 Article 14 各条标题'
+
+  sciahk.evidence:
+    institution: sciahk
+    topic: 证据与披露
+    mechanism: 举证、文件出示与仲裁庭指定专家
+    locator: Art. 27, Art. 29
+    basis_source: sciahk-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『Article 27 Evidence』『Article 29 Experts Appointed by the Arbitral Tribunal』
+
+  sciahk.expedited:
+    institution: sciahk
+    topic: 程序轨道
+    mechanism: 快速程序
+    locator: Art. 23A, Appendix 5
+    basis_source: sciahk-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: '2026-10-24 官方文本命中『Article 23A Expedited Procedure』与『Appendix 5: Expedited Procedure Rules』；适用门槛以机构官网公布值为准，须现取现用'
+
+  sciahk.fee-schedule:
+    institution: sciahk
+    topic: 费用
+    mechanism: 机构登记费、管理费与仲裁员报酬标准
+    locator: App. 3, App. 4
+    basis_source: sciahk-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: '2026-10-24 官方文本命中『Appendix 3: SCIAHK Registration and Administrative Fees』『Appendix 4: Fees and Expenses of Arbitrators』及『Expedited Procedure Rules Fees Schedule』；费率数值须现取现用'
+
+  sciahk.interim-measures:
+    institution: sciahk
+    topic: 临时措施
+    mechanism: 临时措施
+    locator: Art. 26
+    basis_source: sciahk-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『Article 26 Interim Measures』；紧急救济依该条第 10 款转 Appendix 1
+
+  sciahk.joinder-consolidation:
+    institution: sciahk
+    topic: 合并与追加
+    mechanism: 追加第三人、合并仲裁、并行程序与多份合同单次仲裁
+    locator: Art. 17.5–17.8
+    basis_source: sciahk-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『Article 17 General Provisions』；追加第三人、合并仲裁与并行程序分别位于该条第 5、6、7 款
+
+  sciahk.jurisdiction:
+    institution: sciahk
+    topic: 管辖权
+    mechanism: 管辖权异议
+    locator: Art. 23
+    basis_source: sciahk-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『Article 23 Pleas as to the Jurisdiction of the Arbitral Tribunal』
+
+  sciahk.new-claims:
+    institution: sciahk
+    topic: 请求范围
+    mechanism: 变更请求或答辩与进一步书面陈述
+    locator: Art. 22, Art. 24
+    basis_source: sciahk-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『Article 22 Amendments to the Claim or Defence』『Article 24 Further Written Statements』
+
+  sciahk.post-award:
+    institution: sciahk
+    topic: 裁决后救济
+    mechanism: 解释、更正与追加裁决
+    locator: Art. 37, Art. 38, Art. 39
+    basis_source: sciahk-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『Article 37 Interpretation of the Award』『Article 38 Correction of the Award』『Article 39 Additional Award』
+
+  sciahk.statements:
+    institution: sciahk
+    topic: 启动与首轮文书
+    mechanism: 申请书与答辩书
+    locator: Art. 20, Art. 21
+    basis_source: sciahk-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『Article 20 Statement of Claim』『Article 21 Statement of Defence』
+
+  sciahk.third-party-funding:
+    institution: sciahk
+    topic: 证据与披露
+    mechanism: 第三方资助与保险披露
+    locator: Art. 43B
+    basis_source: sciahk-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『Article 43B Disclosure of Third Party Funding or Insurance』
+
+  sciahk.time-notice:
+    institution: sciahk
+    topic: 期间与送达
+    mechanism: 通知方式与期间计算
+    locator: Art. 2, Art. 25
+    basis_source: sciahk-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『Article 2 Notice and Calculation of Periods of Time』『Article 25 Periods of Time』
+
+  sciahk.tribunal-constitution:
+    institution: sciahk
+    topic: 组庭
+    mechanism: 指定机构、仲裁员人数与指定方式
+    locator: Art. 6, Art. 7, Art. 8, Art. 10A
+    basis_source: sciahk-2025
+    status: verified
+    checked_at: '2026-10-24'
+    via: 2026-10-24 官方文本命中『Article 6 Appointing Authority』『Article 7 Number of Arbitrators』及小节标题『Appointment of Arbitrators (Articles 8 to 10A)』
+
+open_questions:
+  - institution: scia
+    source_id: scia-2025
+    question: "SCIA 2025 规则是否设有早期驳回／简易处置机制？2025 全文未见对应条文。"
+    action: "取回本案适用版本全文检索相关表述；未命中即按问题处理，不得依他机构规则推定其有无。"
+    raised_at: "2026-10-24"

@@ -1,0 +1,14 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# 本机运行数据与案件产出（发布仓库不含实测记录和渲染成品）
+data/
+*.docx
+~$*

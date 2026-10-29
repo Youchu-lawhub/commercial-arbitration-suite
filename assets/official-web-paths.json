@@ -1,0 +1,511 @@
+{
+  "schema": "official-web-paths/1",
+  "note": "Curated navigation only. These URLs are NOT evidence that any provision or current version has been fetched or verified. No automated scraping of navigation directories. Country and state/subnational scope must be separately checked. Added country candidates are editorial suggestions only; verify official institution, URL, access policy, current text and exact subnational scope before any citation.",
+  "navigation_fallbacks": [
+    {
+      "title": "中华人民共和国商务部全球法规网—境外法规",
+      "url": "https://policy.mofcom.gov.cn/page/list/nations.html",
+      "mode": "browser-manual-only",
+      "caveat": "禁止自动化采集；译本仅供参考，须回原发布机关核验。"
+    },
+    {
+      "title": "司法部法通网—境外法",
+      "url": "https://lexcom.12348.gov.cn/overseas-law?tab=translation",
+      "mode": "browser-manual-only",
+      "caveat": "仅供人工导航与翻译辅助；页面可达不代表数据可读取；条文须回原发布机关。"
+    },
+    {
+      "title": "US Library of Congress Guide to Law Online",
+      "url": "https://www.loc.gov/research-centers/law-library-of-congress/researcher-resources/guide-to-law-online/",
+      "mode": "browser-navigation",
+      "caveat": "国别来源发现，不是各国法规发布机关。"
+    }
+  ],
+  "jurisdictions": {
+    "US": [
+      {
+        "name": "US federal statutes / U.S. Code",
+        "url": "https://uscode.house.gov/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      },
+      {
+        "name": "Federal regulations / eCFR",
+        "url": "https://www.ecfr.gov/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      },
+      {
+        "name": "Federal courts / opinions",
+        "url": "https://www.uscourts.gov/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "UK": [
+      {
+        "name": "UK legislation (official)",
+        "url": "https://www.legislation.gov.uk/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      },
+      {
+        "name": "UK Supreme Court",
+        "url": "https://www.supremecourt.uk/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "SG": [
+      {
+        "name": "Singapore Statutes Online",
+        "url": "https://sso.agc.gov.sg/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      },
+      {
+        "name": "Singapore judiciary judgments",
+        "url": "https://www.judiciary.gov.sg/judgments",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "AU": [
+      {
+        "name": "Australia Federal Register of Legislation",
+        "url": "https://www.legislation.gov.au/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      },
+      {
+        "name": "High Court of Australia",
+        "url": "https://www.hcourt.gov.au/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "DE": [
+      {
+        "name": "Federal legislation (Gesetze im Internet)",
+        "url": "https://www.gesetze-im-internet.de/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      },
+      {
+        "name": "Federal case law",
+        "url": "https://www.rechtsprechung-im-internet.de/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "FR": [
+      {
+        "name": "Légifrance",
+        "url": "https://www.legifrance.gouv.fr/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "JP": [
+      {
+        "name": "Japanese Law Translation (translation reference only)",
+        "url": "https://www.japaneselawtranslation.go.jp/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      },
+      {
+        "name": "e-Gov Law Search",
+        "url": "https://elaws.e-gov.go.jp/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "KR": [
+      {
+        "name": "Korean Law Information Center",
+        "url": "https://www.law.go.kr/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "IN": [
+      {
+        "name": "India Code",
+        "url": "https://www.indiacode.nic.in/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "ID": [
+      {
+        "name": "Indonesia regulations BPK",
+        "url": "https://peraturan.bpk.go.id/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      },
+      {
+        "name": "Indonesia legal documentation",
+        "url": "https://jdih.setneg.go.id/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "AE": [
+      {
+        "name": "UAE legislation portal",
+        "url": "https://uaelegislation.gov.ae/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "CA": [
+      {
+        "name": "Justice Laws Website (Federal)",
+        "url": "https://laws-lois.justice.gc.ca/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "NZ": [
+      {
+        "name": "New Zealand Legislation",
+        "url": "https://www.legislation.govt.nz/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "EU": [
+      {
+        "name": "EUR-Lex",
+        "url": "https://eur-lex.europa.eu/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "CH": [
+      {
+        "name": "Swiss Fedlex",
+        "url": "https://www.fedlex.admin.ch/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "NL": [
+      {
+        "name": "Overheid legislation",
+        "url": "https://wetten.overheid.nl/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "HK": [
+      {
+        "name": "Hong Kong e-Legislation",
+        "url": "https://www.elegislation.gov.hk/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "INTL": [
+      {
+        "name": "UNCITRAL",
+        "url": "https://uncitral.un.org/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "MY": [
+      {
+        "name": "Federal Legislation Portal",
+        "url": "https://lom.agc.gov.my/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      },
+      {
+        "name": "Attorney General Chambers",
+        "url": "https://www.agc.gov.my/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "VN": [
+      {
+        "name": "National legal database",
+        "url": "https://vbpl.vn/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      },
+      {
+        "name": "Government legal documents",
+        "url": "https://vanban.chinhphu.vn/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "TH": [
+      {
+        "name": "Council of State",
+        "url": "https://www.krisdika.go.th/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      },
+      {
+        "name": "Royal Gazette",
+        "url": "https://ratchakitcha.soc.go.th/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "PH": [
+      {
+        "name": "Official Gazette",
+        "url": "https://www.officialgazette.gov.ph/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      },
+      {
+        "name": "Supreme Court",
+        "url": "https://sc.judiciary.gov.ph/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "KH": [
+      {
+        "name": "Ministry of Justice",
+        "url": "https://www.moj.gov.kh/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "BD": [
+      {
+        "name": "Bangladesh laws",
+        "url": "https://bdlaws.minlaw.gov.bd/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "RU": [
+      {
+        "name": "Official publication of legal acts",
+        "url": "https://publication.pravo.gov.ru/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "TR": [
+      {
+        "name": "Official Gazette",
+        "url": "https://www.resmigazete.gov.tr/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "IT": [
+      {
+        "name": "Normattiva",
+        "url": "https://www.normattiva.it/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      },
+      {
+        "name": "Official Gazette",
+        "url": "https://www.gazzettaufficiale.it/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "ES": [
+      {
+        "name": "Official State Gazette BOE",
+        "url": "https://www.boe.es/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "PL": [
+      {
+        "name": "ISAP legislation database",
+        "url": "https://isap.sejm.gov.pl/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "MX": [
+      {
+        "name": "Diario Oficial de la Federación",
+        "url": "https://www.dof.gob.mx/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      },
+      {
+        "name": "Chamber of Deputies laws",
+        "url": "https://www.diputados.gob.mx/LeyesBiblio/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "BR": [
+      {
+        "name": "Planalto legislation",
+        "url": "https://www.planalto.gov.br/ccivil_03/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "CL": [
+      {
+        "name": "Biblioteca del Congreso Nacional",
+        "url": "https://www.bcn.cl/leychile/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "PE": [
+      {
+        "name": "Official Gazette El Peruano",
+        "url": "https://busquedas.elperuano.pe/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "AR": [
+      {
+        "name": "InfoLEG",
+        "url": "https://www.argentina.gob.ar/normativa",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "SA": [
+      {
+        "name": "Bureau of Experts legislation",
+        "url": "https://laws.boe.gov.sa/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "QA": [
+      {
+        "name": "Al Meezan legal portal",
+        "url": "https://www.almeezan.qa/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "EG": [
+      {
+        "name": "Egypt Ministry of Justice",
+        "url": "https://moj.gov.eg/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "ZA": [
+      {
+        "name": "South African Government legal documents",
+        "url": "https://www.gov.za/documents",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "NG": [
+      {
+        "name": "National Assembly",
+        "url": "https://nass.gov.ng/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "KE": [
+      {
+        "name": "Kenya Law",
+        "url": "https://new.kenyalaw.org/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "MA": [
+      {
+        "name": "Official Gazette",
+        "url": "https://www.sgg.gov.ma/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "KZ": [
+      {
+        "name": "Adilet legal information system",
+        "url": "https://adilet.zan.kz/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ],
+    "UZ": [
+      {
+        "name": "National database of legislation",
+        "url": "https://lex.uz/",
+        "mode": "navigation",
+        "status": "candidate-not-live-tested",
+        "verified": false
+      }
+    ]
+  }
+}

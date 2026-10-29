@@ -1,0 +1,668 @@
+version: "1.0.0"
+schema: 2
+name: commercial-arbitration-suite
+display_name: 中国企业涉外商事仲裁陪跑式专家
+iron_laws_ref: SKILL.md
+subskills:
+  00-cold-start:
+    entry: skills/00-cold-start/SKILL.md
+    stage: cross
+    triggers:
+    - 首次使用
+    - 新案件
+    - 配置
+    - 冷启动
+    requires: []
+    gate: []
+    outputs:
+    - .arbitration-config.md
+    next:
+    - 01-case-file
+    gate_ids: []
+  01-case-file:
+    entry: skills/01-case-file/SKILL.md
+    stage: cross
+    triggers:
+    - 接案
+    - 建档
+    - 案件梳理
+    - 程序坐标
+    - 时间表
+    - 期限
+    - 现在到哪一步
+    - 进度
+    requires:
+    - official_rules_fetch
+    gate:
+    - 合同与仲裁条款全文（或扫描页可读文本）
+    - 争议双方与相关第三方的主体名称、注册地、往来地址
+    - 争议事实时间线（含关键函件与日期）
+    - 拟主张的金额或救济类型
+    - 已知程序状态（是否已发仲裁通知/是否已组庭/机构收件回执）
+    outputs:
+    - 案件档案/00-case-file.md
+    - 案件档案/procedural-map.json
+    - 案件档案/时限日历.csv
+    next:
+    - 02-clause-diagnosis
+    - 03-forum-rules
+    - 04-commencement
+    - 05-defence
+    gate_ids:
+    - contract.arbitration_clause
+    - parties.basic
+    - facts.timeline
+    - relief.summary
+    - procedure.status
+  02-clause-diagnosis:
+    entry: skills/02-clause-diagnosis/SKILL.md
+    stage: P0-P1
+    triggers:
+    - 仲裁条款
+    - 条款审查
+    - dispute resolution clause
+    - 病态条款
+    - pathological clause
+    - 多-tier
+    - 仲裁地选择
+    - 示范条款
+    - 条款体检
+    - 条款设计
+    - 仲裁 vs 诉讼
+    - 机构比较
+    - seat 比较
+    - 多合同条款
+    - 条款谈判
+    requires: [official_rules_fetch]
+    gate: []
+    gate_ids: []
+    outputs:
+    - 条款体检与设计报告
+    - 重写条款与谈判红线（中英对照）
+    - 客户问答
+    - 多合同条款一致性矩阵
+    next: [03-forum-rules]
+    profiles:
+      new-clause:
+        gate:
+        - 交易类型与双方注册法域（未定项登记后续行动）
+        - 拟选机构、仲裁地、语言、仲裁员人数与准据法（未定项明确列出）
+        - 是否存在关联合同/多方交易结构
+        - 争议状态与预期申请人/被申请人姿态（可明确未知）
+        gate_ids: [transaction.context, clause.preferences, contracts.related, dispute.posture]
+        allow_unknown: [transaction.context, clause.preferences, dispute.posture]
+      review-clause:
+        gate:
+        - 现有争议解决条款原文及其所在合同版本
+        - 交易对方所在地与主要资产所在地（未知登记调查行动）
+        - 合同适用法律约定
+        - 是否存在关联合同/多方交易结构
+        - 争议状态与预期申请人/被申请人姿态（可明确未知）
+        gate_ids: [contract.arbitration_clause, counterparty.assets, law.governing, contracts.related, dispute.posture]
+        allow_unknown: [counterparty.assets, dispute.posture]
+      post-dispute:
+        gate: [争议解决条款原文及合同版本, 争议时间线与关键函件, 当前程序状态, 对方主体与资产线索（未知登记调查行动）]
+        gate_ids: [contract.arbitration_clause, dispute.timeline, procedure.status, counterparty.assets]
+        allow_unknown: [counterparty.assets]
+      negotiate:
+        gate: [待谈判条款原文及版本, 理想条款与可接受底线和退出线, 关联合同与多方结构]
+        gate_ids: [contract.arbitration_clause, clause.bottom_lines, contracts.related]
+      compare:
+        gate: [交易类型与双方注册法域（未定项登记后续行动）, 机构与仲裁地等偏好及未定项, 本轮比较目标与范围]
+        gate_ids: [transaction.context, clause.preferences, comparison.scope]
+        allow_unknown: [transaction.context, clause.preferences]
+      portfolio:
+        gate: [待审合同清单与条款版本, 合同涉及的法域, 资产分布与线索（未知登记调查行动）]
+        gate_ids: [portfolio.contracts, portfolio.jurisdictions, portfolio.assets]
+        allow_unknown: [portfolio.assets]
+  03-forum-rules:
+    entry: skills/03-forum-rules/SKILL.md
+    stage: cross
+    triggers:
+    - 规则怎么规定
+    - 期限多少天
+    - 立案要求
+    - 费用
+    - 预缴
+    - 机构指引
+    - practice note
+    - 答疑
+    - 官方网页
+    requires:
+    - official_rules_fetch
+    gate:
+    - 机构名称与案件启动日期（决定适用规则版本）
+    - 具体问题（条文定位／期限／格式／费用／程序）
+    gate_any:
+    - 条款原文
+    - 机构官网链接
+    - data/official 已缓存文本
+    gate_any_ids:
+    - rules.clause_text
+    - rules.official_url
+    - rules.cached_text
+    outputs:
+    - 条文答案（带来源标记）
+    - data/official 缓存与凭证
+    next: []
+    gate_ids:
+    - rules.context
+    - task.question
+  04-commencement:
+    entry: skills/04-commencement/SKILL.md
+    stage: P2
+    triggers:
+    - 申请仲裁
+    - 仲裁申请书
+    - 起草申请
+    - 提交仲裁
+    - 仲裁通知
+    - request for arbitration
+    - RFA
+    - 启动程序
+    - 立案
+    - 申请人
+    - statement of claim
+    requires:
+    - official_rules_fetch
+    - docx_render
+    gate:
+    - 申请人完整法定名称、注册信息、送达地址与邮箱
+    - 被申请人完整法定名称、送达地址与邮箱（含备选送达方式）
+    - 仲裁条款原文与合同编号/日期
+    - 请求事项清单（金额、币种、利息口径、非金钱救济）
+    - 证据清单草案（Exhibit 编号方案）
+    - 授权签字人与代理权限文件状态
+    outputs:
+    - Request for Arbitration
+    - 立案材料包与送达方案
+    - 费用预缴测算
+    - 中文审阅说明
+    next:
+    - 06-tribunal
+    - 07-measures-costs
+    gate_ids:
+    - claimant.identity_contact
+    - respondent.identity_contact
+    - contract.arbitration_clause
+    - relief.schedule
+    - evidence.index
+    - authority.status
+  05-defence:
+    entry: skills/05-defence/SKILL.md
+    stage: P2
+    triggers:
+    - 答辩
+    - 收到仲裁申请
+    - answer
+    - counterclaim
+    - 反请求
+    - 管辖权异议
+    - 抗辩
+    - 抵销
+    requires:
+    - official_rules_fetch
+    - docx_render
+    gate: []
+    outputs:
+    - Answer to Request for Arbitration
+    - Counterclaim（如有）
+    - 管辖权/可受理性异议（保留权利写法）
+    - 中文审阅说明
+    next:
+    - 06-tribunal
+    - 08-evidence
+    profiles:
+      answer:
+        gate:
+        - 对方仲裁申请书全文与随附材料清单
+        - 机构收件日与规则规定的答辩期限
+        - 我方对程序事实的确认（送达、条款、主体）
+        - 对请求事项的回应与反请求/抵销是否提出
+        gate_ids:
+        - opponent.notice
+        - defence.deadline
+        - procedure.confirmation
+        - defence.position
+      counterclaim:
+        gate:
+        - 对方仲裁申请书全文与随附材料清单
+        - 机构收件日与规则规定的答辩期限
+        - 我方对程序事实的确认（送达、条款、主体）
+        - 反请求/抵销的事实与金额依据
+        gate_ids:
+        - opponent.notice
+        - defence.deadline
+        - procedure.confirmation
+        - counterclaim.basis
+      jurisdiction:
+        gate:
+        - 对方仲裁申请书全文与随附材料清单
+        - 机构收件日与规则规定的答辩期限
+        - 我方对程序事实的确认（送达、条款、主体）
+        - 管辖权异议依据与提出时间
+        gate_ids:
+        - opponent.notice
+        - defence.deadline
+        - procedure.confirmation
+        - jurisdiction.objection
+    gate_ids: []
+  06-tribunal:
+    entry: skills/06-tribunal/SKILL.md
+    stage: P3
+    triggers:
+    - 组庭
+    - 仲裁员
+    - 指定仲裁员
+    - 仲裁员披露
+    - 披露问询
+    - 挑战仲裁员
+    - 独任
+    - 三人庭
+    - 首席仲裁员
+    - 仲裁员回避
+    - challenge
+    requires:
+    - official_rules_fetch
+    gate: []
+    outputs:
+    - 提名/指定函
+    - 披露问询函
+    - 挑战申请（含标准与举证）
+    - 中文审阅说明
+    next:
+    - 07-measures-costs
+    - 08-evidence
+    profiles:
+      nomination:
+        gate:
+        - 条款约定的仲裁员人数与指定机制
+        - 提名期限与候选人信息
+        gate_ids:
+        - tribunal.mechanism
+        - tribunal.candidate
+      disclosure:
+        gate:
+        - 条款约定的仲裁员人数与指定机制
+        - 双方已提名/已指定人选与日期
+        - 候选人背景与潜在利益冲突线索
+        gate_ids:
+        - tribunal.mechanism
+        - tribunal.appointments
+        - tribunal.conflicts
+      challenge:
+        gate:
+        - 条款约定的仲裁员人数与指定机制
+        - 双方已提名/已指定人选与日期
+        - 候选人背景与潜在利益冲突线索
+        - 获悉回避事由日期及支持材料
+        gate_ids:
+        - tribunal.mechanism
+        - tribunal.appointments
+        - tribunal.conflicts
+        - challenge.knowledge_date
+    gate_ids: []
+  07-measures-costs:
+    entry: skills/07-measures-costs/SKILL.md
+    stage: P3-P4
+    triggers:
+    - 临时措施
+    - 紧急仲裁员
+    - 保全
+    - interim measures
+    - 担保费用
+    - security for costs
+    - 第三方资助
+    - 预缴
+    - 费用分担
+    requires:
+    - official_rules_fetch
+    - law_retrieval
+    gate: []
+    outputs:
+    - 临时措施申请/异议
+    - 紧急仲裁员申请
+    - 担保费用申请或抗辩
+    - 费用分担主张框架
+    - 中文审阅说明
+    next:
+    - 08-evidence
+    - 09-hearing
+    profiles:
+      interim:
+        gate:
+        - 要保全的具体风险与紧迫性事实（谁、何时、做什么、损失为何不可逆）
+        - 措施对象、所求保护与依据（财产、证据或行为，按请求选择）
+        - 合同/仲裁地所在法域法院协助可行性
+        gate_ids:
+        - measures.urgency
+        - measures.target
+        - court.assistance
+      security:
+        gate:
+        - 对方资产与履约能力线索
+        - 合同/仲裁地所在法域法院协助可行性
+        - 已发生与预计费用明细
+        - 申请或反对费用担保的具体理由
+        gate_ids:
+        - counterparty.assets
+        - court.assistance
+        - costs.schedule
+        - security.position
+      advance:
+        gate:
+        - 已发生与预计费用明细
+        - 机构缴费通知、分摊比例及缴费期限
+        gate_ids:
+        - costs.schedule
+        - costs.notice
+    gate_ids: []
+  08-evidence:
+    entry: skills/08-evidence/SKILL.md
+    stage: P4
+    triggers:
+    - 文件披露
+    - 披露
+    - 请求披露
+    - 披露请求
+    - 披露文件
+    - document production
+    - Redfern
+    - 证据开示
+    - 证人证言
+    - witness statement
+    - 专家证据
+    - 证据异议
+    - privilege
+    - 特权日志
+    requires:
+    - official_rules_fetch
+    gate: []
+    outputs:
+    - Redfern Schedule
+    - 证人陈述（合规写法）
+    - 专家委托与条款方案
+    - 异议与特权日志
+    - 中文审阅说明
+    next:
+    - 09-hearing
+    profiles:
+      production:
+        gate:
+        - 待请求文件类别与相关性/重要性说明（不得 fishing）
+        - 涉密/特权文件处理口径
+        - 披露程序令与请求期限
+        gate_ids:
+        - production.categories
+        - evidence.privilege
+        - production.order
+      witness:
+        gate:
+        - 拟作证证人名单、与案件关系、能证明什么
+        - 涉密/特权文件处理口径
+        - 证人亲历事实与支持文件
+        gate_ids:
+        - witness.identity
+        - evidence.privilege
+        - witness.knowledge
+      expert:
+        gate:
+        - 专业争点与是否需要专家、双方专家机制
+        - 涉密/特权文件处理口径
+        - 专家拟委托事项与资质信息
+        gate_ids:
+        - expert.issues
+        - evidence.privilege
+        - expert.scope
+    gate_ids: []
+  09-hearing:
+    entry: skills/09-hearing/SKILL.md
+    stage: P5
+    triggers:
+    - 庭审
+    - 听证
+    - opening
+    - closing
+    - 盘问
+    - cross-examination
+    - 程序令
+    - 议程
+    - 庭后简报
+    - post-hearing
+    requires:
+    - official_rules_fetch
+    - docx_render
+    gate: []
+    outputs:
+    - 庭审包（议程/开场/结案/盘问提纲）
+    - 庭后简报
+    - 中文审阅说明
+    next:
+    - 10-award-post
+    profiles:
+      hearing:
+        gate:
+        - 庭审日期、时长、形式（现场/远程）与仲裁庭指示
+        - 双方争点清单与证据清单终版
+        - 证人出庭安排与翻译需求
+        - 时间分配方案（time schedule）
+        gate_ids:
+        - hearing.details
+        - issues.evidence_final
+        - witness.arrangements
+        - hearing.allocation
+      post-hearing:
+        gate:
+        - 双方争点清单与证据清单终版
+        - 庭审笔录或记录与庭后简报指令、期限
+        gate_ids:
+        - issues.evidence_final
+        - hearing.record_order
+    gate_ids: []
+  10-award-post:
+    entry: skills/10-award-post/SKILL.md
+    stage: P6
+    triggers:
+    - 裁决
+    - award
+    - 部分裁决
+    - 更正
+    - 解释
+    - 撤销
+    - set aside
+    - 费用裁决
+    - 终局性
+    - 和解
+    - 合意裁决
+    - 执行分流
+    requires:
+    - official_rules_fetch
+    - law_retrieval
+    gate: []
+    outputs:
+    - 裁决后动作矩阵（含期限）
+    - 更正/解释申请
+    - 撤销与终局性分析
+    - 和解与合意裁决方案
+    - 执行分流（明确转交14）
+    - 中文审阅说明
+    next: [14-cross-border-enforcement]
+    profiles:
+      matrix:
+        gate:
+        - 裁决作出地与作出/送达日期（决定各项期限起点）
+        - 裁决主文与理由要点（或待评估的风险假设）
+        - 程序瑕疵线索（组庭、送达、超裁、公共政策）
+        gate_ids:
+        - award.dates_place
+        - award.text
+        - procedure.defects
+      correction:
+        gate:
+        - 裁决作出地与作出/送达日期（决定各项期限起点）
+        - 裁决主文与理由要点（或待评估的风险假设）
+        - 拟更正、解释或补充的具体事项
+        gate_ids:
+        - award.dates_place
+        - award.text
+        - award.correction
+      enforcement:
+        redirect: 14-cross-border-enforcement
+        redirect_profile: plan
+        gate:
+        - 裁决作出地与作出/送达日期（决定各项期限起点）
+        - 裁决主文与理由要点（或待评估的风险假设）
+        - 被执行方资产所在地清单
+        - 裁决履行状态与执行目标
+        gate_ids:
+        - award.dates_place
+        - award.text
+        - counterparty.assets
+        - award.payment_status
+      set-aside:
+        gate:
+        - 裁决作出地与作出/送达日期（决定各项期限起点）
+        - 裁决主文与理由要点（或待评估的风险假设）
+        - 程序瑕疵线索（组庭、送达、超裁、公共政策）
+        gate_ids:
+        - award.dates_place
+        - award.text
+        - procedure.defects
+      finality:
+        gate: [裁决作出地与作出和送达日期, 裁决主文与理由, 部分和中间及终局裁决清单与事项范围]
+        gate_ids: [award.dates_place, award.text, award.inventory]
+      settlement:
+        gate: [裁决主文或争议及和解背景, 拟和解条件与付款和担保安排, 对方资产与履约线索（未知登记调查行动）]
+        gate_ids: [award.text, settlement.terms, counterparty.assets]
+        allow_unknown: [counterparty.assets]
+      enforcement-triage:
+        gate: [裁决作出地与作出和送达日期, 裁决主文与理由, 对方资产线索（未知登记调查行动）, 裁决履行状态与执行目标]
+        gate_ids: [award.dates_place, award.text, counterparty.assets, award.payment_status]
+        allow_unknown: [counterparty.assets]
+    gate_ids: []
+  11-governing-law:
+    entry: skills/11-governing-law/SKILL.md
+    stage: cross
+    triggers:
+    - 准据法
+    - 适用法
+    - 境外法
+    - 某国法律
+    - 判例
+    - foreign law
+    - 法域研究
+    - 怎么查
+    requires:
+    - law_retrieval
+    gate:
+    - 目标法域与具体问题（程序法/实体法/执行法）
+    outputs:
+    - 法域研究简报（来源分层+置信度）
+    - MCP/数据库配置指引
+    - 转交外部律师的要点清单
+    next: []
+    gate_ids:
+    - research.question
+  12-delivery:
+    entry: skills/12-delivery/SKILL.md
+    stage: cross
+    triggers:
+    - 转成Word
+    - 排版
+    - 交付
+    - docx
+    - 汇报
+    - 中文说明
+    requires:
+    - docx_render
+    gate:
+    - 待交付文书的终稿文本
+    - 案件目录
+    - 署名与日期口径
+    outputs:
+    - .docx
+    - 《中文审阅说明》.docx
+    next: []
+    gate_ids:
+    - delivery.final_text
+    - delivery.directory
+    - delivery.signature_date
+  13-stage-qa:
+    entry: skills/13-stage-qa/SKILL.md
+    stage: cross
+    triggers:
+    - 下一步做什么
+    - 这封信怎么回
+    - 能不能延期
+    - 延期
+    - 期限计算
+    - 程序问答
+    - 进度跟踪
+    - 会议准备
+    - 程序信函
+    requires:
+    - official_rules_fetch
+    gate:
+    - 当前程序坐标（阶段+最近一份程序令/函件）
+    - 具体问题
+    outputs:
+    - 即时答案（带来源标记）
+    - 例行程序信函（同一交付契约）
+    next: []
+    gate_ids:
+    - procedure.current_order
+    - task.question
+  14-cross-border-enforcement:
+    entry: skills/14-cross-border-enforcement/SKILL.md
+    stage: P7
+    triggers: [跨境执行, 承认与执行, 纽约公约, 执行裁决, 拒绝执行, 海外资产, 资产调查, 保全, 执行豁免, 主权豁免, 破产, 平行程序, 执行预算, 董事会简报, 可执行性预判, 外部律师执行指示]
+    requires: [official_rules_fetch, law_retrieval]
+    gate: []
+    gate_ids: []
+    outputs: [跨境执行方案, 裁决可执行性预判, 执行文件包与保全清单, 主权豁免和破产及平行程序核查表, 执行可行性董事会简报, 外部律师执行指示]
+    next: []
+    profiles:
+      forecast:
+        gate: [合同与仲裁协议原文, 争议与程序状态及拟获救济, 对方主体与资产线索（未知登记调查行动）]
+        gate_ids: [contract.arbitration_clause, procedure.status, counterparty.assets]
+        allow_unknown: [counterparty.assets]
+      plan:
+        gate: [裁决全文, 裁决作出地与作出和送达日期, 对方资产所在地与线索（未知登记调查行动）, 执行目标与预算约束]
+        gate_ids: [award.text, award.dates_place, counterparty.assets, enforcement.budget]
+        allow_unknown: [counterparty.assets]
+      asset:
+        gate: [被执行方主体信息, 已知资产线索（未知登记调查行动）, 目标法域（未知登记调查行动）]
+        gate_ids: [counterparty.identity, counterparty.assets, enforcement.targets]
+        allow_unknown: [counterparty.assets, enforcement.targets]
+      immunity:
+        gate: [被执行方国家或国企或主权基金属性, 资产性质与用途, 仲裁协议与豁免放弃条款]
+        gate_ids: [counterparty.status, asset.nature, immunity.waiver]
+      insolvency:
+        gate: [被执行方破产或重整状态, 债权申报期限与核验状态, 其他法域执行与平行程序状态]
+        gate_ids: [insolvency.status, insolvency.deadline, parallel.proceedings]
+      board:
+        gate: [执行方案与预算, 预计回收时间表与假设, 和解等替代方案]
+        gate_ids: [enforcement.budget, enforcement.timeline, settlement.alternative]
+      counsel:
+        gate: [拟咨询目标法域（未知登记调查行动）, 律师待答问题及现有事实包（可尚无裁决）, 预算上限与交付日]
+        gate_ids: [enforcement.targets, counsel.question, counsel.budget]
+        allow_unknown: [enforcement.targets]
+stage_default:
+  P0:
+  - 02-clause-diagnosis
+  P7:
+  - 14-cross-border-enforcement
+  P1:
+  - 02-clause-diagnosis
+  P2:
+  - 04-commencement
+  - 05-defence
+  P3:
+  - 06-tribunal
+  P4:
+  - 07-measures-costs
+  - 08-evidence
+  P5:
+  - 09-hearing
+  P6:
+  - 10-award-post
