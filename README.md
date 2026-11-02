@@ -7,7 +7,14 @@
 - 入口、铁律与执行流程：[SKILL.md](SKILL.md)
 - 安装自检：`python3 scripts/install_suite.py`
 - 运行依赖：Python 3.9+、PyYAML；可选 xmllint（OOXML 校验）与 python-docx
+- 交付清单生成：`python3 scripts/delivery.py build --workdir <案件目录>`，人工逐页复核后 `delivery.py attest --workdir <案件目录> --reviewer <姓名>`
+- 发布打包：`python3 scripts/release.py --out <目标.zip>`（自动跑闸门、排除 .git 与缓存、写 sha256 并解包复验）
+- 只读安装（技能目录不可写）须先设 `RULESUITE_DATA_DIR` 指向可写缓存目录，否则官方文本抓取无处落盘
 - 子技能与输出定义：`suite.yaml`
+
+## 运行时数据缓存
+
+`data/` 是运行时生成的公共缓存目录（机构规则全文 `data/official/`、来源凭证 `data/_provenance/`），**不随技能包分发**，打包/复制技能包时必须排除。缓存一经抓取或 `import` 即可跨案件只读复用；把缓存目录迁移到其他位置时，用环境变量 `RULESUITE_DATA_DIR` 指向新路径。单有文件与哈希不等于官方真实性或适用性已确认，条文引用仍按各 source 的核验记录执行。
 
 ## 许可
 

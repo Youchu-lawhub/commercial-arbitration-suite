@@ -9,14 +9,14 @@ description: 机构规则与官方指引的实时调取与答疑：按仲裁启�
 
 ## 一、入口闸门
 
-材料要求以 `suite.yaml` 的本子技能条目为唯一依据。已在会话中明确的事实直接登记，不重复索取。
-对实际案件，先核对本案配置，再把已读取的材料逐项登记到案件根 `case.json`（`rulesuite-case/1`）；台账 `case` 与配置一致，Markdown 清单仅由台账生成供人阅读。
+材料与入口闸门以 `suite.yaml` 本子技能条目为准（铁律 3、4）；已明确的事实直接登记，不重复索取。
+已读取材料登记到案件根 `case.json`（`rulesuite-case/1`，台账口径见 `references/practical-workflow.md`）。
 
 ```bash
 python3 <suite>/scripts/route.py --gate 03-forum-rules --workdir <案件目录> --provided <案件目录>/case.json
 ```
 
-未通过时，针对影响本轮结论的缺项提问；可先整理已知事实、检索路径与明确标为未完成的框架，不虚构事实，不交付未核验定稿。通用教学或规则导航问题不要求伪造案件配置。
+未通过时只追问影响本轮结论的缺项；可先出未完成标记的框架，不虚构事实（铁律 3）。
 
 本闸门另设三项任选其一的来源基础（`suite.yaml` 的 `gate_any_ids`）：`rules.clause_text`（条款原文）、`rules.official_url`（机构官网链接）、`rules.cached_text`（`data/official` 已缓存文本）。在 `case.json.facts` 中把实际具备的一项或多项登记为 `confirmed` + value/evidence 即满足；三项均未登记时返回一条 `gate_any` 缺项。`conflict` 阻断提交，`pending` 只允许受控草案；本任务不开放 `unknown`。`route.py --gate` 与 `intake.py checklist` 会逐项列出这些候选项，不得另建 Markdown 勾选代替台账。
 

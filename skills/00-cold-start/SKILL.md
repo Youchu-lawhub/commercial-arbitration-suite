@@ -34,7 +34,7 @@ metadata:
    |---|---|---|
    | `official_rules_fetch` | "需要时我可以直接从机构官网取规则与指引文本，可以吗？" | 只能引导用户人工下载并 `import` 到 `data/official/`；在此之前所有条文引用一律标 `待核验` |
    | `law_retrieval` | "本案准据法／仲裁地是境外法时，我先跑一条命令看你机器上哪些检索通道真的可用，再给你配置清单，可以吗？" | 只输出检索路径与官方来源清单，不作实体法结论 |
-   | `company_research` | "需要核验对方或申请人境外注册信息时，用已安装的官方/商业企业信息接口，可以吗？" | `degraded (official registries; jurisdiction pending)`：只给官方注册机关检索路径 |
+   | `company_research` | "主体核验：境内用企业信息类 MCP（先探测再绑定），境外按注册地给官方登记机关检索路径（见下），可以吗？" | `degraded (official registries)`：只给官方注册机关检索路径与取件方式 |
    | `docx_render` | "交付要 Word 吗？本机有 python3 即可。" | 只出 `.md`，并说明如何自行转 Word |
    | `local_corpus` | "本机是否已有已解析的法律知识库（如域外法研究、仲裁规则解读、典型案例集等，Markdown 目录）？" | 跳过 |
    | `party_data` | "主体信息我全部以你提供的材料为准，可以吗？" | 无替代：缺材料就问 |
@@ -46,6 +46,17 @@ metadata:
    ```
    把 `gate` 与 `setup_gap` 原样转述给用户后由用户选择。
    该槽**逐案复核**，不是一次性事实：换法域须重跑 `plan`，`check` 报 `UNREACHABLE`／`GONE` 时原 `bound` 记录立即下调为 `degraded`（铁律 6）。用户有个人检索偏好时按 `references/research-personalization.md` 分层记录；接入新 MCP 按 `references/mcp-onboarding.md` 验收，不把写配置等同连接成功。
+
+   **槽位探测（记 bound 前必须做；探测＝一次真实调用，不凭工具名单记 bound）**：宿主 agent 清点已连接 MCP 中的法律能力（法条/法规检索、判例、引用核验、企业主体信息、文档解析），逐个做一次廉价探测——法条槽取一条已知条文（从本案规则缓存或登记表已核验来源中挑）、主体槽查一家公开企业——把探测用的工具与结果摘要写进槽位行，如 `- slot(law_retrieval): bound (元典系法条 MCP 探测成功 @ 2026-11-01; fallback: browser+web)`。探测不到、报错或需密钥的，如实记 `degraded`/`skipped` 并写原因。
+
+   - **默认与选择**：境内法条检索默认走元典系 MCP（探测到即 bound）；同一能力探测到多个可用后端（用户另配的检索/主体接口等）时，逐个探测后列明覆盖范围与费用性质，交用户选择，不静默并入；用户自选后端按能力绑定，公共登记表不新增品牌条目。
+   - **主体检索**：境内主体默认企业信息类 MCP（探测后记 bound）；境外登记机关按注册地给官方检索路径——CN 国家企业信用信息公示系统、MY SSM (ssm.com.my)、SG ACRA BizFile、HK 公司注册处电子查册、GB Companies House、US 各州 Secretary of State——只给路径与取件方式，不代认定主体信息。
+   - **境外法穷尽阶梯**（law_retrieval 涉案时逐层留痕，未穷尽不得宣告"无通道"）：
+     1. `research_sources.py plan --jurisdiction <法域>` 列登记通道，逐条跑 acceptance；
+     2. 宿主 MCP 与已配置检索能力逐个探测本案命题；
+     3. 官方门户经浏览器/网页取文（登记表 `blocked_paths` 已给 `browser_url` 的直接用）；
+     4. 人工下载后 `fetch_official.py import` 或按来源登记。
+     全部穷尽仍无正文 → 披露"未取得一手文本"，条号写占位、只给检索路径，重大实体问题转外部律师——不得以"没配通道"为由跳过 2)、3)。
 5. **按需锁定程序坐标**：先预填机构、仲裁地、语言、启动事件/日期、规则版本、人数与指定方式；仅追问本轮必需的冲突和缺项，余项留待办，不阻塞无关任务。启动日不一定等同上传或签署日，按机构规则的收件、送达标准确认；新拟条款写"尚未启动"，不编造日期。用 `fetch_official.py applicable` 取版本，把输出的 `edition`、`fetch_policy`、`citation_fields` 记进配置文件（不记录不可用的 `citation_format`）：
    ```bash
    python3 <suite>/scripts/fetch_official.py applicable --inst <机构id> --commencement <YYYY-MM-DD>
@@ -70,7 +81,7 @@ metadata:
    - `fetch` 失败（网站被阻断、反爬、423/403 等）→ 降级为人工下载：告知用户在浏览器打开该机构官网规则页，下载 PDF 后放入 `data/official/`，再跑 `fetch_official.py fetch <source_id> --to-md` 做 PDF→MD 转换；也可用 `import` 登记来源（`--kind official/mirror/browser`），只有截图时先 OCR 并对照原图，不得把挑战页当正文；
    - **版本更新检测**：后续新案件冷启动时，`check` 命令已在上一步运行；若探测到机构网站上的规则版本与缓存不一致（如 applicable 输出了新版本号），才触发重新下载，否则沿用已有缓存。一家公司通常只约定有限几家机构，缓存积累后此步骤基本为零延迟；
    - 安装目录只读时，用 `RULESUITE_DATA_DIR` 把公共缓存迁到外部可写目录；远程可达状态与本地缓存状态分开解释，单有文件和哈希不等于官方真实性或适用性已确认。
-7. **写配置文件与材料台账**（模板见 `assets/templates/00-冷启动配置.md`），槽位行必须保持 `- slot(name): value` 格式，`route.py --detect` 依赖它。未适用字段写"不适用"并简述原因，待核验字段记录原因，不宣称已确认。另用 `intake.py bootstrap --facts <已整理事实.json> --workdir <案件目录>` 生成案件根唯一材料台账 `case.json`（`rulesuite-case/1`，`case` 与配置一致）：每个 gate_id 登记 `confirmed`+`value/evidence`、`pending`+`pending_id/question`、`not_applicable`+`reason`，或 `suite.yaml` 允许时的 `unknown`+完整 follow-up；`gate_any_ids` 的候选项按同一格式逐项登记，至少一项 confirmed 才满足“任选其一”。`case.json` 是 route 与 verify 共用的唯一底账；没有它，提交态会以 `[GATE]` 拒绝。用 `intake.py checklist --gate <子技能id> --facts <案件目录>/case.json` 生成只读 Markdown 视图供人阅读，不得用 Markdown 勾选代替台账。
+7. **写配置文件与材料台账**（模板见 `assets/templates/00-冷启动配置.md`），槽位行必须保持 `- slot(name): value` 格式，`route.py --detect` 依赖它。`intake.py bootstrap` 生成配置时按本机 `data/official` 实际缓存预填 `official_rules_fetch`（有带凭证缓存记 bound，否则 degraded），该槽仍按本节第 4 步逐案确认。未适用字段写"不适用"并简述原因，待核验字段记录原因，不宣称已确认。另用 `intake.py bootstrap --facts <已整理事实.json> --workdir <案件目录>` 生成案件根唯一材料台账 `case.json`（`rulesuite-case/1`，`case` 与配置一致）：每个 gate_id 登记 `confirmed`+`value/evidence`、`pending`+`pending_id/question`、`not_applicable`+`reason`，或 `suite.yaml` 允许时的 `unknown`+完整 follow-up；`gate_any_ids` 的候选项按同一格式逐项登记，至少一项 confirmed 才满足“任选其一”。`case.json` 是 route 与 verify 共用的唯一底账；没有它，提交态会以 `[GATE]` 拒绝。用 `intake.py checklist --gate <子技能id> --facts <案件目录>/case.json` 生成只读 Markdown 视图供人阅读，不得用 Markdown 勾选代替台账。
 8. **回报**：用 3–5 行中文告诉用户：本案是否涉外、程序坐标、缺哪些槽位、下一步做什么（通常先 `route.py --detect --workdir <案件目录>`，再按本轮目标选子技能，不强制每案先做全量建档）。配置表示已记录环境，不代表本案所有法律问题已核验。同时告知用户：本案适用机构的内置规则版本为 [[source-id]]（生效日期 [[date]]），置信度 [[level]]，抓取策略 [[fetch_policy]]，引用资格 [[citation_ready]]；未就绪时说明缺口。若需人工核验或导入更新版本，指引见 `references/institution-rule-versions.md`。
 
 ## 二、判定与拒绝话术
@@ -84,6 +95,7 @@ metadata:
 - [ ] `install_suite.py --fix` 退出码 0（FAIL 已修）
 - [ ] `route.py --scope` 结果为 `IN_SCOPE`，且依据写进了配置
 - [ ] 配置已建立；本轮必需槽位已有真实绑定或降级确认，未涉及/未确认项如实保留，不为消除 `unfilled` 伪造确认；探测限制明确披露
+- [ ] 记 `bound` 的 `law_retrieval`/`company_research` 槽位各有一次真实探测记录（工具＋日期）；境外法案件穷尽阶梯逐层留痕，未穷尽不宣告"无通道"
 - [ ] 本案适用规则经条款、真实启动事件与过渡规则复核；`applicable` 只筛候选，旧版约定用 `--agreed-edition`，未启动不编日期
 - [ ] 已向用户披露本案适用机构的内置规则版本（source-id、生效日期、置信度、`fetch_policy`、`citation_ready`），写入配置文件第六节
 - [ ] 本案适用规则全文已缓存于 `data/official/<source_id>.md`，或已登记为 `NEEDS_MANUAL` 并告知用户人工下载路径

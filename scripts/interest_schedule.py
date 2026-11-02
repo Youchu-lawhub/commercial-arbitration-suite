@@ -21,12 +21,20 @@ def number(x):
 
 def calculate(data):
     if data.get('schema')!='rulesuite-interest/1' or not data.get('currency'):
-        raise ValueError('schema/currency 缺失')
-    if data.get('method')!='simple' or data.get('interval')!='start-inclusive-end-exclusive':
-        raise ValueError('仅支持明确单利、含起日不含止日；其他口径须另行计算')
+        raise ValueError('schema/currency 缺失' + ('' if data.get('schema') else '（缺 schema=rulesuite-interest/1）')
+                         + ('' if data.get('currency') else '（缺 currency）'))
+    missing=[k for k in ('method','interval','basis') if not data.get(k)]
+    if missing:
+        raise ValueError('缺少字段：' + '、'.join(missing)
+                         + '；合法取值 method=simple（明确单利），interval=start-inclusive-end-exclusive（含起日不含止日），'
+                           'basis=ACT/365F｜ACT/360｜ACT/ACT-year')
+    if data.get('method')!='simple':
+        raise ValueError(f"method 仅支持 simple（明确单利），现在是「{data.get('method')}」；复利或其他口径须另行计算")
+    if data.get('interval')!='start-inclusive-end-exclusive':
+        raise ValueError(f"interval 仅支持 start-inclusive-end-exclusive（含起日不含止日），现在是「{data.get('interval')}」")
     basis=data.get('basis')
     if basis not in ('ACT/365F','ACT/360','ACT/ACT-year'):
-        raise ValueError('basis 仅 ACT/365F、ACT/360、ACT/ACT-year')
+        raise ValueError(f"basis 仅 ACT/365F、ACT/360、ACT/ACT-year，现在是「{basis}」")
     rows=[];total=Decimal(0);ends={}
     for row in data['segments']:
         start=date.fromisoformat(row['start']);end=date.fromisoformat(row['end']);principal=number(row['principal']);rate=number(row['annual_rate'])

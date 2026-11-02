@@ -39,6 +39,7 @@ CHECKED_RE = re.compile(r"^校验\s*(\d{4}-\d{2}-\d{2})$")
 LOCATOR_RE = re.compile(
     r"(?:Art\.?|Article|Rule|Section|§|Schedule|Annex|Appendix|Chapter|Part|"
     r"Introduction|Preamble|序言|引言|附录|第\s*[0-9一二三四五六七八九十百千]+\s*条|"
+    r"Order\s*(?:No\.?\s*)?\d*|para(?:graph)?\.?|Clause|页|款|项|"
     r"\b[RREL]-\d)", re.I)
 EXAMPLE_MARKS = ("...", "…", "YYYY", "<")
 
@@ -132,11 +133,24 @@ def parse_source_marker(marker: str, valid_ids: set, url_check=None) -> tuple:
     issues.extend(_url_issues(parts))
     issues.extend(_source_url_issues(sid, parts, valid_ids, url_check))
     if len(parts) != 5 or any(not part for part in parts):
-        issues.append("须按顺序含非空 id、版本、定位、URL、校验日期五项")
+        names = ["id", "版本", "定位", "URL", "校验日期"]
+        detail = []
+        if len(parts) != 5:
+            detail.append(f"实际 {len(parts)} 段")
+        blank = [f"第{i + 1}段（{names[i]}）" for i, part in enumerate(parts[:5]) if not part.strip()]
+        if blank:
+            detail.append("空段：" + "、".join(blank))
+        issues.append("须按顺序含非空 id、版本、定位、URL、校验日期五项" + ("（" + "；".join(detail) + "）" if detail else "")
+                      + "；写法示例 [source:机构-年份 | 版本标签 | 第X条第（一）款 | https://官方URL | 校验 2026-01-01]，表格单元内分隔符须写反斜杠加竖线且不可漏竖线")
     if len(parts) == 5 and (
             not parts[3].startswith("https://")
             or not CHECKED_RE.fullmatch(parts[4])):
-        issues.append("URL 或校验日期字段位置无效")
+        where = []
+        if not parts[3].startswith("https://"):
+            where.append(f"第4段（URL）应为 https:// 开头，现在是「{parts[3][:60]}」")
+        if not CHECKED_RE.fullmatch(parts[4]):
+            where.append(f"第5段（校验日期）应为「校验 YYYY-MM-DD」，现在是「{parts[4][:30]}」")
+        issues.append("URL 或校验日期字段位置无效（" + "；".join(where) + "）")
     if not any(part.lower().startswith(("https://", "http://")) for part in parts):
         issues.append("缺来源 URL")
     dated = CHECKED_RE.fullmatch(parts[4]) if len(parts) == 5 else None

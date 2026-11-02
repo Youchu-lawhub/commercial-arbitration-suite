@@ -15,7 +15,7 @@ toc: true
 #! 适用子技能：07-measures-costs 第 9 项（预缴款与费用杠杆）、第 10 项（第三方资助）、第 11 项（费用分担主张框架）。产出名对应 07 的 outputs 之"费用分担主张框架"。
 #! 闸门未过不得使用：python3 <suite>/scripts/route.py --gate 07-measures-costs --profile advance --workdir <案件目录> --provided <案件目录>/case.json。缺"已发生与预计费用明细"或缺缴款通知与份额信息时，本轮只出《补充材料与信息确认清单》视图。
 #! 先取官方文本（顺序执行）：python3 <suite>/scripts/fetch_official.py applicable --inst <机构id> --commencement <仲裁启动日> ；python3 <suite>/scripts/fetch_official.py check --inst <机构id> ；python3 <suite>/scripts/fetch_official.py fetch <规则版source_id> --to-md ；python3 <suite>/scripts/fetch_official.py lookup <规则版source_id> --pattern "advance|deposit|failure to pay|substitute|costs|funder|third-party funding" --max 12 ；费用表与税项另跑 lookup <费用表source_id> --pattern "fees|VAT|tax|withholding" --max 12 。
-#! 渲染与核验：python3 <suite>/scripts/render_docx.py --in <draft.md> --out <draft.docx> --mode legal --strict --manifest <x.paras.json> ；再跑 python3 <suite>/scripts/verify_suite.py --workdir <交付目录> --mode submission，并配中文审阅说明。
+#! 渲染与核验：python3 <suite>/scripts/render_docx.py --in <draft.md> --out <draft.docx> --mode legal --strict --manifest <x.paras.json> ；再跑 python3 <suite>/scripts/verify_suite.py --workdir <交付目录> --mode submission；非中文文书另配中文审阅说明（本身用中文提交的文书不配）。
 #! 顺序纪律：先走机构的催缴与替代缴纳机制并保留全部凭证（缴款通知、催缴函、付款回单、汇率与时点记录），再请求单独裁决。顺序颠倒会被指未用尽程序内救济，构成程序滥用抗辩的靶子。
 #! 执行地资产线索一律来自用户材料，本套件不代为认定对方主体、资产位置或偿付能力；未取得的信息保持 [[占位]]。
 #! 裁决签署前结清仲裁员报酬是常见实务风险：报酬与税项未结清时，机构通常不释放裁决草案，签署与送达整体延迟。相关处理与费用表口径必须现查规则与机构费用表后再写入文书，本模板不给任何天数或费率。

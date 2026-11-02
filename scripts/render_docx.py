@@ -675,14 +675,14 @@ def render(inp: Path, outp: Path, mode=None, strip_sources=False, manifest_path=
         raise RenderError("manifest 不能覆盖输入或 DOCX")
     meta, body_text = split_front_matter(text)
     if draft:
-        from pending import load, validate_text, BANNER
+        from pending import load, validate_text, banner_text
         if strict or not pending_path:
             raise RenderError('--draft 需要 --pending，不能同时 --strict')
         data, entries = load(pending_path)
         if str(meta.get('case', '')) != data['case']:
             raise RenderError('记稿 frontmatter case 须与 pending 案件代号一致')
         relative = str(inp.resolve())
-        validate_text(text, relative, entries)
+        tokens = validate_text(text, relative, entries)
         if header_text and '[[' in header_text or footer_text and '[[' in footer_text:
             raise RenderError('草案页眉页脚占位须写入记稿，不用 CLI 覆盖')
     elif pending_path:
@@ -706,7 +706,7 @@ def render(inp: Path, outp: Path, mode=None, strip_sources=False, manifest_path=
 
     body, manifest, placeholders, heads, n = parse_and_build(body_text, mode, strip_sources)
     if draft:
-        body = para([_run_factory(BANNER, b=True)], style="Normal") + body
+        body = para([_run_factory(banner_text(len(tokens)), b=True)], style="Normal") + body
     if want_toc:
         body = toc_block(mode) + body
 

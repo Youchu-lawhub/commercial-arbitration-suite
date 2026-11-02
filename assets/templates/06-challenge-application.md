@@ -15,7 +15,7 @@ toc: true
 #! 适用子技能：06-tribunal 第 6 项动作（拟写挑战申请）与第 7 项（评估决定与救济空间）。产出名对应 06 的 outputs 之"挑战申请（含标准与举证）"。
 #! 闸门未过不得使用：python3 <suite>/scripts/route.py --gate 06-tribunal --profile challenge --workdir <案件目录> --provided <案件目录>/case.json。缺"双方已提名或已指定人选与日期"或"候选人背景与潜在利益冲突线索"时，本轮只出《补充材料与信息确认清单》视图，不发本申请。
 #! 先取官方文本（顺序执行）：python3 <suite>/scripts/fetch_official.py applicable --inst <机构id> --commencement <仲裁启动日> ；python3 <suite>/scripts/fetch_official.py check --inst <机构id> ；python3 <suite>/scripts/fetch_official.py fetch <规则版source_id> --to-md ；python3 <suite>/scripts/fetch_official.py lookup <规则版source_id> --pattern "challenge|objection|disclosure|justifiable doubts|time limit|decision" --max 12 。软法分类另跑：python3 <suite>/scripts/fetch_official.py lookup iba-conflicts-2024 --pattern "List|waivable|non-exploitable|disclosure" --max 12 。
-#! 渲染与核验：python3 <suite>/scripts/render_docx.py --in <draft.md> --out <draft.docx> --mode legal --strict --manifest <x.paras.json> ；再跑 python3 <suite>/scripts/verify_suite.py --workdir <交付目录> --mode submission，并配一份同目录中文审阅说明。
+#! 渲染与核验：python3 <suite>/scripts/render_docx.py --in <draft.md> --out <draft.docx> --mode legal --strict --manifest <x.paras.json> ；再跑 python3 <suite>/scripts/verify_suite.py --workdir <交付目录> --mode submission；非中文文书另配中文审阅说明（本身用中文提交的文书不配），与本件同目录。
 #! 现实预期：挑战成功率低、代价高。败诉后的信用成本是真实的——仲裁庭对反复或包装过的异议会记入程序裁量与费用考量，己方后续每一项程序请求的说服力都会下降。因此本申请只在可证事实直接落到规则标准时使用，不做"商业不便"包装。
 #! 顺序价值：先要求补充信息，再决定是否挑战。问询函把事实基础固定下来、把期限起算与不计入异议期的请求写清，并让对方无法以"你方早知道"抗辩；跳过这一步直接挑战，常因事实不足被驳，且失去一次书面固定事实的机会。
 #! 不得混入的无效事由：仲裁员专业背景不利、法律观点不合我方预期、由对方提名、其国籍——这些都不构成独立性事由，混入会被驳回并削弱己方整体可信度。
@@ -83,7 +83,7 @@ Where soft-law situation lists are cited, they are cited only as classification 
 | 已采取内部隔离与信息屏障 | [[隔离措施的实际覆盖范围与验证方式]] | [[附件号]] |
 | 异议迟延，应由我方承担后果 | [[收到日、问询日与答复日的期间计算]] | [[附件号]] |
 
-#! 仲裁庭关注点写在中文审阅说明里：挑战成功后的替代指定权归属、程序迟延的费用后果、我方过度挑战对后续程序裁量的影响。
+#! 仲裁庭关注点写在中文审阅说明（文书本身为中文时记入矩阵 adversarial_review）里：挑战成功后的替代指定权归属、程序迟延的费用后果、我方过度挑战对后续程序裁量的影响。
 
 ## VII. Relief Requested
 

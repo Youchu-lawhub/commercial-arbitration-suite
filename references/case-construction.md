@@ -67,7 +67,9 @@ AT 记录被攻击的 CL/DF/E/F/EV/A/R、对方论证、最有力材料、回应
 
 实质未知先登记 OQ；确需受控草案时，在 `pending.json` 登记 `[[Q1:待确认事项]]`，并在问题说明中关联 OQ、负责人及文书范围。Q 不代替 OQ，解决后回写事实源并重渲染。提交态不得残留占位或以“用户同意”绕过未核验关键依据。
 
-04/05/08/09 文书记稿加入 `workflow`（子技能名）、`matrix: case`、`profile`（当前任务）。`case` 只写稳定案件代号，机构案号放正文。内部矩阵、办理清单、决策件标 `pair: false` 和“仅内部，不得对外”；正式文书每份配中文审阅说明。
+矩阵 `documents` 只收记稿文件路径的字符串数组（不是对象），路径按矩阵文件所在目录解析（矩阵在 `案件档案/`，交付件在 `交付/` 时写 `../交付/<文书>.md`）；核验会逐份读取这些记稿并核锚点，因此实际请求的每个 `R-` 必须出现在其中某份文书的锚点行里，否则报 RELIEF_ANCHOR 或 DOCUMENT 不存在。
+
+04/05/08/09 文书记稿加入 `workflow`（子技能名）、`matrix: case`、`profile`（当前任务）。`case` 只写稳定案件代号，机构案号放正文。内部矩阵、办理清单、决策件标 `pair: false` 和“仅内部，不得对外”；正式文书按铁律 5 的语言条件配对——非中文文书逐份配中文审阅说明，本身用中文提交的文书不另出（需逐段核对时出 `pair: false` 内部核对件）。
 
 ## 6. 工具顺序与闸门
 
@@ -78,10 +80,12 @@ python3 <suite>/scripts/case_matrix.py render --in <案件档案/case-matrix.yam
 python3 <suite>/scripts/case_matrix.py summary --in <案件档案/case-matrix.yaml>
 python3 <suite>/scripts/case_matrix.py anchors --in <案件档案/case-matrix.yaml> --draft <文书.md>
 python3 <suite>/scripts/case_matrix.py check --in <案件档案/case-matrix.yaml> --stage submission
+python3 <suite>/scripts/case_matrix.py scaffold --record element|fact|evidence|relief|authority|claim [--id <编号>]
+python3 <suite>/scripts/case_matrix.py explain --code <判定码>
 python3 <suite>/scripts/verify_suite.py --workdir <案件目录> --mode submission
 ```
 
-`init` 仅建含 unknown 的骨架，不能自动完成法律推理；必须按材料完善。旧版迁移先查看 `case_matrix.py migrate --help`，另存输出、核映射后使用，不猜未支持参数。`check --stage enforcement` 用于案件链条的执行衔接，不替代执行矩阵检查：
+`init` 仅建含 unknown 的骨架，不能自动完成法律推理；必须按材料完善。不会写某类记录时用 `scaffold` 取键名齐全的骨架再填值（unknown 字段须用 OQ 的 paths/targets 覆盖）；看不懂判定码（如 REVIEW_COVERAGE、ORPHAN_FACT）时用 `explain --code` 取含义与修法，不必读校验器源码。旧版迁移先查看 `case_matrix.py migrate --help`，另存输出、核映射后使用，不猜未支持参数。`check --stage enforcement` 用于案件链条的执行衔接，不替代执行矩阵检查：
 
 ```bash
 python3 <suite>/scripts/clause_audit.py check --in <clause-audit.yaml> --stage report

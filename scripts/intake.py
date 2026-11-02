@@ -8,6 +8,7 @@ if __name__ == '__main__':
 import argparse
 import hashlib
 import json
+import os
 from pathlib import Path
 import re
 import sys
@@ -77,6 +78,9 @@ def validate_suite(data):
         raise SchemaError('subskills 须为非空映射')
     for sid, meta in subs.items():
         validate_gate_spec(meta, str(sid))
+        outputs = meta.get('outputs', [])
+        if not isinstance(outputs, list) or not all(isinstance(row, str) and row.strip() for row in outputs):
+            raise SchemaError(str(sid) + ' outputs 须为字符串列表')
         profiles = meta.get('profiles', {})
         if not isinstance(profiles, dict):
             raise SchemaError(str(sid) + ' profiles 须为映射')
@@ -225,6 +229,16 @@ def evaluate(data,sid,profile=None,mode='submission'):
             'limitation':'材料闸门只复用记录；不适用项按 reason 记为已核；未知项不是已确认事实，法律与矩阵核验另行完成'}
 
 
+def official_slot_status():
+    """official_rules_fetch 按 data/official 实际缓存判定：有带凭证缓存即 bound，否则 degraded。"""
+    data_dir=Path(os.environ.get('RULESUITE_DATA_DIR', str(ROOT/'data'))).expanduser().resolve()
+    official=data_dir/'official';prov=data_dir/'_provenance'
+    ids={p.stem for p in official.iterdir() if p.is_file() and not p.is_symlink()
+         and p.suffix in ('.md','.pdf','.html','.txt') and (prov/(p.stem+'.json')).is_file()} if official.is_dir() else set()
+    if not ids:return 'degraded (await content import/review)'
+    return 'bound (fetch_official.py + data/official 本地缓存 %d 个来源；未缓存机构按需 fetch/import 后核验)'%len(ids)
+
+
 def main():
     require_python(script_name=__file__)
     ap=argparse.ArgumentParser(description=__doc__);sub=ap.add_subparsers(dest='cmd',required=True)
@@ -264,12 +278,13 @@ def main():
             if cfg.exists():raise ValueError('已有配置；请更新未决项，不重复bootstrap')
             target.write_text(json.dumps(data,ensure_ascii=False,indent=2),encoding='utf-8')
             cfg.write_text('case: '+data['case']+'\n~ 工作目录：'+str(wd)+'\n'
-                '- slot(official_rules_fetch): degraded (await content import/review)\n'
-                '- slot(law_retrieval): skipped\n- slot(docx_render): bound (local standard-library renderer)\n'
-                '- slot(local_corpus): skipped\n- slot(company_research): degraded (official registries; jurisdiction pending)\n- slot(party_data): user-materials-only\n',encoding='utf-8')
+                '- slot(official_rules_fetch): '+official_slot_status()+'\n'
+                '- slot(law_retrieval): skipped\n- slot(docx_render): bound (render_docx.py, no third-party deps)\n'
+                '- slot(local_corpus): skipped\n- slot(company_research): degraded (official registries; select by incorporation jurisdiction)\n- slot(party_data): user-materials-only\n',encoding='utf-8')
             result={'decision':'BOOTSTRAPPED','case':data['case'],'case_file':str(target),'config':str(cfg),
                     'pending':[k for k,v in data['facts'].items() if v['status']!='confirmed'],
-                    'note':'只登记可观测环境与有来源的事实；没有宣称访谈完成、联网权限或规则已核验'}
+                    'note':'只登记可观测环境与有来源的事实；没有宣称访谈完成、联网权限或规则已核验。'
+                           'official_rules_fetch 按本机 data/official 缓存实际判定（有带凭证缓存记 bound，否则 degraded）；单有缓存不等于本案条文已核验'}
         print(json.dumps(result,ensure_ascii=False,indent=2));return 0
     except SchemaError as e:
         print(json.dumps({'decision':'SCHEMA_INVALID','error':str(e)},ensure_ascii=False));return 4

@@ -13,7 +13,7 @@ keep_sources: false
 
 #! 适用 08-evidence / production；只按 suite.yaml 本 profile 核材料，运行 route.py --gate 08-evidence --profile production --workdir <案件目录> --provided <案件目录>/case.json。缺项登记 pending/Q，不合并证人或专家的材料闸门。
 #! 先读 case-matrix.yaml；事实、要件、证据和权威用 F/E/EV/R/A 的 #! 锚点追溯，表格在底稿逐项映射，程序证据不强造实体要件。对抗审查须记录，单人自审标 self_review。
-#! A/B/C/D/E 按本轮需要拆件，不默认生成五份；保留 workflow/profile/matrix，每份配套中文审阅说明。
+#! A/B/C/D/E 按本轮需要拆件，不默认生成五份；保留 workflow/profile/matrix；中文审阅说明只配给非中文文书，中文文书不另出。
 #! A、E 是供当事人提出的拟议文本，不是仲裁庭已签发文件；正文保留 PROPOSED，未确认的会议、合意、决定及签名不得写成既成事实。真正签发的程序令由有权主体制作。
 #! 程序依据先依本案规则版本和程序令核验；软法须确认是否及以何种方式被采用，不能把拟议条款声称为某软法原文。内部来源标记按主入口铁律2记录。
 #! 每项取证连接任一方的争点、待证事实与证明目的；允许可识别的特定文件或狭窄类别。窗口、列数、日志及制裁依本案框架确定，不把模板建议变成法定门槛。

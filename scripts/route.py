@@ -110,7 +110,11 @@ def read_case(path: Path) -> str:
             case = load_case(p)
             return "case: " + case["case"] + "\n" + "\n".join(str(v["value"]) for v in case["facts"].values() if v["status"] == "confirmed")
         if isinstance(data, dict) and data.get("schema") == "rulesuite-extract/1":
-            return "\n".join(x.get("text", "") for x in data["documents"] if x.get("status") == "parsed")
+            docs = data.get("documents")
+            if not isinstance(docs, list):
+                raise ValueError('rulesuite-extract/1 输入须含 documents 数组；请用 intake.py extract 生成，'
+                                 '或提供 {"documents":[{"file":"...","status":"parsed","text":"..."}]}')
+            return "\n".join(x.get("text", "") for x in docs if isinstance(x, dict) and x.get("status") == "parsed")
         if isinstance(data, dict) and isinstance(data.get("confirmed"), list):
             return "case: " + str(data.get("case", "")) + "\n" + "\n".join("- [x] " + x for x in data["confirmed"])
     return extract(p)

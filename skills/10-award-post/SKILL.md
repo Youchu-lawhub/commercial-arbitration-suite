@@ -100,7 +100,7 @@ python3 <suite>/scripts/route.py --gate 10-award-post --profile matrix --workdir
 
 事实、要件及证据沿用 `case-matrix.yaml`（新案 `schema: 2`）；执行底账由 `enforcement-plan.yaml`（`schema: 1`）维护。实质段落用 `#! 锚点：F-001 / E-CL01-01 / CL-01 / DF-01 / R-01 / EV-001 / A-01` 形式，替换为已存在且相关的 ID；AW-/T- 只作表内文书／目标编号，不作案件段落锚点。
 
-对外申请及律师指示必须配《中文审阅说明》；内部矩阵／分析／和解方案 `pair: false`。内部反方攻击、谈判退出线与授权上限不混入公开申请；给律师的必要披露需授权且限于本次范围。保留有效法律引注，内部分析不整份随申请外发。
+对外申请及律师指示为非中文时配《中文审阅说明》，本身用中文起草的法院申请或函件不另出；内部矩阵／分析／和解方案 `pair: false`。内部反方攻击、谈判退出线与授权上限不混入公开申请；给律师的必要披露需授权且限于本次范围。保留有效法律引注，内部分析不整份随申请外发。
 
 ```bash
 python3 <suite>/scripts/case_matrix.py check --in <案件档案/case-matrix.yaml> --stage draft --profile correction --json

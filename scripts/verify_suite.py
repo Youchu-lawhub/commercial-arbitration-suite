@@ -11,8 +11,8 @@
   python3 verify_suite.py --selftest        # 用内置样例验证本脚本与 render_docx 可用
 
 检查项：
-  PAIR      每份 .docx 文书都有配套《中文审阅说明》（.md/.docx 均可），且说明含五节固定结构
-  DELIVERY  仅提交模式：《中文审阅说明》不得只有 .md 记稿，须与文书一并交付 .docx，且须登记交付清单与视觉复核
+  PAIR      非中文 .docx 文书须有配套《中文审阅说明》（.md/.docx 均可）且说明含五节固定结构；正文本身为中文的文书按语言豁免，不另出说明
+  DELIVERY  仅提交模式：配套《中文审阅说明》不得只有 .md 记稿，须与文书一并交付 .docx，且须登记交付清单与视觉复核
   FILL      文书中不得残留 [[占位符]]（Word 内黄底高亮或记稿内 [[...]]）
   CITE      说明文件里的规则/指引引用必须带 [source:...] 标记；正文条号须在说明中对应说明；条文内容和适用性另作人工核对
   XREF      文书内 "paragraph N" 交叉引用不超过实际编号段落数（依赖 render_docx 的 .paras.json 清单）
@@ -53,6 +53,8 @@ PARA_REF_RE = re.compile(
 def para_ref_findall(text: str) -> list:
     results = []
     for m in PARA_REF_RE.finditer(text):
+        if m.group(2) and re.search(r'(?:裁决书|裁决)$', text[:m.start()]):
+            continue
         val = m.group(1) or m.group(2)
         if val:
             results.append(val)
@@ -63,6 +65,8 @@ RULE_RE = re.compile(
     r"条文\s*\d+|第\s*\d+\s*条", re.I)
 BODY_RULE_RE = re.compile(r"(?:Rule|rule|Art\.?|Article)\s+(\d+)", re.I)
 DEADLINE_DAYS_RE = re.compile(r"(\d+)\s*(?:days?|日|天)", re.I)
+# Calendar dates end in 日/号, so they would otherwise be read as deadline lengths.
+CALENDAR_DATE_TEXT_RE = re.compile(r"\d{4}\s*年\s*\d{1,2}\s*月(?:\s*\d{1,2}\s*[日号])?|\d{4}-\d{2}-\d{2}")
 RELIEF_COUNT_RE = re.compile(r"(\d+)\s*(?:项|个)\s*(?:请求|救济|relief|remedy|prayer)", re.I)
 RELIEF_ITEMS_RE = re.compile(r"(?:relief\s*sought|请求.*?项|prayer|仲裁请求)\s*[:：]?\s*(\d+)", re.I)
 AMOUNT_RE = re.compile(r"((?:USD|EUR|GBP|RMB|CNY|HKD|SGD|JPY|S\$|HK\$|US\$|€|\$|￥)\s?[\d,]+(?:\.\d+)?(?:\s?(?:million|billion|m\b|bn\b))?)", re.I)
@@ -401,6 +405,12 @@ def pair_of(doc: Path, notes: list, used: set) -> Path | None:
     return candidates[0] if candidates else None
 
 
+def flatten_text(text: str) -> str:
+    """docx 抽取常把币种与数字拆到不同段落（SGD\\n1926000.00），金额/日期
+    镜像比对前先折叠空白，消除跨行变体的假阳性。"""
+    return re.sub(r"\s+", " ", text)
+
+
 def normalize_amount(s: str) -> str:
     s = s.strip().upper().replace(",", "").replace(" ", "")
     return s
@@ -467,6 +477,9 @@ def normalize_date(value):
 
 
 def extract_amounts(text: str) -> list:
+    text = flatten_text(text)
+    # docx 抽取会把千分位逗号后的数字换行/加空格（1, 926,000.00）；先拼回再匹配
+    text = re.sub(r"(?<=\d),\s+(?=\d)", ",", text)
     raw = AMOUNT_RE.findall(text)
     raw = [re.sub(r"^(S\$|HK\$|US\$|RMB)", lambda m: {"S$":"SGD", "HK$":"HKD", "US$":"USD", "RMB":"CNY"}[m.group().upper()], a, flags=re.I) for a in raw]
     return [normalize_amount(a) for a in raw]
@@ -519,6 +532,17 @@ def internal_document(path):
         meta,_=split_front_matter(source.read_text(encoding='utf-8'))
         return str(meta.get('pair','true')).lower()=='false'
     except (OSError,ValueError,KeyError):return False
+
+
+CJK_SHARE = 0.5
+
+
+def chinese_document(path):
+    """铁律 5 解决的是"读不懂"：文书本身以中文撰写时无需再配中文审阅说明。"""
+    text = docx_text(path) if path.suffix.lower() == '.docx' else path.read_text(encoding='utf-8', errors='replace')
+    cjk = len(re.findall(r'[㐀-䶿一-鿿]', text))
+    latin = len(re.findall(r'[A-Za-z]', text))
+    return cjk >= 40 and cjk / (cjk + latin) >= CJK_SHARE
 
 BOARD_SECTIONS = {
     'decision': ('决策事项', '需要决策什么', '决策请求', '本次决策', 'decision'),
@@ -575,45 +599,26 @@ def known_anchor_ids(data):
     return ids
 
 
-def check_anchors(text, known, require=False):
+def check_anchors(text, known, require=False, label=None, offset=0):
     """Anchors precede prose paragraphs; titles/tables/letters need no blanket anchors."""
+    from _anchors import scan
+    result = scan(text, require=require, known=known)
     errors = []
-    pending = None
-    in_paragraph = False
-    for number, line in enumerate(text.splitlines(), 1):
-        s = line.strip()
-        if s.startswith('#!') and '锚点' in s:
-            if pending is not None:
-                errors.append(f'[ANCHOR] line {pending} 锚点未挂接正文段落')
-            m = re.fullmatch(r'#! 锚点：[ \t]*(.+)', s)
-            tokens = re.split(r'\s*[/,，]\s*', m[1]) if m else []
-            if not tokens or any(not ANCHOR_ID.fullmatch(t) for t in tokens) or len(tokens) != len(set(tokens)):
-                errors.append(f'[ANCHOR] line {number} 锚点语法无效；使用 #! 锚点：F-001 / E-CL01-01 / EV-001 / R-01 / A-01')
+    where = (label + ' ') if label else ''
+    text_of = {
+        'syntax': '锚点语法无效；使用 #! 锚点：F-001 / E-CL01-01 / EV-001 / R-01 / A-01',
+        'order': '锚点分组须按 F/CL/DF/E/EV/R/A 顺序',
+        'not_attached': '锚点未挂接正文段落',
+        'not_adjacent': '锚点须紧邻后续正文而非空行、标题或表格',
+        'missing': '实质正文段落缺锚点',
+        'dangling': '悬空锚点',
+    }
+    for line in sorted(result['issues']):
+        for issue in result['issues'][line]:
+            if issue['kind'] == 'unknown':
+                errors.append(f'[ANCHOR] {where}line {line + offset} 引用矩阵中不存在的ID：' + ', '.join(issue['ids']))
             else:
-                rank = {'F':0, 'CL':1, 'DF':2, 'E':3, 'EV':4, 'R':5, 'A':6}
-                order = [rank[t.split('-')[0]] for t in tokens]
-                if order != sorted(order):
-                    errors.append(f'[ANCHOR] line {number} 锚点分组须按 F/CL/DF/E/EV/R/A 顺序')
-                if set(tokens) - known:
-                    errors.append(f'[ANCHOR] line {number} 引用矩阵中不存在的ID：' + ', '.join(sorted(set(tokens) - known)))
-            pending = number
-            in_paragraph = False
-            continue
-        exempt = (not s or s.startswith(('#', '|', '>', '~ ', '- ', '* ')) or s == '<pagebreak>'
-                  or bool(re.match(r'^(Dear\b|Yours\b|Sincerely\b|敬启|此致|日期[:：]|Date:|To:|From:)', s, re.I)))
-        if exempt:
-            if pending is not None:
-                errors.append(f'[ANCHOR] line {pending} 锚点须紧邻后续正文而非空行、标题或表格')
-                pending = None
-            in_paragraph = False
-            continue
-        start = not in_paragraph or bool(re.match(r'^\d+[.]?\s+', s))
-        if start and require and pending is None:
-            errors.append(f'[ANCHOR] line {number} 实质正文段落缺锚点')
-        pending = None
-        in_paragraph = True
-    if pending is not None:
-        errors.append(f'[ANCHOR] line {pending} 悬空锚点')
+                errors.append(f'[ANCHOR] {where}line {line + offset} ' + text_of[issue['kind']])
     return errors
 
 
@@ -673,6 +678,94 @@ def resolve_matrix(workdir, source, value):
     return candidate
 
 
+OUTPUT_TYPE_ALIASES = (
+    ('仲裁申请书', ('仲裁申请书', 'request for arbitration', 'request-for-arbitration', 'notice of arbitration')),
+    ('立案材料包', ('立案材料包', '送达方案')),
+    ('费用测算', ('费用预缴测算', '费用测算', '预缴', '利息计算', 'interest', 'advance on costs')),
+    ('审阅说明', ('中文审阅说明', '审阅说明')),
+    ('立案指引', ('立案申请指引', '立案指引', 'filing-guide', 'filing_guide')),
+    ('条款诊断', ('条款诊断', '条款体检', 'clause')),
+    ('答辩状', ('答辩', 'answer to request', 'answer-to-request', 'answer')),
+    ('反请求', ('反请求', 'counterclaim')),
+    ('管辖异议', ('管辖异议', 'jurisdiction')),
+    ('仲裁员', ('仲裁员', '提名', '挑战', 'nomination', 'challenge', 'disclosure')),
+    ('临时措施', ('临时措施', '紧急', 'interim', 'urgent')),
+    ('费用担保', ('费用担保', 'security for costs', 'security-for-costs')),
+    ('披露', ('披露', 'document production', 'document-production', 'redfern')),
+    ('证人', ('证人', 'witness')),
+    ('专家', ('专家', 'expert')),
+    ('庭审', ('庭审', 'hearing')),
+    ('庭后', ('庭后', 'post-hearing')),
+    ('裁决后', ('裁决', 'award', '更正', '解释', 'correction', 'interpretation', '和解', 'consent')),
+    ('执行', ('执行', 'enforcement', 'set-aside', '撤销')),
+    ('外部律师', ('外部律师', 'external counsel', 'external-counsel')),
+    ('研究简报', ('研究', 'research', '简报', 'brief', '答案卡')),
+    ('程序函', ('程序函', 'procedural letter', 'procedural-letter')),
+    ('案件档案', ('案件档案', '案件构建矩阵', 'case-matrix', '主体信息', '主体')),
+)
+
+
+def output_type(text):
+    low = str(text).lower()
+    for token, aliases in OUTPUT_TYPE_ALIASES:
+        if any(a in low for a in aliases):
+            return token
+    return None
+
+
+def declared_output_types():
+    from intake import safe_yaml
+    data = safe_yaml((SUITE_ROOT / 'suite.yaml').read_text(encoding='utf-8')) or {}
+    result = {}
+    for sid, spec in (data.get('subskills') or {}).items():
+        rows = spec.get('outputs') or []
+        typed = [(row, output_type(row)) for row in rows]
+        result[sid] = [(row, tok) for row, tok in typed if tok]
+    return result
+
+
+def output_completeness(workdir, docs, artifacts):
+    """suite.yaml 声明产出 vs 本轮交付件；产出可以是另一份文件内的小节，故按类型与正文双通道匹配。"""
+    from render_docx import split_front_matter
+    declared = declared_output_types()
+    if not declared:
+        return []
+    names = [p.name for p in artifacts]
+    present = {t for t in (output_type(n) for n in names) if t}
+    corpus = ' '.join(names)
+    for path in artifacts:
+        if path.suffix.lower() != '.md':
+            continue
+        try:
+            corpus += '\n' + path.read_text(encoding='utf-8', errors='replace')[:200000]
+        except OSError:
+            continue
+    corpus = re.sub(r'\s+', '', corpus)
+    issues = []
+    reported = set()
+    for doc in docs:
+        source = doc.with_suffix('.md')
+        meta = {}
+        if source.is_file():
+            try:
+                meta, _ = split_front_matter(source.read_text(encoding='utf-8'))
+            except (OSError, ValueError):
+                meta = {}
+        workflow = str(meta.get('workflow') or '')
+        for row, token in declared.get(workflow, []):
+            if token in present or re.sub(r'\s+', '', str(row)) in corpus:
+                continue
+            if token == '审阅说明' and chinese_document(doc):
+                continue
+            if (workflow, row) in reported:
+                continue
+            reported.add((workflow, row))
+            issues.append('[OUTPUTS] %s 声明产出「%s」（类型 %s）未在本轮交付清单出现；'
+                          '若本轮确属不适用请在交付说明中写明，不要默示省略' % (workflow, row, token))
+    return issues
+
+
+
 def render_anchor_check(source, meta, text):
     from intake import safe_yaml
     kind = workflow_kind(meta, text, source.name)
@@ -688,7 +781,12 @@ def render_anchor_check(source, meta, text):
     if not path.is_file():
         return ['[ANCHOR] 严格模式缺少可解析的 case-matrix.yaml']
     known = known_anchor_ids(safe_yaml(path.read_text(encoding='utf-8')))
-    return check_anchors(text, known, require=kind == 'case' and str(meta.get('mode','legal')) == 'legal')
+    try:
+        offset = len(source.read_text(encoding='utf-8').splitlines()) - len(text.splitlines())
+    except (OSError, UnicodeError):
+        offset = 0
+    return check_anchors(text, known, require=kind == 'case' and str(meta.get('mode','legal')) == 'legal',
+                         label=source.name, offset=max(0, offset))
 
 
 def matrix_stage(kind, meta, mode):
@@ -805,7 +903,8 @@ def check_case_delivery(workdir, docs, mode, pending_path=None):
                         errors += [f'[PENDING] {doc.name} {e}' for e in cross['errors']]
                         warnings += [f'[PENDING] {doc.name} {w}' for w in cross['warnings']]
             if 'case' in specs or '#! 锚点：' in body:
-                errors += check_anchors(body, known, require=kind == 'case' and str(meta.get('mode',manifest.get('mode','legal'))) == 'legal')
+                errors += check_anchors(body, known, require=kind == 'case' and str(meta.get('mode',manifest.get('mode','legal'))) == 'legal',
+                                        label=doc.name, offset=len(raw.splitlines()) - len(body.splitlines()))
         except (OSError, ValueError, TypeError, KeyError) as exc:
             errors.append(f'[MATRIX] {doc.name} 记稿、metadata或矩阵输入无效：{type(exc).__name__}')
             exit_code = max(exit_code, 4)
@@ -1077,7 +1176,10 @@ def verify(workdir: Path, forced_pairs=None, mode="submission", pending_path=Non
             selected_data=json.loads(selection_path.read_text(encoding='utf-8'))
             if selected_data.get('filing_guide'):
                 declared=(workdir/selected_data['filing_guide']).resolve()
-                if filing_guide and Path(filing_guide).resolve()!=declared:raise ValueError('立案指引参数与本轮清单不一致')
+                if filing_guide:
+                    given = Path(filing_guide)
+                    given = (workdir / given if not given.is_absolute() else given).resolve()
+                    if given != declared: raise ValueError('立案指引参数与本轮清单不一致：--filing-guide 解析为 %s，清单声明为 %s' % (given, declared))
                 filing_guide=str(declared)
         except (ValueError,TypeError,OSError,KeyError) as exc:
             print(json.dumps({'decision':'VERIFY_FAILED','submission_ready':False,'gate_issues':[],
@@ -1152,8 +1254,13 @@ def verify(workdir: Path, forced_pairs=None, mode="submission", pending_path=Non
         draft_errors.append('[GUIDE] 仲裁申请、重写或补正须在本轮清单 filing_guide 声明立案申请指引；草案亦须说明未核步骤')
     if filing_guide:
         try:
-            guide = Path(filing_guide).resolve()
-            relative = guide.relative_to(workdir.resolve()).as_posix()
+            guide = Path(filing_guide)
+            if not guide.is_absolute():
+                guide = (workdir / guide)
+            guide = guide.resolve()
+            if not guide.is_relative_to(workdir):
+                raise ValueError(f'立案指引须位于案件目录内：{guide}（案件目录 {workdir}）；相对路径按 --workdir 解析')
+            relative = guide.relative_to(workdir).as_posix()
             text = guide.read_text(encoding='utf-8')
             required = ['线上立案', '邮寄', '送达', '费用', '提交后', '核查日期']
             if guide.suffix != '.md' or any(x not in text for x in required) or not re.search(r'https://[^\s]+', text):
@@ -1175,7 +1282,19 @@ def verify(workdir: Path, forced_pairs=None, mode="submission", pending_path=Non
                 validate_docx(artifact, workdir, pending_path)
         except (ValueError, OSError, KeyError, zipfile.BadZipFile) as e:
             draft_errors.append('[PENDING] ' + str(e))
+    pending_map = {}
+    if mode == 'draft' and pending_path:
+        try:
+            from pending import load as _load_pending
+            _, _pentries = _load_pending(pending_path)
+            for _e in _pentries:
+                if _e.get('status') == 'open':
+                    for _f in _e.get('files', []):
+                        pending_map.setdefault(str(Path(_f).resolve()), set()).add(_e['placeholder'])
+        except (ValueError, OSError):
+            pass  # 登记表加载失败已由 PENDING 块报出；此处按无登记处理
     draft_fill = []
+    draft_pending_info = []
     if artifacts is not None:
         for artifact in artifacts:
             if artifact in docs or artifact in notes: continue
@@ -1188,16 +1307,25 @@ def verify(workdir: Path, forced_pairs=None, mode="submission", pending_path=Non
     for md in md_all:
         if is_note(md):
             continue
-        md_ph = md_has_placeholder(md)
-        if md_ph:
+        md_ph = PLACEHOLDER_RE.findall(md.read_text(encoding="utf-8", errors="ignore"))
+        if not md_ph:
+            continue
+        if mode == 'draft' and pending_path:
+            reg = pending_map.get(str(md.resolve()), set())
+            stray = [t for t in md_ph if t not in reg]
+            if stray:
+                draft_fill.append(f"[FILL] {md.name} 记稿存在未登记占位符 {stray[:3]}：登记进 pending.json 或替换为案件事实")
+            else:
+                draft_pending_info.append(f"[FILL] {md.name} 含 {len(md_ph)} 处已登记待确认占位（审阅草案允许）")
+        else:
             draft_fill.append(f"[FILL] {md.name} 记稿残留占位符 {md_ph[:3]}：需同步更新对应 .docx")
-    if draft_fill and mode != "draft":
+    if draft_fill:
         problems = lint_dialect(md_all) + draft_fill + citation_errors + draft_errors + matrix_report['errors']
         print(json.dumps({"decision": "VERIFY_FAILED", "workdir": str(workdir),
                           "documents": len(docs), "notes": len(notes),
                           "gate_issues": gate_issues,
                           "problems": problems,
-                          "action": "先把记稿中的占位符替换为案件事实，再生成 .docx"},
+                          "action": "先把记稿中的占位符替换为案件事实或登记 pending.json，再生成 .docx"},
                          ensure_ascii=False, indent=2))
         return 2
     if not docs and not notes:
@@ -1211,7 +1339,7 @@ def verify(workdir: Path, forced_pairs=None, mode="submission", pending_path=Non
                           "action": "先用 render_docx.py 生成 .docx"},
                          ensure_ascii=False, indent=2))
         return 3
-    problems, passed = list(draft_errors) + citation_errors + matrix_report['errors'], []
+    problems, passed = list(draft_errors) + citation_errors + matrix_report['errors'], list(draft_pending_info)
     pairs = []
     if selected_pairs is not None:
         pairs = selected_pairs
@@ -1250,8 +1378,11 @@ def verify(workdir: Path, forced_pairs=None, mode="submission", pending_path=Non
     for d, n in pairs:
         if internal_document(d):
             passed.append(f"[PAIR] {d.name} 按内部件豁免（pair:false）")
+        elif n is None and chinese_document(d):
+            passed.append(f"[PAIR] {d.name} 正文本身为中文，铁律 5 无需另配《中文审阅说明》（按文书语言豁免，非内部件豁免）")
         elif n is None:
-            problems.append(f"[PAIR] {d.name} 缺少配套《中文审阅说明》（铁律 5）")
+            problems.append(f"[PAIR] {d.name} 缺少配套《中文审阅说明》（铁律 5）；说明件须与主文书同目录同前置名，"
+                            f"命名为 {d.stem}-中文审阅说明.docx（或 .md）")
         else:
             passed.append(f"[PAIR] {d.name} ↔ {n.name}")
             if mode == 'submission' and n.suffix.lower() != ".docx":
@@ -1262,7 +1393,7 @@ def verify(workdir: Path, forced_pairs=None, mode="submission", pending_path=Non
     cache = {}
     for artifact in all_docx:
         problems += [f'[DOCX] {issue}' for issue in check_docx_structure(artifact, schema)]
-        if docx_has_placeholder(artifact):
+        if mode != 'draft' and docx_has_placeholder(artifact):
             problems.append(f'[FILL] {artifact.name} DOCX 残留占位符')
         if artifact in originals:
             continue  # Invalid delivery role, not a request to manufacture provenance.
@@ -1286,7 +1417,7 @@ def verify(workdir: Path, forced_pairs=None, mode="submission", pending_path=Non
         txt = docx_text(d)
         cache[d] = txt
         ph_parts = docx_has_placeholder(d)
-        if ph_parts:
+        if ph_parts and mode != 'draft':
             problems.append(f"[FILL] {d.name} 在 {ph_parts} 残留黄色高亮占位符：交付前逐项替换")
         try:
             with zipfile.ZipFile(d) as z:
@@ -1344,7 +1475,18 @@ def verify(workdir: Path, forced_pairs=None, mode="submission", pending_path=Non
             cache[n] = ntxt
             n_ph = md_has_placeholder(n) if n.suffix == ".md" else docx_has_placeholder(n)
             if n_ph:
-                problems.append(f"[FILL] {n.name} 说明中残留占位符：{n_ph[:5]}")
+                if mode == 'draft' and n.suffix == ".md" and pending_path:
+                    tokens = PLACEHOLDER_RE.findall(n.read_text(encoding="utf-8", errors="ignore"))
+                    reg = pending_map.get(str(n.resolve()), set())
+                    stray = [t for t in tokens if t not in reg]
+                    if stray:
+                        problems.append(f"[FILL] {n.name} 说明存在未登记占位符：{stray[:5]}")
+                    else:
+                        passed.append(f"[FILL] {n.name} 含 {len(tokens)} 处已登记待确认占位（审阅草案允许）")
+                elif mode == 'draft':
+                    pass  # docx 说明的高亮占位已由 PENDING 块逐 run 校验兜底
+                else:
+                    problems.append(f"[FILL] {n.name} 说明中残留占位符：{n_ph[:5]}")
             miss = check_note_sections(ntxt)
             if miss:
                 problems.append(f"[PAIR] {n.name} 五节结构不合格：{miss}")
@@ -1368,6 +1510,9 @@ def verify(workdir: Path, forced_pairs=None, mode="submission", pending_path=Non
                 uncovered = []
                 for rm in rule_mentions:
                     rule_text = rm.group()
+                    prefix = ntxt[max(0, rm.start() - 30):rm.start()]
+                    if re.search(r'(?:\bContract\s+|合同\s*)$', prefix, re.I):
+                        continue
                     rm_line = ntxt[:rm.start()].count('\n')
                     has_source = False
                     for vs in valid_sources:
@@ -1392,8 +1537,8 @@ def verify(workdir: Path, forced_pairs=None, mode="submission", pending_path=Non
                     problems.append(f"[CONSIST] 当事方 '{party}' 出现在文书 {d.name} 中，但未出现在 {n.name}")
             if declared:
                 passed.append(f"[CONSIST] {d.name} ↔ {n.name} 当事方名称一致：{declared}")
-            doc_amounts = extract_amounts(dtxt)
-            note_amounts = extract_amounts(ntxtd)
+            doc_amounts = extract_amounts(flatten_text(dtxt))
+            note_amounts = extract_amounts(flatten_text(ntxtd))
             for da in doc_amounts:
                 if da not in note_amounts:
                     problems.append(f"[CONSIST] 金额 {da} 只见于文书 {d.name}、未见于说明 {n.name}")
@@ -1410,21 +1555,19 @@ def verify(workdir: Path, forced_pairs=None, mode="submission", pending_path=Non
                                 conflict = True
                     if conflict:
                         problems.append(f"[CONSIST] 说明 {n.name} 含矛盾金额 {na}（文书中为不同币种同数值）")
-            dds = {normalize_date(x) for x in DATE_RE.findall(dtxt)}
-            note_dates = {normalize_date(x) for x in DATE_RE.findall(ntxtd)}
+            dds = {normalize_date(x) for x in DATE_RE.findall(flatten_text(dtxt))}
+            note_dates = {normalize_date(x) for x in DATE_RE.findall(flatten_text(ntxtd))}
             for dd in dds:
                 if dd not in note_dates:
                     problems.append(f"[CONSIST] 关键日期 '{dd}' 见于文书但未同步到说明")
-            doc_days = set(DEADLINE_DAYS_RE.findall(dtxt))
-            note_days = set(DEADLINE_DAYS_RE.findall(ntxtd))
+            doc_days = set(DEADLINE_DAYS_RE.findall(CALENDAR_DATE_TEXT_RE.sub(' ', flatten_text(dtxt))))
+            note_days = set(DEADLINE_DAYS_RE.findall(CALENDAR_DATE_TEXT_RE.sub(' ', flatten_text(ntxtd))))
             if doc_days and note_days and doc_days != note_days:
                 problems.append(f"[CONSIST] 期限天数不一致：文书 {sorted(doc_days)} 天 vs 说明 {sorted(note_days)} 天")
-            doc_relief_count = count_relief_items(dtxt)
-            note_relief_count = count_relief_items(ntxtd)
+            doc_relief_count = count_relief_items(flatten_text(dtxt))
+            note_relief_count = count_relief_items(flatten_text(ntxtd))
             if doc_relief_count and note_relief_count and doc_relief_count != note_relief_count:
                 problems.append(f"[CONSIST] 请求项数量不一致：文书 {doc_relief_count} 项 vs 说明 {note_relief_count} 项")
-    if mode == 'draft' and not draft_errors:
-        problems = [p for p in problems if not p.startswith('[FILL]')]
     if mode == 'submission':
         for artifact in docs:
             mp = artifact.with_suffix('.paras.json')
@@ -1446,6 +1589,9 @@ def verify(workdir: Path, forced_pairs=None, mode="submission", pending_path=Non
     else:
         matrix_report['warnings'] += ['[VISUAL] '+x for x in visual_issues]
     if font_status['cjk']!='available':matrix_report['warnings'].append('[FONT] '+font_status['message'])
+    matrix_report['warnings'] += output_completeness(
+        workdir, docs, artifacts if artifacts is not None
+        else list(workdir.rglob('*.md')) + list(workdir.rglob('*.docx')))
     extra_limitations = []
     if mode == 'submission':
         from fetch_official import legal_status
@@ -1465,7 +1611,7 @@ def verify(workdir: Path, forced_pairs=None, mode="submission", pending_path=Non
     if problems:
         action = '逐项修补后再交付'
     elif mode == 'draft':
-        action = '草案结构通过；DRAFT_OK 不是提交验收，确认事实后按 --mode submission 重跑'
+        action = '审阅草案可交付：将 docx 与说明连同 pending 清单交用户逐项确认，标注不可提交；确认事实后按 --mode submission 重跑'
     elif submission_ready:
         action = '自动校验与已登记视觉复核通过；仍需法律及授权复核后交付'
     else:
@@ -1504,6 +1650,15 @@ def verify(workdir: Path, forced_pairs=None, mode="submission", pending_path=Non
 
 def selftest() -> int:
     import tempfile
+    print("--- xref external award reference check ---")
+    refs = para_ref_findall("内部段落 2。裁决书第42段及裁决第43段。")
+    if refs != ["2"]:
+        print(json.dumps({'decision': 'SELFTEST_FAIL',
+                          'problems': ['外部裁决段落被误作本文件交叉引用：%r' % refs],
+                          'action': 'XREF 只核对本文件段落，保留内部引用并排除明示的裁决书／裁决段落'},
+                         ensure_ascii=False, indent=2))
+        return 2
+    print('OK    XREF     外部裁决段落不计入本文件交叉引用')
     suite = Path(__file__).resolve().parent.parent
     td = Path(tempfile.mkdtemp(prefix="arb-selftest-"))
     legal = td / "Sample-Request.md"
@@ -1547,6 +1702,16 @@ def selftest() -> int:
         print(r.stdout or r.stderr)
         if r.returncode != 0:
             return 2
+    print("--- pairing language check ---")
+    en, zh = chinese_document(td / "Sample-Request.docx"), chinese_document(td / "Sample-Request-中文审阅说明.docx")
+    if en or not zh:
+        print(json.dumps({'decision': 'SELFTEST_FAIL',
+                          'problems': ['铁律 5 语言判定异常：英文样例应不免配（实测 %s），中文样例应免配（实测 %s）；'
+                                       '免配豁免只适用于正文以中文为主的文书' % (en, zh)],
+                          'action': '修 chinese_document 的 CJK 占比判定，不得放宽为全部免配或一律不免'},
+                         ensure_ascii=False, indent=2))
+        return 2
+    print('OK    PAIR     英文样例不免配、中文样例按语言免配')
     print("--- verify (draft) ---")
     return verify(td, mode="draft", pending_path=pending)
 

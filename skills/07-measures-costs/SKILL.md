@@ -9,8 +9,8 @@ description: 临时措施、紧急仲裁员、担保费用、预缴款与费用�
 
 ## 一、入口闸门
 
-材料要求以 `suite.yaml` 的本子技能条目为唯一依据。已在会话中明确的事实直接登记，不重复索取。
-对实际案件，先核对本案配置，再把已读取的材料逐项登记到案件根 `case.json`（`rulesuite-case/1`）；台账 `case` 与配置一致，Markdown 清单仅由台账生成供人阅读。
+材料与入口闸门以 `suite.yaml` 本子技能条目为准（铁律 3、4）；已明确的事实直接登记，不重复索取。
+已读取材料登记到案件根 `case.json`（`rulesuite-case/1`，台账口径见 `references/practical-workflow.md`）。
 
 ```bash
 python3 <suite>/scripts/route.py --gate 07-measures-costs --profile <文书类型> --workdir <案件目录> --provided <案件目录>/case.json
@@ -18,7 +18,7 @@ python3 <suite>/scripts/route.py --gate 07-measures-costs --profile <文书类�
 
 本子技能任务类型：`interim`、`security`、`advance`。只选本轮需要的文书类型，不把其他类型的必填项合并进来。
 
-未通过时，针对影响本轮结论的缺项提问；可先整理已知事实、检索路径与明确标为未完成的框架，不虚构事实，不交付未核验定稿。通用教学或规则导航问题不要求伪造案件配置。
+未通过时只追问影响本轮结论的缺项；可先出未完成标记的框架，不虚构事实（铁律 3）。
 
 ## 二、动作
 
@@ -66,7 +66,7 @@ python3 <suite>/scripts/route.py --gate 07-measures-costs --profile <文书类�
 | `紧急仲裁员申请` | 机制适用条件的现查依据（条号+来源标记）、组庭前必要性与时间窗、押金/费用缴纳状态、决定失效期与主案衔接 |
 | `担保费用申请或抗辩` | 已核权限及标准、清偿风险与比例性证据、可核预算、金额/形式/期限的备位方案 |
 | `费用分担主张框架` | 可赔性台账、预缴与替代缴纳记录、偿还请求权限和决定形式、实际执行路径、税项与付汇提示 |
-| `中文审阅说明` | 与每份文书配对；含路径选择理由、法院协助四维核验结论与置信度、对置检查、待用户确认事项 |
+| `中文审阅说明`（仅非中文文书） | 与该文书配对；含路径选择理由、法院协助四维核验结论与置信度、对置检查、待用户确认事项 |
 
 机构机制差异须按 `references/forum-rules-matrix.md` 的核验流程从本案适用版本的官方文本取得，境外法检索路径见 `references/foreign-law-research.md`；期限与决定后的主案衔接写入时限日历（口径参照 `references/procedural-timetable.md`）。
 

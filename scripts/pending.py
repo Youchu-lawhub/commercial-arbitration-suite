@@ -9,7 +9,10 @@ from pathlib import Path
 import zipfile
 import xml.etree.ElementTree as ET
 
-BANNER = 'DRAFT — 待确认草案，不得提交'
+BANNER_RE = re.compile(r'DRAFT — 审阅草案：含 (\d+) 处待确认项，不可提交')
+
+def banner_text(count):
+    return f'DRAFT — 审阅草案：含 {count} 处待确认项，不可提交'
 NS = {'w': 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'}
 
 def json_path(json_file, value):
@@ -39,7 +42,7 @@ def load(path):
             raise ValueError('法律/期限/来源待核项关闭须含核验人、核验日期与来源；用户同意不能代替法律核验')
         token = item.get('placeholder', '')
         if not token.startswith(ident + ':') or any(c in token for c in '[]\r\n'):
-            raise ValueError('placeholder 须为 Q编号:内容，不能含括号或换行')
+            raise ValueError(f'pending {ident} 的 placeholder「{token}」不合规：须以「{ident}:」开头，不能含括号或换行')
         files = item.get('files', [])
         if not files or not all(isinstance(f, str) and f for f in files):
             raise ValueError('pending files 须为非空路径列表')
@@ -48,11 +51,17 @@ def load(path):
     return data, entries
 
 def validate_text(text, relative, entries):
+    import difflib
     tokens = re.findall(r'\[\[([^\[\]\r\n]+)\]\]', text)
     allowed = {x['placeholder'] for x in entries if x['status']=='open' and relative in x['files']}
     missing = set(tokens) - allowed
     if missing:
-        raise ValueError(f'{relative} 存在未登记或已解决占位符: {sorted(missing)}')
+        hints = []
+        for m in sorted(missing):
+            near = difflib.get_close_matches(m, sorted(allowed), n=1)
+            hints.append(m + (f'（与已登记「{near[0]}」相近，Q 编号与冒号后内容须逐字一致）' if near
+                              else '（pending.json 无相近登记；先登记或替换为案件事实）'))
+        raise ValueError(f'{relative} 存在未登记或已解决占位符: ' + '；'.join(hints))
     if text.count('[[') != len(tokens) or text.count(']]') != len(tokens):
         raise ValueError('占位符不闭合或嵌套')
     return tokens
@@ -71,8 +80,11 @@ def validate_docx(path, root, registry):
     tokens = validate_text(source.read_text(encoding='utf-8'), relative, entries)
     with zipfile.ZipFile(path) as z:
         body = ET.fromstring(z.read('word/document.xml'))
-        if BANNER not in ''.join(body.itertext()):
-            raise ValueError('草案缺少不可提交标识')
+        m = BANNER_RE.search(''.join(body.itertext()))
+        if not m:
+            raise ValueError('草案缺少状态声明（DRAFT — 审阅草案：含 N 处待确认项，不可提交）')
+        if int(m.group(1)) != len(tokens):
+            raise ValueError(f'状态声明与实际待确认数不一致：声明 {m.group(1)} 处，记稿实际 {len(tokens)} 处；用 --draft 重新渲染')
         for name in z.namelist():
             if not re.fullmatch(r'word/(document|header\d*|footer\d*)\.xml', name):
                 continue
@@ -81,7 +93,10 @@ def validate_docx(path, root, registry):
                 if run.find('w:rPr/w:highlight', NS) is not None:
                     text = ''.join(t.text or '' for t in run.findall('w:t', NS))
                     if text not in {'['+t+']' for t in tokens}:
-                        raise ValueError(f'{path.name} 有未映射高亮内容: {text}')
+                        import difflib
+                        near = difflib.get_close_matches(text.strip('[]'), tokens, n=1)
+                        hint = f'（与已登记「[{near[0]}]」相近，疑为渲染后手改 docx；请用 --draft 重新渲染）' if near else ''
+                        raise ValueError(f'{path.name} 有未映射高亮内容: {text}{hint}')
     return tokens
 
 

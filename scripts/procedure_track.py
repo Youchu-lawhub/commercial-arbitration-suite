@@ -173,9 +173,18 @@ def main():
     try:
         data=json.loads(Path(a.input).read_text(encoding='utf-8'))
         if a.fingerprint:
-            profile=data.get('profile',data) if isinstance(data,dict) else None
+            if not isinstance(data,dict): raise ValueError('profile 须为对象')
+            fingerprinted=str(a.input)
+            profile=data.get('profile') if isinstance(data.get('profile'),dict) else None
+            if profile is None and data.get('profile_file'):
+                pf=Path(data['profile_file'])
+                if not pf.is_absolute(): pf=Path(a.input).resolve().parent/pf
+                fingerprinted=str(pf)
+                profile=json.loads(pf.read_text(encoding='utf-8'))
+            if profile is None: profile=data
             if not isinstance(profile,dict): raise ValueError('profile 须为对象')
-            print(json.dumps({'profile_sha256':profile_fingerprint(profile),'legal_verified':False}));return 0
+            print(json.dumps({'profile_sha256':profile_fingerprint(profile),
+                              'fingerprinted':fingerprinted,'legal_verified':False}));return 0
         if isinstance(data,dict) and data.get('profile_file'):
             path=Path(data['profile_file'])
             if not path.is_absolute(): data['profile_file']=str(Path(a.input).resolve().parent/path)

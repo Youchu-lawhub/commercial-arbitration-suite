@@ -27,9 +27,9 @@
 |---|---|
 | 文书草稿 | `<案件目录>/deliverables/<序号>-<文书英文名>.md` |
 | 交付文书 | 同名 `.docx`，`--mode legal` |
-| 中文审阅说明 | `<文书名>-中文审阅说明.md` / `.docx`，`--mode memo` |
+| 中文审阅说明（仅非中文文书） | `<文书名>-中文审阅说明.md` / `.docx`，`--mode memo`；文书本身为中文时不出本件 |
 | 段落清单 | `<文书名>.paras.json`（`--manifest` 产出，核验交叉引用用） |
-| 缺一份 | 视为未完成（铁律 5），`verify_suite.py` 会报 PAIR 失败 |
+| 缺一份（非中文文书未配说明） | 视为未完成（铁律 5），`verify_suite.py` 会报 PAIR 失败 |
 
 文件名不写对方当事人全称与争议标的细节（铁律 8）；案号或代号足够定位即可。
 
@@ -40,15 +40,16 @@
 ```markdown
 ---
 title: Request for Arbitration
-case: ABC v. XYZ — ICC Case No. [[xxxx/xx]]
+case: [[稳定案件代号]]
 mode: legal
-footer_left: Draft [[v1]] — [[date]]
+footer_left: ICC Case No. [[xxxx/xx]] — Draft [[v1]] — [[date]]
 keep_sources: false
 toc: true
 ---
 ```
 
 只有 `title`、`case`、`mode`、`footer_left`、`keep_sources`、`toc`、`pair` 七个键生效。
+`case` 只写本案稳定代号：交付闸门把该值与 `.arbitration-config.md`、`case.json` 与案件矩阵逐字比对，写成"当事人对名＋机构案号"或任何带描述的形式会被判"案件代号不一致"；机构案号、对手方简称与文书描述一律放 `title` 或 `footer_left`。
 文号、语言、日期等元信息写成正文首段或用 `--header` / `--footer` 传入，**不要自造键指望渲染器识别**。
 
 ### 块级
@@ -155,4 +156,4 @@ python3 <suite>/scripts/verify_suite.py --workdir <交付目录> --mode submissi
 
 一条来源标记只挂一个来源 id；同一句依赖两份来源时，分别写两个完整 marker。URL 不写“同上”；ID 与 URL 须对应登记条目。
 
-配套中文审阅说明的义务适用于交机构或交对方的正式文书。内部立案清单、办理指引或计算台账可在记稿 frontmatter 标 `pair: false`；渲染会登记，核验明确输出内部件豁免，仍检查来源、占位、结构和同步性。不得为对外文书使用该豁免。
+配对义务以铁律 5 为准，本文件不复述：只有**非中文**对外文书才配《中文审阅说明》，中文文书不配。内部立案清单、办理指引或计算台账可在记稿 frontmatter 标 `pair: false`；渲染会登记，核验明确输出内部件豁免，仍检查来源、占位、结构和同步性。不得为对外文书使用该豁免。

@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""案件构建矩阵 schema 2；init/check/render/summary/anchors/migrate，无网络。"""
+"""案件构建矩阵 schema 2；init/check/render/summary/anchors/migrate/scaffold/explain，无网络。"""
 import argparse
+import json
 import re
 import sys
 from pathlib import Path
 
-from _matrix_common import (ANCHOR_RE, ID_RE, Check, MatrixError, checked_file, cli,
+from _matrix_common import (Check, MatrixError, checked_file, cli,
                             dump_yaml, failure, filled, iso_date, load_yaml, question,
                             render_view, resolve_path, safe_write, unknown)
 
@@ -351,12 +352,13 @@ def _check_documents(c, data, base_path):
             result = anchors(data, path.read_text(encoding='utf-8'))
             ids.update(result['anchored_ids'])
             for err in result['errors']:
+                err['path'] = '%s#%s' % (Path(doc).name, err['path'])
                 if err['code'] in ('ANCHOR_UNKNOWN', 'ANCHOR_SYNTAX'):
                     c.errors.append(err)
                 else:
                     c.blocks.append(err)
         except (OSError, UnicodeError):
-            c.error('DOCUMENT', p, '锚点文书不存在或不可读')
+            c.error('DOCUMENT', p, '锚点文书不存在或不可读：%s（documents 路径按矩阵所在目录解析）' % path)
     return ids
 
 
@@ -418,108 +420,45 @@ def anchors(data, text):
 Use `#! 锚点范围：facts|argument|relief|none` for unrecognised headings.
 Heading/table/quote/letter furniture are exempt; every prose paragraph in a
 substantive section needs an adjacent anchor of the matching family.
+Syntax, family order and adjacency rules are the shared `_anchors` engine
+(the same rules the delivery gate enforces).
 """
+    from _anchors import scan, MATRIX_ID
     c = Check(data, 'anchors', strict=True)
     known = {r.get('id') for name in COLLECTIONS for r in data.get(name, []) if isinstance(r, dict)}
     denials = {r.get('id') for r in data.get('defences', []) if isinstance(r, dict) and r.get('kind') == 'denial'}
     if isinstance(data.get('enforcement'), dict):
         known.update(t for t in data['enforcement'].get('targets', []) if isinstance(t, str))
-    errors, used, pending = [], set(), []
-    scope, paragraph, paragraph_ids, paragraph_line = None, [], [], 0
-    fence = None
-    substantive, prose = 0, 0
     ordinary_letter = bool(re.search(r'^(Dear\b|敬启|致[^\n]*[:：])', text, re.I | re.M))
-    scope_stack = []
-    frontmatter = text.startswith('---\n')
-    def flush():
-        nonlocal paragraph, paragraph_ids, substantive, prose
-        if paragraph:
-            prose += 1
-            if scope:
-                substantive += 1
-                expected = {'facts': ('F-',), 'argument': ('E-', 'A-'), 'relief': ('R-', 'DF-')}[scope]
-                denial_anchor = scope == 'argument' and any(v in denials for v in paragraph_ids)
-                if not denial_anchor and not any(any(v.startswith(prefix) for prefix in expected) for v in paragraph_ids):
-                    errors.append({'code': 'ANCHOR_COVERAGE', 'path': 'line.%s' % paragraph_line,
-                                   'message': '事实／论证／救济正文段缺少对应类型的相邻锚点'})
-            used.update(paragraph_ids)
-        paragraph, paragraph_ids = [], []
-    for number, line in enumerate(text.splitlines(), 1):
-        s = line.strip()
-        if frontmatter:
-            if number > 1 and s == '---':
-                frontmatter = False
-            continue
-        match = ANCHOR_RE.match(line)
-        if match:
-            flush()
-            pending = [v for v in re.split(r'[,，/\s]+', match.group(1)) if v]
-            if not pending or any(not ID_RE.fullmatch(v) for v in pending):
-                errors.append({'code': 'ANCHOR_SYNTAX', 'path': 'line.%s' % number, 'message': '锚点须为规范主键，不能用占位符'})
-            if any(v not in known for v in pending):
-                errors.append({'code': 'ANCHOR_UNKNOWN', 'path': 'line.%s' % number, 'message': '锚点引用未登记编号'})
-            continue
-        if s.startswith('```') or s.startswith('~~~'):
-            flush()
-            marker = s[:3]
-            fence = None if fence == marker else marker
-            pending = []
-            continue
-        if fence:
-            continue
-        if s.startswith('#! 锚点范围：') or s.startswith('#! 锚点范围:'):
-            flush()
-            selected = re.split('[:：]', s, maxsplit=1)[1].strip()
-            if selected not in ('facts', 'argument', 'relief', 'none'):
-                errors.append({'code': 'ANCHOR_SYNTAX', 'path': 'line.%s' % number, 'message': '不支持的锚点范围'})
-            scope = selected if selected in ('facts', 'argument', 'relief') else None
-            pending = []
-            continue
-        heading = re.match(r'^(#{1,6})\s+(.*)', s)
-        if heading:
-            flush()
-            level, title = len(heading.group(1)), heading.group(2).lower()
-            while scope_stack and scope_stack[-1][0] >= level:
-                scope_stack.pop()
-            inherited = scope_stack[-1][1] if scope_stack else None
-            if re.search(r'事实|背景|facts|factual|background', title):
-                scope = 'facts'
-            elif re.search(r'救济|请求事项|relief|remed', title):
-                scope = 'relief'
-            elif re.search(r'法律|论证|管辖|紧迫|不可弥补|利益衡量|legal|law|argument|jurisdiction|merits|urgency', title):
-                scope = 'argument'
+    result = scan(text, require=False, list_exempt=False, id_pattern=MATRIX_ID,
+                  known=known, scopes=True, denials=denials)
+    message_of = {'syntax': '锚点须为规范主键，不能用占位符',
+                  'order': '锚点分组须按 F/CL/DF/E/EV/R/A 顺序',
+                  'unknown': '锚点引用未登记编号',
+                  'scope_invalid': '不支持的锚点范围',
+                  'not_attached': '锚点未挂接正文段落',
+                  'not_adjacent': '锚点须紧邻后续正文而非空行、标题或表格',
+                  'dangling': '悬空锚点'}
+    code_of = {'syntax': 'ANCHOR_SYNTAX', 'order': 'ANCHOR_SYNTAX', 'unknown': 'ANCHOR_UNKNOWN',
+               'scope_invalid': 'ANCHOR_SYNTAX', 'not_attached': 'ANCHOR_ADJACENCY',
+               'not_adjacent': 'ANCHOR_ADJACENCY', 'dangling': 'ANCHOR_ADJACENCY'}
+    for line in sorted(result['issues']):
+        for item in result['issues'][line]:
+            path = 'line.%s' % line
+            if item['kind'] == 'coverage':
+                c.blocks.append({'code': 'ANCHOR_COVERAGE', 'path': path,
+                                 'message': '事实／论证／救济正文段缺少对应类型的相邻锚点'})
             else:
-                scope = inherited
-            scope_stack.append((level, scope))
-            pending = []
-            continue
-        if not s:
-            flush()
-            continue
-        if s.startswith(('|', '>', '~', '#!')) or s in ('---', '***'):
-            flush()
-            pending = []
-            continue
-        if re.match(r'^(Dear\b|Yours\b|Sincerely\b|敬启|此致|日期[:：]|Date:|To:|From:)', s, re.I):
-            flush()
-            pending = []
-            continue
-        if re.match(r'^\d+[.)]\s', s) and paragraph:
-            flush()
-        if not paragraph:
-            paragraph_line, paragraph_ids = number, pending
-            pending = []
-        paragraph.append(s)
-    flush()
-    c.errors.extend(e for e in errors if e['code'] != 'ANCHOR_COVERAGE')
-    c.blocks.extend(e for e in errors if e['code'] == 'ANCHOR_COVERAGE')
+                c.errors.append({'code': code_of[item['kind']], 'path': path,
+                                 'message': message_of[item['kind']]})
+    counts = result['counts']
     if not text.strip():
         c.block('ANCHOR_EMPTY', '$', '空文书不能通过提交锚点闸门')
-    elif substantive == 0 and prose and not ordinary_letter:
+    elif counts['substantive'] == 0 and counts['prose'] and not ordinary_letter:
         c.block('ANCHOR_SCOPE', '$', '未识别正文范围；请明确标注 facts/argument/relief，而不是免除全部正文')
-    elif substantive == 0:
+    elif counts['substantive'] == 0:
         c.warn('ANCHOR_SCOPE', '$', '常规信函或标题表格免除正文锚定；仍检查所有显式锚点编号')
-    return c.result(anchored_ids=sorted(v for v in used if isinstance(v, str)), substantive_paragraphs=substantive)
+    return c.result(anchored_ids=result['anchored_ids'], substantive_paragraphs=counts['substantive'])
 
 
 def check_anchors(matrix_path, draft_path, stage='submission'):
@@ -528,7 +467,13 @@ def check_anchors(matrix_path, draft_path, stage='submission'):
         structural = check_file(matrix_path, stage='draft')
         if structural['exit_code']:
             return structural
-        return anchors(data, Path(draft_path).read_text(encoding='utf-8'))
+        result = anchors(data, Path(draft_path).read_text(encoding='utf-8'))
+        label = Path(draft_path).name
+        for bucket in ('errors', 'warnings'):
+            for item in result.get(bucket, []):
+                if isinstance(item.get('path'), str) and item['path'].startswith('line.'):
+                    item['path'] = '%s#%s' % (label, item['path'])
+        return result
     except MatrixError as exc:
         return failure(exc, 'anchors')
     except (OSError, UnicodeError):
@@ -536,24 +481,35 @@ def check_anchors(matrix_path, draft_path, stage='submission'):
 
 
 def extra_parser(commands):
-    for name in ('anchors', 'migrate'):
+    for name in ('anchors', 'migrate', 'scaffold', 'explain'):
         sub = commands.add_parser(name)
         sub.add_argument('--json', action='store_true', default=argparse.SUPPRESS)
         sub.add_argument('--workdir', default=argparse.SUPPRESS)
-        sub.add_argument('--in', dest='input', required=True)
+        if name in ('anchors', 'migrate'):
+            sub.add_argument('--in', dest='input', required=True)
         if name == 'anchors':
             sub.add_argument('--draft', required=True)
-            sub.add_argument('--fix-anchors', action='store_true', help='仅报告，不修改文书')
-        else:
+            sub.add_argument('--report-anchors', action='store_true', help='仅报告锚点问题，不修改文书（不自动改写）')
+        elif name == 'migrate':
             sub.add_argument('--from', dest='old_schema', type=int, required=True)
             sub.add_argument('--to', dest='new_schema', type=int, required=True)
             sub.add_argument('--out', required=True)
             sub.add_argument('--force', action='store_true')
+        elif name == 'scaffold':
+            sub.add_argument('--record', required=True,
+                             choices=('element', 'fact', 'evidence', 'relief', 'authority', 'claim'))
+            sub.add_argument('--id', dest='record_id', default='')
+        elif name == 'explain':
+            sub.add_argument('--code', required=True)
 
 
 def extra_command(args):
     if args.command == 'anchors':
         return check_anchors(args.input, args.draft)
+    if args.command == 'scaffold':
+        return scaffold(args.record, args.record_id)
+    if args.command == 'explain':
+        return explain(args.code)
     old = load_yaml(args.input)
     if args.old_schema != 1 or args.new_schema != 2 or type(old.get('schema')) is not int or old['schema'] != 1:
         raise MatrixError('MIGRATION_SCHEMA', 'schema', '仅支持真实 schema 1 显式迁移到 2', 4)
@@ -568,6 +524,88 @@ def extra_command(args):
     result = check_file(out)
     result['output'] = out
     return result
+
+
+SCAFFOLD_KINDS = {
+    'element': ('E-CL01-01', {
+        'claim': 'CL-01', 'statement': 'unknown', 'burden': 'claimant', 'standard': 'preponderance',
+        'facts': ['F-001'], 'evidence': ['EV-001'], 'witnesses': [], 'strength': 'partial',
+        'gap': 'unknown', 'opponent_attack': 'unknown', 'response': 'unknown', 'fallback': 'unknown'}),
+    'fact': ('F-001', {
+        'date': '2000-01-01', 'actor': 'claimant', 'act': 'unknown',
+        'source': {'document_id': 'EV-001', 'locator': 'unknown'},
+        'status': 'disputed', 'elements': ['E-CL01-01'], 'adverse': False, 'background': False}),
+    'evidence': ('EV-001', {
+        'title': 'unknown', 'exhibit_no': 'C-1', 'type': 'document', 'originality': 'unknown',
+        'holder': 'claimant', 'language': '中文',
+        'source': {'document_id': 'D-01', 'locator': 'unknown'},
+        'facts': ['F-001'], 'elements': ['E-CL01-01'], 'verified': False,
+        'proves': 'unknown', 'limits': 'unknown'}),
+    'relief': ('R-01', {
+        'object': 'respondent', 'action': 'unknown', 'type': 'money', 'currency': 'USD',
+        'amount': 0, 'calculation_ref': 'unknown',
+        'interest': {'basis': 'unknown', 'rate': 'unknown', 'from': '2000-01-01', 'method': 'simple'},
+        'basis': 'unknown', 'elements': ['E-CL01-01']}),
+    'authority': ('A-01', {
+        'citation': 'unknown', 'issuer': 'unknown', 'type': 'statute', 'status': 'good_law',
+        'weight': 'binding', 'forum': 'unknown', 'date': '2000-01-01',
+        'proposition': 'unknown', 'source': 'unknown', 'verified_at': '2000-01-01',
+        'verified': False, 'use': 'support'}),
+    'claim': ('CL-01', {
+        'kind': 'claim', 'label': 'unknown', 'against': 'respondent',
+        'legal_basis': [{'instrument': 'unknown', 'provision': 'unknown',
+                         'authority_id': 'A-01', 'confidence': 'high'}],
+        'relief': ['R-01'], 'elements': ['E-CL01-01']}),
+}
+
+EXPLANATIONS = {
+    'MISSING': ('缺少结构字段', '按报错路径补齐该键；不会写字段时先用 case_matrix.py scaffold --record <类型> 生成带全键名的骨架，不要用猜测的键名代替。'),
+    'ENUM': ('枚举值不在允许集合', '只能取规定字符串（如 kind 取 claim/counterclaim/alternative，证据 type 取 document/witness/expert/electronic/physical），不是任意英文短语；查看 --explain 列出的取值再改。'),
+    'TYPE': ('字段类型不符', '布尔位须为 true/false，金额须为非负数，documents 必须是路径字符串数组，不要用对象或 true/false 字符串。'),
+    'DATE': ('日期格式不符', '用 ISO 日期 YYYY-MM-DD；模糊期间用 period 而不是 date；OQ 的 due 用 ISO 日期或 unknown，不写"提交前"。'),
+    'ORPHAN_FACT': ('事实未被要件引用或未反向挂接', '该事实必须同时出现在某个要件的 facts 列表里，并在自己的 elements 字段里回指该要件；两边都写才成立，缺一边即报此码。'),
+    'ORPHAN_EVIDENCE': ('证据未被事实或要件引用', '把该证据加入要件的 evidence 列表，或让某个事实的 source.document_id 指向它；只挂在矩阵里不被引用即视为孤立。'),
+    'OWNER_LINK': ('要件与主张归属不一致', '要件编号须形如 E-<主张去横杠>-NN（CL-01 → E-CL01-01），element.claim 指向主张，且主张的 elements 列表也要包含它。'),
+    'DANGLING_REFERENCE': ('引用了不存在的编号', '该 ID 尚未在对应集合登记；先补记录再引用，不要只在锚点或 references 里写一个尚不存在的编号。'),
+    'UNREGISTERED_UNKNOWN': ('未知/缺口未登记 OQ', '把该未知写进 open_questions，用 paths（如 relief）或 targets（如 R-03）覆盖到报错字段；只把字段留空或写 unknown 不算登记。'),
+    'UNVERIFIED': ('实际依赖内容尚未核验', '关键字段仍为空或 unknown 且该记录被本轮依赖；补实值并登记来源，或明确标为未完成（草案可过，提交态必被拦）。'),
+    'AUTHORITY_UNVERIFIED': ('权威未经阅文核验', '先真正取到官方文本/法条并核对，再标 verified: true 并写 verified_at、verified_scope；只在 source 里写"已核验"而没实际调用的会被此码拦下。'),
+    'AUTHORITY_STATUS': ('已失效权威被当作现行依据', '被推翻或被替代的权威不能 support 现行命题；改引现行版本，或把 use 改为 distinguish/background 并说明。'),
+    'EVIDENCE_UNVERIFIED': ('依赖证据未声明已核验', '对本轮实际依赖的证据填 verified: true 并保留来源定位；不要只写"见合同"而不声明已阅原件。'),
+    'RELIEF_ANCHOR': ('正文缺少 R- 锚点', '本轮实际请求的每个 R- 必须出现在 documents 所列记稿的 #! 锚点行中，否则救济无法回溯到矩阵。'),
+    'REVIEW_COUNT': ('对抗审查条数不足', '按复杂度补足 attack_lines/premortem：light 2、standard 3、complex 5 条；每条 attack_line 需 target/attack/response/fallback 四键。'),
+    'REVIEW_COVERAGE': ('核心要件未被攻击线覆盖', 'theory.must_prove 里的每个要件 ID 都必须作为某条 attack_line 的 target 出现；新增要件后同步补攻击线，不要只写一条泛泛的总攻击。'),
+    'OWN_WEAKNESS': ('未确认预演失败包含本方弱点', '把 adversarial_review.own_weakness_reviewed 置 true，并保证 premortem 中确有本方论证可能失败的场景，而不只是对方违规风险。'),
+    'ANCHOR_SYNTAX': ('锚点行格式错误', '锚点行写作 #! 锚点：F-001 / E-CL01-01 / EV-001 / R-01 / A-01；只用已登记 ID、不重复、家族按 F/CL/DF/E/EV/R/A 排序，行后紧跟正文段。'),
+    'ANCHOR_UNKNOWN': ('锚点引用未登记编号', '锚点只能写矩阵中真实存在的 ID；示例编号或 [[F]] 之类占位写法都会被判未知。'),
+    'ANCHOR_COVERAGE': ('实质段落缺少相邻锚点', '事实段须带 F-、论证段带 E-/A-、救济段带 R- 锚点且紧邻其后；标题表格信函套语可豁免，编号清单行在矩阵校验中也计为正文。'),
+    'ANCHOR_ADJACENCY': ('锚点未紧邻正文', '锚点行与正文段之间不能有空行、标题、表格或围栏；把锚点行移到其所证明段落的正上方。'),
+    'OPEN_BLOCKING_QUESTION': ('存在阻断级未决问题', '该 OQ 标了 blocking: true，须先解决或把相关未知转成受控草案占位并映射 Q，不能直接进提交态。'),
+    'SELF_REVIEW': ('自审提示（非错误）', '本次为同一人自审；不得表述为独立冷读，需要独立意见时另行安排复核人。'),
+    'METHOD_ONLY': ('法系仅作论证方法（非错误）', 'governing_law.family 只组织论证，不决定准据法或证明标准；具体法源结论仍须走 11-governing-law。'),
+}
+
+
+def scaffold(kind, record_id=''):
+    ident, row = SCAFFOLD_KINDS[kind]
+    if record_id:
+        ident = record_id
+    text = dump_yaml([dict(row, id=ident)]).rstrip()
+    print('# %s 骨架：键名即 schema 2 必填项，unknown/空值代表待确认项\n%s' % (kind, text))
+    print('# 用法：把本行并入矩阵对应集合（claims/elements/facts/evidence/relief/authorities），'
+          '凡 unknown 的字段必须在 open_questions 用 paths 或 targets 覆盖，否则报 UNREGISTERED_UNKNOWN；'
+          'verified/self_review 等布尔位不要提前写成 true。')
+    return {'decision': 'pass', 'exit_code': 0, 'errors': [], 'warnings': [], 'record': dict(row, id=ident)}
+
+
+def explain(code):
+    code = str(code).strip().upper()
+    meaning, remedy = EXPLANATIONS.get(code, ('未收录的判定码', '该码不在 case_matrix 内置说明表内；'
+                                              '先按报错 path 定位到具体字段，再用 scaffold 对照键名与类型，'
+                                              '不要凭印象删字段。'))
+    print(json.dumps({'code': code, 'meaning': meaning, 'remedy': remedy,
+                      'known_codes': sorted(EXPLANATIONS)}, ensure_ascii=False, indent=2))
+    return {'decision': 'pass', 'exit_code': 0, 'errors': [], 'warnings': []}
 
 
 if __name__ == '__main__':

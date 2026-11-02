@@ -17,7 +17,7 @@ keep_sources: false
 #! python3 <suite>/scripts/fetch_official.py applicable --inst [[机构代号]] --commencement [[仲裁启动日]]
 #! python3 <suite>/scripts/fetch_official.py fetch [[规则 source_id]] --to-md ；python3 <suite>/scripts/fetch_official.py lookup [[规则或软法 source_id]] --pattern "witness"
 #! 渲染：python3 <suite>/scripts/render_docx.py --in <draft.md> --out <draft.docx> --mode legal --strict --manifest <x.paras.json>
-#! 一份陈述只给一位证人。复制进案件目录后按证人改名，逐份渲染并配套《中文审阅说明》；manifest 的段落号是后续盘问提纲与结案陈词引用 "paragraph __" 的唯一依据。
+#! 一份陈述只给一位证人。复制进案件目录后按证人改名，逐份渲染；证言文本为非中文时逐份配套《中文审阅说明》，中文证言不另出；manifest 的段落号是后续盘问提纲与结案陈词引用 "paragraph __" 的唯一依据。
 #! 更新禁止：陈述一经签署不得补写新事实；情况变化须另出一版新陈述并在版本说明里写清改了哪段、为何改。开庭前夜改核心事实等于把弹劾材料送给对方。
 #! 接触纪律：证人只由本方及其律师接触，不得与对方有任何接触，不得与其他证人讨论彼此证言；庭前能否由律师准备证人存在法域差异，须先与程序令逐条比对，程序令未写者列为"待向仲裁庭确认"，不得按己方习惯默认允许。
 #! 一段一事实：每段只写一个事实，段内不写法律评价、不写"本案应如何裁决"、不写推测；技术评价与推断只能由鉴定人写入专家报告，事实证人不得出意见证言。

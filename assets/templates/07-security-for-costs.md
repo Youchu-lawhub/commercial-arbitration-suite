@@ -15,7 +15,7 @@ toc: true
 #! 适用子技能：07-measures-costs 第 7 项（担保费用申请侧）与第 8 项（抗辩侧）。产出名对应 07 的 outputs 之"担保费用申请或抗辩"。
 #! 闸门未过不得使用：python3 <suite>/scripts/route.py --gate 07-measures-costs --profile security --workdir <案件目录> --provided <案件目录>/case.json。四项 gate 中"对方资产与履约能力线索"与"已发生与预计费用明细"缺任一项即不得起草本申请，改出《补充材料与信息确认清单》视图。
 #! 先取官方文本（顺序执行）：python3 <suite>/scripts/fetch_official.py applicable --inst <机构id> --commencement <仲裁启动日> ；python3 <suite>/scripts/fetch_official.py check --inst <机构id> ；python3 <suite>/scripts/fetch_official.py fetch <规则版source_id> --to-md ；python3 <suite>/scripts/fetch_official.py lookup <规则版source_id> --pattern "security for costs|costs of the arbitration|discretion|advance" --max 12 。
-#! 渲染与核验：python3 <suite>/scripts/render_docx.py --in <draft.md> --out <draft.docx> --mode legal --strict --manifest <x.paras.json> ；再跑 python3 <suite>/scripts/verify_suite.py --workdir <交付目录> --mode submission，并配中文审阅说明。
+#! 渲染与核验：python3 <suite>/scripts/render_docx.py --in <draft.md> --out <draft.docx> --mode legal --strict --manifest <x.paras.json> ；再跑 python3 <suite>/scripts/verify_suite.py --workdir <交付目录> --mode submission；非中文文书另配中文审阅说明（本身用中文提交的文书不配）。
 #! 不得使用的理由：对方是外国公司、外资背景、规模小、是子公司或 SPV 本身，均不构成命令担保的依据；现代实践已摒弃纯国籍标准。以此类理由提出，会被驳回并削弱己方后续所有请求的可信度。
 #! 主体与财务信息：全部以用户提供的材料为准，本套件不代为认定主体身份、股权结构或偿付能力；凡未从材料取得的数值与事实，一律保持 [[占位]] 并登记到 case.json 后刷新《补充材料与信息确认清单》视图。
 #! 与临时措施申请的区分：本文件只覆盖费用担保，不覆盖争议标的的保全。混用会被要求拆分，并可能因要件错位同时损害两份申请。标的保全请用 assets/templates/07-interim-measures.md。

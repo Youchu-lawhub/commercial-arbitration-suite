@@ -1,4 +1,4 @@
-version: "1.0.0"
+version: "1.1.1"
 schema: 2
 name: commercial-arbitration-suite
 display_name: 中国企业涉外商事仲裁陪跑式专家
@@ -177,7 +177,7 @@ subskills:
     - Request for Arbitration
     - 立案材料包与送达方案
     - 费用预缴测算
-    - 中文审阅说明
+    - '中文审阅说明（文书非中文时；中文文书改为内部核对件并标 pair: false）'
     next:
     - 06-tribunal
     - 07-measures-costs
@@ -208,7 +208,7 @@ subskills:
     - Answer to Request for Arbitration
     - Counterclaim（如有）
     - 管辖权/可受理性异议（保留权利写法）
-    - 中文审阅说明
+    - '中文审阅说明（文书非中文时；中文文书改为内部核对件并标 pair: false）'
     next:
     - 06-tribunal
     - 08-evidence
@@ -269,7 +269,7 @@ subskills:
     - 提名/指定函
     - 披露问询函
     - 挑战申请（含标准与举证）
-    - 中文审阅说明
+    - '中文审阅说明（文书非中文时；中文文书改为内部核对件并标 pair: false）'
     next:
     - 07-measures-costs
     - 08-evidence
@@ -324,7 +324,7 @@ subskills:
     - 紧急仲裁员申请
     - 担保费用申请或抗辩
     - 费用分担主张框架
-    - 中文审阅说明
+    - '中文审阅说明（文书非中文时；中文文书改为内部核对件并标 pair: false）'
     next:
     - 08-evidence
     - 09-hearing
@@ -383,7 +383,7 @@ subskills:
     - 证人陈述（合规写法）
     - 专家委托与条款方案
     - 异议与特权日志
-    - 中文审阅说明
+    - '中文审阅说明（文书非中文时；中文文书改为内部核对件并标 pair: false）'
     next:
     - 09-hearing
     profiles:
@@ -436,7 +436,7 @@ subskills:
     outputs:
     - 庭审包（议程/开场/结案/盘问提纲）
     - 庭后简报
-    - 中文审阅说明
+    - '中文审阅说明（文书非中文时；中文文书改为内部核对件并标 pair: false）'
     next:
     - 10-award-post
     profiles:
@@ -485,7 +485,7 @@ subskills:
     - 撤销与终局性分析
     - 和解与合意裁决方案
     - 执行分流（明确转交14）
-    - 中文审阅说明
+    - '中文审阅说明（文书非中文时；中文文书改为内部核对件并标 pair: false）'
     next: [14-cross-border-enforcement]
     profiles:
       matrix:
@@ -581,7 +581,7 @@ subskills:
     - 署名与日期口径
     outputs:
     - .docx
-    - 《中文审阅说明》.docx
+    - 《中文审阅说明》.docx（文书非中文时必出）
     next: []
     gate_ids:
     - delivery.final_text

@@ -15,7 +15,7 @@ toc: true
 #! 适用子技能：07-measures-costs 第 1—6 项动作。产出名对应 07 的 outputs 之"临时措施申请/异议"与"紧急仲裁员申请"。
 #! 按本轮 interim 检查：python3 <suite>/scripts/route.py --gate 07-measures-costs --profile interim --workdir <案件目录> --provided <案件目录>/case.json。核实紧迫性、措施对象与依据、法院协助可行性；证据或行为保全不强制无关资产或费用明细。缺项先整理与研究，不虚构材料，不提交未核验申请。
 #! 先取官方文本（顺序执行）：python3 <suite>/scripts/fetch_official.py applicable --inst <机构id> --commencement <仲裁启动日> ；python3 <suite>/scripts/fetch_official.py check --inst <机构id> ；python3 <suite>/scripts/fetch_official.py fetch <规则版source_id> --to-md ；python3 <suite>/scripts/fetch_official.py lookup <规则版source_id> --pattern "emergency|interim|conservatory|provisional|security|deposit" --max 12 。禁止凭记忆写机构是否设有紧急仲裁员、其天数与费用条件。
-#! 渲染与核验：python3 <suite>/scripts/render_docx.py --in <draft.md> --out <draft.docx> --mode legal --strict --manifest <x.paras.json> ；再跑 python3 <suite>/scripts/verify_suite.py --workdir <交付目录> --mode submission，并配中文审阅说明。
+#! 渲染与核验：python3 <suite>/scripts/render_docx.py --in <draft.md> --out <draft.docx> --mode legal --strict --manifest <x.paras.json> ；再跑 python3 <suite>/scripts/verify_suite.py --workdir <交付目录> --mode submission；非中文文书另配中文审阅说明（本身用中文提交的文书不配）。
 #! 核心纪律一（损害）：不可弥补损害要件的关键是"金钱不足以弥补"，不是"我方会受损"。可赔性与赔付路径未被排除，就是对方最有力的反驳；跨境场景中最站得住的表述是兑付后追索不能与资质、许可的不可逆丧失。
 #! 核心纪律二（对象边界）：措施只能指向对方可控的行为。银行、登记机关、买方、承运人不是程序当事人，仲裁庭对非当事人通常无直接管辖权，请求命令第三人会把整份申请的可信度拉低。见索即付保函独立兑付，仲裁庭命令通常约束不到银行，止付须走法院路径（见 VI 节）。
 #! 核心纪律三（基线）：凡请求"维持现状"必须定义 baseline，否则对方会主张现状已对其有利。以申请日或合同应然状态为准，二选一并全文统一。

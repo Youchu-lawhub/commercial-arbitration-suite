@@ -1,6 +1,6 @@
 {
   "schema": "research-sources/1",
-  "generated": "2026-10-28",
+  "generated": "2026-11-01",
   "refresh_cadence_days": 90,
   "_note": "外部检索通道登记表：只登记通道与核验证据，不放案件材料。state 与 checked 由 scripts/research_sources.py check 刷新，凭证写入用户本地数据目录 _provenance/research-<id>.json。 登记状态为原包历史记录，本发布未对全部通道作联网正文验收；check 仅探活，不能自动绑定。",
   "disclosure": {
@@ -16,7 +16,7 @@
     "LIVE_CLIENT": "无内置语料，运行时实时抓官方网站（受网站反爬影响）",
     "AUTH_REQUIRED": "端点可达但需账号或 OAuth",
     "PARTIAL": "部分工具实测通过，其余报错，谨慎使用",
-    "SECONDARY_ONLY": "只作线索定位，不得充当引注来源：官方检索门户／首页即属本级，承载可引注正文须用指向具体文件的通道；get 对其返回 LOCATOR_ONLY_CHANNEL 并拒绝取文",
+    "SECONDARY_ONLY": "只作线索定位，不得充当引注来源：实测响应体无可用正文（门户首页、检索页、反爬壳、非官方转载站）即落本级；get 对其返回 LOCATOR_ONLY_CHANNEL 并拒绝取文。门户与非官方站点不得预先登记为本状态（install_suite 审计强制移入 blocked_paths），本状态主要是 check 实测后的运行时降级档",
     "BLOCKED": "本机网络不可达或被反爬拦截，走浏览器/人工路径",
     "DEAD": "已核验不存在（404/DNS 失败），禁止再写入配置"
   },
@@ -3268,7 +3268,7 @@
       ],
       "action": "browser-or-manual",
       "browser_url": "https://lom.agc.gov.my/",
-      "disclose": "马来西亚仲裁地法未取得一手文本：吉隆坡为 AIAC 所在地、属高频仲裁地，条号一律写占位并转外部律师，不得用门户可达充数。",
+      "disclose": "马来西亚仲裁地法未取得一手文本：吉隆坡为 AIAC 所在地、属高频仲裁地；成文法经本门户站内检索定位 Act 全文（浏览器或放宽超时），取得后 fetch_official.py import 核验；未取得前条号一律写占位并转外部律师，不得用门户可达充数",
       "checked": "2026-10-27"
     },
     {
@@ -3363,6 +3363,36 @@
       "browser_url": "https://uaelegislation.gov.ae/en",
       "disclose": "阿联酋联邦条文（含第6/2018号仲裁法令与民事程序法执行编）未取得一手文本：须浏览器在官方门户定位法令后取文，并先确定案件落在大陆法院还是 DIFC/ADGM 自由区轨道；未取回前条号与期限写占位并转外部律师",
       "checked": "2026-10-28"
+    },
+    {
+      "id": "my-kehakiman-blocked",
+      "title": "马来西亚联邦法院官网 kehakiman.gov.my 本机超时",
+      "reason": "2026-11-01 curl 15s 连接超时（HTTP 000，无响应体）；本网络不可达，不代表站点失效",
+      "jurisdictions": [
+        "MY"
+      ],
+      "layers": [
+        "case_law"
+      ],
+      "action": "browser-or-manual",
+      "browser_url": "https://www.kehakiman.gov.my/",
+      "disclose": "马来西亚判例检索缺口：本机直接访问超时，判例原文经浏览器人工或订阅库取得；不得因通道不可达而编造判例名或案号",
+      "checked": "2026-11-01"
+    },
+    {
+      "id": "my-cljlaw-blocked",
+      "title": "CLJ Law（Malaysian Current Law Journals）超时且属订阅库",
+      "reason": "2026-11-01 curl 15s 连接超时（HTTP 000）；cljlaw.com 为马来西亚判例主要订阅库，另需账号",
+      "jurisdictions": [
+        "MY"
+      ],
+      "layers": [
+        "case_law"
+      ],
+      "action": "manual-subscription",
+      "browser_url": "https://cljlaw.com/",
+      "disclose": "马来西亚判例实务上主要经 CLJ 订阅取得；无订阅时走法院官网人工检索与公开判例资源，不得以聚合站摘要充当引注",
+      "checked": "2026-11-01"
     }
   ],
   "dead_claims": [

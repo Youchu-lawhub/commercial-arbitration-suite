@@ -506,7 +506,7 @@ def check_research_sources():
             bindable = s.get("state") in ("VERIFIED_KEYLESS", "VERIFIED_REMOTE_MCP")
             if bindable and not ph and is_portal:
                 bad.append(f"{sid} 状态声称免密可取正文，但 url_template 指向站点根／检索页（末段 {last!r}）："
-                           f"门户只能定位文件，state 应改 SECONDARY_ONLY，或把模板改指带占位的文件路径")
+                           f"门户只能定位文件，把模板改指带占位的具体文件路径，或删除本条并把官方入口移入 blocked_paths")
             for k, v in (ep.get("params") or {}).items():
                 val = str(v)
                 if val in ("required", "optional"):
@@ -709,6 +709,40 @@ def check_docs(ids):
         fail("DOCS", f"文档命令与脚本 CLI 不符：{b}")
     if not bad:
         ok("DOCS", f"{n} 处文档内命令行与脚本 argparse 完全一致")
+
+
+def check_single_source():
+    laws = []
+    for line in (SUITE / 'SKILL.md').read_text(encoding='utf-8').splitlines():
+        m = re.match(r'^(\d+)\.\s*\*\*(.+?铁律)\*\*。(.+)$', line.strip())
+        if m:
+            sig = m.group(3)[:60]
+            if len(sig) >= 40:
+                laws.append((m.group(1), sig))
+    bad = []
+    for path in sorted(SUITE.rglob('*.md')):
+        if path.name == 'SKILL.md' or '.git' in path.parts:
+            continue
+        text = path.read_text(encoding='utf-8', errors='replace')
+        for no, sig in laws:
+            if sig in text:
+                bad.append('%s 逐字复述铁律 %s 正文（应引用该条编号，不重复成文）' % (path.relative_to(SUITE), no))
+    for item in bad[:6]:
+        fail('SRCDOC', item)
+    if not bad:
+        ok('SRCDOC', '铁律正文仅见于 SKILL.md；其余文件为引用编号或差异化表述（共 %d 条受检）' % len(laws))
+    from intake import safe_yaml
+    suite_version = str((safe_yaml((SUITE / 'suite.yaml').read_text(encoding='utf-8')) or {}).get('version', ''))
+    front = (SUITE / 'SKILL.md').read_text(encoding='utf-8').split('---')[1] if (SUITE / 'SKILL.md').is_file() else ''
+    skill_version = ''
+    for line in front.splitlines():
+        if line.strip().startswith('version:'):
+            skill_version = line.split(':', 1)[1].strip().strip('"')
+    if suite_version and skill_version and suite_version != skill_version:
+        fail('VERSION', '版本号不一致：suite.yaml=%s，SKILL.md frontmatter=%s（版本单源在 suite.yaml，frontmatter 供平台读取，必须同步）'
+             % (suite_version, skill_version))
+    else:
+        ok('VERSION', '版本号一致：%s（suite.yaml 与 SKILL.md frontmatter 同步）' % (suite_version or skill_version))
 
 
 # ── CLEAN ───────────────────────────────────────────────────────────────
@@ -973,6 +1007,7 @@ def main() -> int:
     check_rule_audit()
     check_research_sources()
     check_docs(ids)
+    check_single_source()
     check_clean()
     check_runtime(a.fix, Path(a.workdir).expanduser() if a.workdir else None)
     emit(a.json, 2 if any(r["state"] == "FAIL" for r in results) else 0)

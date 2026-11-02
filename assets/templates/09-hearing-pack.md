@@ -18,7 +18,7 @@ toc: true
 #! python3 <suite>/scripts/fetch_official.py applicable --inst [[机构代号]] --commencement [[仲裁启动日]]
 #! python3 <suite>/scripts/fetch_official.py fetch [[规则 source_id]] --to-md ；python3 <suite>/scripts/fetch_official.py lookup [[规则 source_id]] --pattern "witness"
 #! 渲染：python3 <suite>/scripts/render_docx.py --in <draft.md> --out <draft.docx> --mode legal --strict --manifest <x.paras.json>
-#! 用法：本包各节按庭审程序令的条目顺序排列，交付前删去仲裁庭已经签发并覆盖了同一内容的条款，避免两份文本冲突；每节另配《中文审阅说明》。
+#! 用法：本包各节按庭审程序令的条目顺序排列，交付前删去仲裁庭已经签发并覆盖了同一内容的条款，避免两份文本冲突；本包各节合一交付；仅当交付文本为非中文时另配《中文审阅说明》。
 #! 时间分配一律用小时，不用天数：可用水时 − 休息 − 程序讨论 − 开场陈述 − 仲裁庭提问 = 可分配询问时，双方各半并写明余数处理；每位证人主询问设上限，超时由仲裁庭直接切断；仲裁庭提问占用其自身时间；超过一两分钟的异议计入异议方时间；由秘书保存"平等用时"记录。用天数分配会导致一方以整日占用、己方证人被压缩。
 #! 盘问提纲按仲裁员阅读顺序排列（争点 → 该争点的关键文件 → 文件页码 → 要证人确认的一句话），不按证人笔记本的时间顺序；每问先给出处再发问，封闭式、一事实一问。
 #! 纪要与不利记录：庭审当日核对出席名单、证人出庭与盘问顺序、用时消耗、被驳回或被限制的提问、任何口头承诺；对方或仲裁庭口径进入纪要而与事实不符时，须在订正期内提出书面纠正并附记录页码，不当日提出即视为默认。

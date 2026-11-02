@@ -35,7 +35,7 @@ python3 scripts/research_sources.py judge --url <候选URL> [--jurisdiction <DE>
   - `FETCHED`（附 `content_grade: ok`）：HTML 去标签后有足量正文、或 PDF 有文本层。仍须按来源分层定级，`verified` 恒为 false。
   - `FETCHED_SCAN_OCR_REQUIRED`：官方扫描件已存进案件目录，但**没有文本层、一个字条文都没读到**，故不附 `citation_stub`；先 OCR 再核对条号，在此之前按未取得一手文本处理。
   - `FETCH_FAILED`：壳页／空响应／非所声明的格式。**退出码仍为 0**，因为这是降级路径而非输入错误；须改浏览器取文或换通道，不得把本次下载当依据。
-- `state` 为 `SECONDARY_ONLY`／`BLOCKED` 的通道是**官方检索门户**：`get` 直接拒绝并返回 `LOCATOR_ONLY_CHANNEL`。门户首页正文再多也没有条文，用它是去**定位**具体文件 URL，再以承载该 URL 的通道取文或走人工流程。
+- 门户与非官方站点**不得预先登记为通道**（install_suite 静态审计强制移入 `blocked_paths`）；`SECONDARY_ONLY`／`BLOCKED` 主要是 `check` 实测后的运行时降级档——`get` 对这两种状态直接拒绝并返回 `LOCATOR_ONLY_CHANNEL`。门户首页正文再多也没有条文，用它是去**定位**具体文件 URL，再以承载该 URL 的通道取文或走人工流程。
 - 退出码 0 表示"可以继续工作"，**包括降级路径与未登记法域**；只有输入非法、登记表损坏、`--out` 落在套件内时才返回 2。
 - `check`/`plan` 的实测结论有保鲜期：`plan` 会把 `GONE` 降为不可用、把 `UNREACHABLE`／被反爬挡住的通道**从可绑定名单里剔除**。
 - `check` 的结论（`verdict`）决定 `plan` 是否继续把通道算作可用，各档含义不可混用：

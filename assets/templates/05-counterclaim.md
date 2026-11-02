@@ -17,7 +17,7 @@ toc: false
 #! 先取文本再落笔：applicable --inst <机构> --commencement <案件启动日> 定适用版本；fetch <rules-source-id> --to-md；lookup <rules-source-id> --pattern "counterclaim|advance on costs|set-off"；
 #! 反请求的期限、份数、递交渠道、是否须同时向对方送达、是否须随附预缴款及其计算方式（含是否与主请求合并计算争议金额）一律现查后替换占位（铁律 1、2）；未取得文本前不得落任何条号、天数与费率。
 #! 渲染：python3 <suite>/scripts/render_docx.py --in <draft.md> --out <draft.docx> --mode legal --toc --strict --manifest <x.paras.json>；退出码 3＝仍有占位未填，本轮不交付。
-#! 与答复同时交付时，每份正式文书各配同名《中文审阅说明》，不以一份说明替代两份配对；按各自 manifest 的段落号用 paragraph n 引用（XREF 核验），当事方、同一事件日期与金额口径须一致（CONSIST 核验）。
+#! 与答复同时交付时，每份**非中文**正式文书各配同名《中文审阅说明》，不以一份说明替代两份配对；本身用中文提交的文书不另出中文审阅说明；按各自 manifest 的段落号用 paragraph n 引用（XREF 核验），当事方、同一事件日期与金额口径须一致（CONSIST 核验）。
 #! 自足性铁律：本反请求假设答复部分不被阅读也能独立支撑管辖、责任与所求救济；保留管辖依据、必要条款引述和事实主线。金钱请求附计算，非金钱请求写清对象、行为、范围、条件与适用期限。
 #! 未量化金钱请求、缺少必要事实或依据，可能引发补正、费用核定或期限风险，具体后果须核适用规则。共用事实可用 paragraph [[n]] 交叉引用，但必要事实仍在本文件写明并与答复保持一致。
 #! 不同合同或主体不当然排除反请求；逐项核仲裁协议范围、当事人约束及多合同程序依据。送达主体、渠道、时点与证明按本案规则及程序指示落实。
@@ -74,7 +74,7 @@ toc: false
 20. in any event, order that the Claimant bear the costs of this Counterclaim, including the institution's administrative charges, the arbitrators' fees and expenses and the Counterclaimant's legal and other costs, with interest at [[rate or basis]] from [[date]] to actual payment; and
 21. grant such further or other relief as the tribunal considers appropriate, the Counterclaimant reserving the right to supplement, amend or particularize this Counterclaim and to increase the amounts claimed.
 ## CHECKLIST ONE: WHETHER THE COUNTERCLAIM FALLS WITHIN THE SAME ARBITRATION CLAUSE
-#! 本节与下节是提交前内部核对表：定稿对外版整节删除（或原样转入《中文审阅说明》第四节）；删除后其余段落编号由 Word 自动重排，不影响 paragraph n 的引用逻辑。
+#! 本节与下节是提交前内部核对表：定稿对外版整节删除（或原样转入《中文审阅说明》第四节；不出该说明的中文文书转入矩阵 adversarial_review）；删除后其余段落编号由 Word 自动重排，不影响 paragraph n 的引用逻辑。
 #! 仲裁协议范围或当事人约束等关键项未核时，不进入提交态；先补材料并评估原期限内可行行动。后续提出须核本案新增请求条件与所需许可，不默认存在任务书或必然获准。
 | Item to be verified | Basis of the counterclaim | Arbitration clause for the principal claim | Result |
 |---|---|---|---|

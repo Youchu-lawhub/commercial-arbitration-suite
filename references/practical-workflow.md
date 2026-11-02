@@ -41,7 +41,7 @@ python3 <suite>/scripts/render_docx.py --in <案件目录>/申请书-中文审�
 python3 <suite>/scripts/verify_suite.py --workdir <案件目录> --mode draft --pending <案件目录>/pending.json
 ```
 
-DRAFT_OK 仅表示草案登记及结构通过，不能提交。草案自动加不可提交标识；清单或记稿改变后须重渲染。确认后替换实际事实，将事项登记 resolved，去掉 --draft，使用 --strict 重渲染，最终运行 `--mode submission`；只有 `VERIFIED` 且退出 0 才是提交态，`VERIFY_INCOMPLETE` 不是。正式提交前仍须视觉检查与法律复核。工作目录只放本轮交付件，避免旧版本参与校验。
+DRAFT_OK 表示审阅草案可交付：含已登记待确认项，渲染自动附"含 N 处待确认项，不可提交"状态声明；docx 连同说明与 pending 清单交用户逐项确认，但不可提交仲裁机构。清单或记稿改变后须重渲染。确认后替换实际事实，将事项登记 resolved，去掉 --draft，使用 --strict 重渲染，最终运行 `--mode submission`；只有 `VERIFIED` 且退出 0 才是提交态，`VERIFY_INCOMPLETE` 不是。正式提交前仍须视觉检查与法律复核。工作目录只放本轮交付件，避免旧版本参与校验。
 
 ## 三、缓存及官网受阻
 

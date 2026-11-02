@@ -29,12 +29,12 @@ def within(root, value):
     root = Path(root).resolve()
     value = Path(value)
     if value.is_absolute() or '..' in value.parts:
-        raise ValueError('案件来源须使用目录内相对路径')
+        raise ValueError('案件来源须使用目录内相对路径（登记值：%s，案件目录：%s）' % (value, root))
     p = root / value
     p.resolve().relative_to(root)
     if any(x.is_symlink() for x in [p, *p.parents] if x != root):
         raise ValueError('案件来源不接受符号链接')
-    if not p.is_file(): raise ValueError('案件来源文件不存在')
+    if not p.is_file(): raise ValueError('案件来源文件不存在：%s' % p.resolve())
     return p
 
 
@@ -59,7 +59,7 @@ def load_local(root):
 def source_evidence(sid, root=None, locator=None, edition=None, url=None, quote=None, max_age=None, checked_at=None):
     """Return (issues, text). Attests recorded review, never independently proves law."""
     import fetch_official as f
-    if not f.safe_id(sid): return ['来源 ID 非法'], None
+    if not f.safe_id(sid): return ['来源 ID 非法（多为标记分隔符缺失或误写：须为 id | 版本 | 定位 | URL | 校验 日期 五段，表格单元内分隔符写反斜杠加竖线）'], None
     local = load_local(root).get(sid) if root else None
     errors = []
     text = None

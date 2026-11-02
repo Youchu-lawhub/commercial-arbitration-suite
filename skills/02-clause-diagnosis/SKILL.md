@@ -100,12 +100,12 @@ python3 <suite>/scripts/clause_audit.py render --in <案件档案/clause-audit.y
 | 模板 | 用法 |
 |---|---|
 | `assets/templates/02-条款诊断报告.md` | 一页摘要＋按需展开的十二维明细，内部 `pair: false` |
-| `assets/templates/02-条款重写与谈判红线.md` | 内部谈判方案；对外仅抽取批准条款，另配中文审阅说明 |
+| `assets/templates/02-条款重写与谈判红线.md` | 内部谈判方案；对外仅抽取批准条款，条款文本为非中文时另配中文审阅说明 |
 | `assets/templates/02-条款体检客户问答.md` | 业务语言、只答本轮所需问题，内部件 |
 | `assets/templates/02-多合同条款一致性矩阵.md` | 合同关系与冲突，不重复建条款库 |
 | `assets/templates/02-仲裁条款库.md` | 去敏化文本、适用条件、版本与复核登记，不是本轮必填 |
 
-内部攻击线、退出线、未经批准的让步不得进入对外条款。对外文书选定语言、清理占位，交付 `.docx` 与《中文审阅说明》；内部件不强迫配对。最终使用 `verify_suite.py --workdir <案件目录> --mode draft|submission` 对应状态检查；独立条款任务不强制新建案件矩阵。
+内部攻击线、退出线、未经批准的让步不得进入对外条款。对外文书选定语言、清理占位，交付 `.docx`，其中非中文文书另配《中文审阅说明》；中文文书与内部件不强迫配对。最终使用 `verify_suite.py --workdir <案件目录> --mode draft|submission` 对应状态检查；独立条款任务不强制新建案件矩阵。
 
 ## 六、下游
 

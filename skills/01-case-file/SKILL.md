@@ -7,7 +7,7 @@ description: 接案建档与程序坐标校准：把用户给散的合同、条�
 
 ## 一、入口闸门
 
-材料要求以 `suite.yaml` 的本子技能条目为唯一依据。已在会话中明确的事实直接登记，不重复索取。
+材料与入口闸门以 `suite.yaml` 本子技能条目为准（铁律 3、4）；已明确的事实直接登记，不重复索取。
 对实际案件，先核对本案配置，再把已读材料逐项登记到案件根唯一的 `case.json`（`rulesuite-case/1`，`case` 与配置一致）：`confirmed` 须有 `value` 与 `evidence`，缺项用 `pending`+`pending_id/question` 或 `not_applicable`+`reason` 如实登记，必要时用 `unknown`+完整 follow-up。Markdown 清单只由 `intake.py checklist` 生成供人阅读，不是材料台账。
 
 ```bash
@@ -15,7 +15,7 @@ python3 <suite>/scripts/intake.py checklist --gate 01-case-file --facts <案件�
 python3 <suite>/scripts/route.py --gate 01-case-file --workdir <案件目录> --provided <案件目录>/case.json
 ```
 
-未通过时，针对影响本轮结论的缺项提问；可先整理已知事实、检索路径与明确标为未完成的框架，不虚构事实，不交付未核验定稿。通用教学或规则导航问题不要求伪造案件配置。
+未通过时只追问影响本轮结论的缺项；可先出未完成标记的框架，不虚构事实（铁律 3）。
 
 ## 二、建档动作
 
