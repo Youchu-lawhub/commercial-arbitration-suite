@@ -75,6 +75,10 @@ def build(out_path, do_verify=True):
         target = tmp / 'unpacked'
         with zipfile.ZipFile(out_path) as z:
             z.extractall(target)
+            for info in z.infolist():
+                mode = (info.external_attr >> 16) & 0o777
+                if mode:
+                    (target / info.filename).chmod(mode)
         results, ok = checks(target / 'commercial-arbitration-suite', tmp / 'verify-data')
         if not ok:
             print(json.dumps({'decision': 'EXTRACTED_CHECK_FAILED', 'checks': results}, ensure_ascii=False, indent=2))
